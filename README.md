@@ -40,13 +40,10 @@ python clean_museo_data.py
 
 ### 2. Trasformazione in RDF
 ```bash
-java -jar sparql-anything-1.2.0-NIGHTLY-SNAPSHOT.jar -q queries/mappings.sparql -f NT > output/output_temp.nt
+java -jar sparql-anything-1.2.0-NIGHTLY-SNAPSHOT.jar -q queries/mappings.sparql -f NT > output/output.nt
 ```
 
-### 3. Filtro Valori Vuoti
-```powershell
-Get-Content output/output_temp.nt | Where-Object { $_ -notlike '*""*' } > output/output.nt
-```
+*La query SPARQL gestisce automaticamente i valori vuoti usando costrutti OPTIONAL*
 
 ## 📊 Risultati
 

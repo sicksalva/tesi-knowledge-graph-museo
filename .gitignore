@@ -10,8 +10,9 @@ sparql-anything-*
 output/output_temp.nt
 
 # Notes folder (except markdown)
-notes/
-!notes/**/*.md
+notes/*
+!notes/md/
+!notes/md/*.md
 
 # Python cache
 __pycache__/

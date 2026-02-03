@@ -1197,3 +1197,65 @@ Modifiche possibili:
 **Sistema ora pronto per integrazione in triplestore enterprise e query SPARQL federato.**
 
 ---
+
+## 9. IMPLEMENTAZIONE MAPPINGS MULTIPLI (3 febbraio 2026)
+
+### 9.1 Requisito Mappings Doppi
+**Obiettivo**: Implementare entrambe le opzioni di mapping (Schema.org + Wikidata) per massimizzare l'interoperabilità semantica
+
+### 9.2 Analisi File mappings.csv
+**Struttura identificata**:
+- Colonna 4: "Option 1" (Schema.org)  
+- Colonna 13: "Option 1.1" (Wikidata)
+- Esempio: "Autonomia" → `schema:fuelEfficiency` + `wdt:P2073`
+
+### 9.3 Sviluppo Script Dual Mappings
+
+#### 9.3.1 Nuovo Script: generate_kg_dual_mappings.py
+```python
+def load_dual_mappings(mappings_file):
+    # Carica entrambe le opzioni quando disponibili
+    schema_org_option1 = clean_value(row.get('Option 1'))  
+    wikidata_option1 = clean_value(row.get('Option 1.1'))  
+    # Crea lista di mappings per ogni colonna
+    mappings_list = []
+```
+
+#### 9.3.2 Logica Mappings Multipli
+- **25 colonne** mappate dal file `mappings.csv`
+- **15 colonne** con mappings doppi (Schema.org + Wikidata)
+- **40 predicati totali**: 23 Schema.org + 17 Wikidata
+
+### 9.4 Risultati Comparativi
+
+#### 9.4.1 Veicolo V_176 - Confronto Triple
+
+**output_wikidata.nt**: 17 triple
+- Autonomia: Solo `wdt:P2073` "50 km"
+
+**output_dual_mappings.nt**: 25 triple (+47%)
+- Autonomia doppia: `schema:fuelEfficiency` + `wdt:P2073`  
+- Paese doppio: `schema:countryOfOrigin` + `wdt:P1071`
+- Marca doppia: `schema:brand` + `wdt:P1716`
+
+#### 9.4.2 Statistiche Finali
+- **3.332 triple** totali (+40% rispetto a versione singola)
+- **100% copertura dati** mantenuta  
+- **Interoperabilità massimizzata** con doppi standard
+
+### 9.5 Cleanup Progetto
+- Spostato `generate_kg_wikidata.py` → `old/scripts/`
+- Spostato `output_wikidata.nt` → `old/output/`
+- Rimosso `mappings_kg.csv` e `cleaned_csvs/` (obsoleti)
+- Script attivo: `scripts/generate_kg_dual_mappings.py`
+- Output attivo: `output/output_dual_mappings.nt`
+
+### 9.6 Output Finale
+**File**: `output/output_dual_mappings.nt`
+- **163 veicoli** con doppia interoperabilità
+- **15 colonne** con mappings multipli
+- **Sistema enterprise-ready** per triplestore
+
+**Mappings multipli implementati con successo - Massima interoperabilità semantica raggiunta.**
+
+---

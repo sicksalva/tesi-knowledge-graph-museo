@@ -81,12 +81,12 @@ def create_enhanced_mappings(wikidata_props):
             'label': 'brand'
         },
         'Modello': {
-            'predicate': SCHEMA.model,  # WD?
+            'predicate': SCHEMA.model,
             'datatype': XSD.string,
             'label': 'model'
         },
         'Anno': {
-            'predicate': SCHEMA.modelDate,  # WD?
+            'predicate': SCHEMA.modelDate,
             'datatype': XSD.gYear,
             'label': 'model date'
         },

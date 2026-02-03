@@ -21,20 +21,23 @@ Progetto di tesi per la creazione di knowledge graph a partire da dati del museo
 │   └── cleaned_csvs/
 │       └── museo_cleaned.csv     # Dataset pulito legacy
 ├── scripts/                      # Script attivo
-│   └── generate_kg_wikidata.py   # ⭐ Generatore finale con Wikidata
+│   └── generate_kg_dual_mappings.py # ⭐ Generatore con mappings multipli
 ├── queries/                      # Query attive (vuoto - non più necessario)
-├── output/                       # Knowledge graph finale
-│   └── output_wikidata.nt       # ⭐ 2.368 triple con interoperabilità LOD
+├── output/                       # Knowledge graph attuale
+│   └── output_dual_mappings.nt  # ⭐ 3.332 triple con mappings multipli
 ├── old/                          # 🗄️ Archivio sviluppo storico
 │   ├── scripts/
-│   │   ├── clean_museo_data.py   # Approccio SPARQL Anything
-│   │   ├── generate_kg.py        # Prima implementazione Python
-│   │   └── generate_kg_complete.py # Implementazione Schema.org completa
+│   │   ├── clean_museo_data.py      # Approccio SPARQL Anything
+│   │   ├── generate_kg.py           # Prima implementazione Python
+│   │   ├── generate_kg_complete.py  # Implementazione Schema.org completa
+│   │   └── generate_kg_wikidata.py  # Implementazione Wikidata singola
+│   ├── mappings_kg.csv              # Mappings intermedi legacy
 │   ├── queries/
 │   │   └── mappings.sparql      # Query SPARQL Anything legacy
 │   └── output/
 │       ├── output.nt            # Output SPARQL Anything (1.579 triple)
-│       └── output_complete.nt   # Output Schema.org completo (2.368 triple)
+│       ├── output_complete.nt   # Output Schema.org completo (2.368 triple)
+│       └── output_wikidata.nt   # Output Wikidata singolo (2.368 triple)
 ├── .venv/                        # Ambiente virtuale Python
 ├── sparql-anything-1.2.0-NIGHTLY-SNAPSHOT.jar  # Tool legacy
 └── notes/
@@ -44,7 +47,7 @@ Progetto di tesi per la creazione di knowledge graph a partire da dati del museo
 
 ## 🚀 Quick Start
 
-### Generazione Knowledge Graph (Approccio Finale)
+### Generazione Knowledge Graph (Approccio Finale - Mappings Multipli)
 
 #### 1. Setup Ambiente
 ```bash
@@ -59,10 +62,10 @@ pip install pandas>=1.3.0 rdflib>=6.0.0
 #### 2. Generazione Knowledge Graph
 ```bash
 cd c:\Users\salva\Desktop\Tesi
-python scripts/generate_kg_wikidata.py
+python scripts/generate_kg_dual_mappings.py
 ```
 
-**Output**: `output/output_wikidata.nt` (2.368 triple con interoperabilità Wikidata)
+**Output**: `output/output_dual_mappings.nt` (3.332 triple con mappings multipli Schema.org + Wikidata)
 
 ### 🗄️ Approcci Legacy (in /old/)
 
@@ -70,18 +73,20 @@ Gli approcci precedenti sono stati archiviati per riferimento storico:
 
 - **SPARQL Anything**: `old/queries/mappings.sparql` + `old/scripts/clean_museo_data.py`
 - **Python Schema.org**: `old/scripts/generate_kg_complete.py`  
-- **Prima implementazione**: `old/scripts/generate_kg.py`
+- **Primera implementazione**: `old/scripts/generate_kg.py`
+- **Wikidata singolo**: `old/scripts/generate_kg_wikidata.py`
 
 Per testare gli approcci legacy, i file sono disponibili nella cartella `/old/` con i rispettivi output.
 
 ## 📊 Risultati
 
 ### Knowledge Graph Finale
-- **163 veicoli** trasformati con interoperabilità Linked Open Data  
-- **29 proprietà semantiche** mappate su tre livelli
-- **2.368 triple RDF** generate (`output/output_wikidata.nt`)
+- **163 veicoli** trasformati con doppia interoperabilità (Schema.org + Wikidata)
+- **40 proprietà semantiche** con mappings multipli quando disponibili  
+- **3.332 triple RDF** generate (`output/output_dual_mappings.nt`)
 - **100% copertura dati**: Tutte le righe e colonne processate  
 - **Copertura temporale**: 1891-2000 (109 anni di storia automobilistica)
+- **15 colonne** con mappings doppi per massima interoperabilità
 
 ### Sistema a Tre Livelli di Proprietà
 

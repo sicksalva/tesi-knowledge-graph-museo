@@ -1,0 +1,13 @@
+column,predicate,datatype
+Inventario,http://example.org/inventario,http://www.w3.org/2001/XMLSchema#string
+Marca,http://schema.org/brand,http://www.w3.org/2001/XMLSchema#string
+Modello,http://schema.org/model,http://www.w3.org/2001/XMLSchema#string
+Anno,http://schema.org/modelDate,http://www.w3.org/2001/XMLSchema#gYear
+AnniProduzione,http://example.org/productionYears,http://www.w3.org/2001/XMLSchema#string
+Paese,http://schema.org/countryOfOrigin,http://www.w3.org/2001/XMLSchema#string
+Acquisizione,http://schema.org/purchaseDate,http://www.w3.org/2001/XMLSchema#string
+TipoMotore,http://example.org/engineType,http://www.w3.org/2001/XMLSchema#string
+Cilindrata,http://example.org/displacement,http://www.w3.org/2001/XMLSchema#string
+Potenza,http://schema.org/power,http://www.w3.org/2001/XMLSchema#string
+Velocita,http://schema.org/speed,http://www.w3.org/2001/XMLSchema#string
+Carrozzeria,http://schema.org/bodyType,http://www.w3.org/2001/XMLSchema#string

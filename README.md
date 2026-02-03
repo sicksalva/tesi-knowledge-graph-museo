@@ -15,14 +15,11 @@ Progetto di tesi per la creazione di knowledge graph a partire da dati del museo
 ```
 ├── data/                          # Dataset e risorse semantiche
 │   ├── museo.csv                 # Dataset originale (163 veicoli, 29 colonne)
-│   ├── mappings.csv              # Mappature Schema.org legacy
-│   ├── mappings_kg.csv           # Mappature KG intermedie
-│   ├── Wikidata_P.csv            # 291 proprietà Wikidata per automotive
-│   └── cleaned_csvs/
-│       └── museo_cleaned.csv     # Dataset pulito legacy
-├── scripts/                      # Script attivo
+│   ├── mappings.csv              # Mappature semantiche complete (Schema.org + Wikidata)
+│   └── Wikidata_P.csv            # 291 proprietà Wikidata per automotive
+├── scripts/                      # Script attuale
 │   └── generate_kg_dual_mappings.py # ⭐ Generatore con mappings multipli
-├── queries/                      # Query attive (vuoto - non più necessario)
+├── queries/                      # Query attive (vuoto)
 ├── output/                       # Knowledge graph attuale
 │   └── output_dual_mappings.nt  # ⭐ 3.332 triple con mappings multipli
 ├── old/                          # 🗄️ Archivio sviluppo storico
@@ -42,7 +39,7 @@ Progetto di tesi per la creazione di knowledge graph a partire da dati del museo
 ├── sparql-anything-1.2.0-NIGHTLY-SNAPSHOT.jar  # Tool legacy
 └── notes/
     └── md/
-        └── progetto_log.md       # Documentazione completa (1.199 righe)
+        └── progetto_log.md       # Documentazione completa (1.270+ righe)
 ```
 
 ## 🚀 Quick Start

@@ -1,0 +1,36 @@
+museum:
+  name: egizio
+  file_name: data/mauto_en.csv
+  data_source: EMT
+  id_column_name: _id
+  text_column_name: text_en
+  labels:
+    - PERSON
+    - LOCATION
+
+global:
+  model_name: Qwen/Qwen3-0.6B
+  max_processed: !!int 10
+  sleep_time: !!int 10
+
+
+inference:
+  text: 
+    |
+    The SE 025 is created in 1971 as a single-seater designed by Abarth for the CSAI, with the goal of offering young Italian drivers an affordable car to train and develop their skills. 
+    It is equipped with the 1.6-liter Lampredi twin-cam engine from the Fiat 124 Sport and uses components derived from production models. 
+    Lightweight and agile, it exceeds 200 km/h and becomes the star of the Formula Italia Trophy, the single-make championship that launches drivers destined to shine in international competitions such as Riccardo Patrese, Michele Alboreto, and Nicola Larini.
+  prompt:
+    |
+    Task: you are supporting an AI system that extracts relevant entities from the catalogue of a museum.
+    
+    Instruction: 
+    1. read the following description of a museum item and extract relevant entities 
+    2. the entities can be of the following types: PERSON, LOCATION
+    3. the output must follow this format: {{'PERSON': [list of persons], 'LOCATION': [list of locations]}}
+    4. Answer only in JSON. The answer should not have extra text.
+    
+    Description: {text} 
+
+    Answer:
+    

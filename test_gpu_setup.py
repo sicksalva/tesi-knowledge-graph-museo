@@ -19,9 +19,9 @@ def test_gpu():
         # Test semplice
         x = torch.rand(100, 100).cuda()
         y = x @ x.T
-        print(f"✅ GPU test successful - tensor on {y.device}")
+        print(f"GPU test successful - tensor on {y.device}")
     else:
-        print("❌ CUDA not available")
+        print("CUDA not available")
     
     return torch.cuda.is_available()
 

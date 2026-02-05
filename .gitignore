@@ -14,10 +14,13 @@ notes/*
 !notes/md/
 !notes/md/*.md
 
-# Python cache
+# Python cache and virtual environment
 __pycache__/
 *.pyc
 *.pyo
+.venv/
+venv/
+env/
 
 # Jupyter notebooks checkpoints
 .ipynb_checkpoints/

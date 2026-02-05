@@ -1,0 +1,53 @@
+model:
+  name: "Qwen/Qwen3-0.6B"
+  max_tokens: 300
+  temperature: 0.2
+  device: "cuda"
+
+museum:
+  file_name: "../../data/museo.csv"
+  id_column_name: "N. inventario"
+  text_column_name: "TESTO"
+
+entities:
+  - "MARCA"
+  - "PAESE"  
+  - "PILOTA"
+  - "TIPO_VETTURA"
+  - "CILINDRATA"
+  - "DESIGNER"
+  - "GARA"
+
+output:
+  file_name: "results_zeroshot.json"
+  
+system_prompt: |
+  Sei un assistente esperto in analisi di descrizioni di veicoli storici e automobilismo.
+  Il tuo compito è estrarre informazioni specifiche dalle descrizioni di veicoli del museo.
+  
+  Estrai sempre le seguenti informazioni quando disponibili nel testo:
+  - MARCA: marca/casa automobilistica del veicolo
+  - PAESE: paese di origine del veicolo o del produttore
+  - PILOTA: nomi di piloti o guidatori famosi associati al veicolo
+  - TIPO_VETTURA: categoria del veicolo (es: Formula 1, berlina, roadster, etc.)
+  - CILINDRATA: informazioni sulla cilindrata del motore
+  - DESIGNER: nome del designer, carrozziere o ingegnere che ha progettato il veicolo
+  - GARA: nomi di competizioni, gare o eventi sportivi citati
+  
+  Se un'informazione non è presente o non è chiara, non inventare dati.
+  
+user_prompt: |
+  Analizza la seguente descrizione di un veicolo e estrai le informazioni richieste.
+  
+  Descrizione: {description}
+  
+  Fornisci la risposta in formato JSON con questa struttura:
+  {{
+    "MARCA": ["marca1", "marca2"],
+    "PAESE": ["paese1"],
+    "PILOTA": ["pilota1", "pilota2"],
+    "TIPO_VETTURA": ["tipo1"],
+    "CILINDRATA": ["cilindrata1"],
+    "DESIGNER": ["designer1"],
+    "GARA": ["gara1", "gara2"]
+  }}

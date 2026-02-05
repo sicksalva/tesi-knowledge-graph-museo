@@ -1,25 +1,25 @@
 model:
-  name: "Qwen/Qwen3-0.6B"
-  max_tokens: 300
-  temperature: 0.2
-  device: "cuda"
+  name: "Qwen/Qwen3-0.6B"          # Modello LLM (600M parametri)
+  max_tokens: 300                   # Numero massimo token generati (~200-250 parole output)
+  temperature: 0.2                  # Controllo creatività
+  device: "cuda"                    # Dispositivo di calcolo (cuda=GPU, cpu=processore)
 
 museum:
-  file_name: "../../data/museo.csv"
-  id_column_name: "N. inventario"
-  text_column_name: "TESTO"
+  file_name: "../../data/museo.csv" # Percorso relativo al dataset dei veicoli
+  id_column_name: "N. inventario"   # Colonna con ID univoco del veicolo
+  text_column_name: "TESTO"         # Colonna con descrizione da analizzare
 
-entities:
-  - "MARCA"
-  - "PAESE"  
-  - "PILOTA"
-  - "TIPO_VETTURA"
-  - "CILINDRATA"
-  - "DESIGNER"
-  - "GARA"
+entities:                           # Lista delle entità da estrarre dalle descrizioni
+  - "MARCA"                         # Marca/casa automobilistica (es: Ferrari, Alfa Romeo)
+  - "PAESE"                         # Paese di origine (es: Italia, Francia)
+  - "PILOTA"                        # Nomi piloti famosi (es: Nuvolari, Schumacher)
+  - "TIPO_VETTURA"                  # Categoria veicolo (es: Formula 1, berlina)
+  - "CILINDRATA"                    # Info motore (es: 2.0 litri, V8)
+  - "DESIGNER"                      # Progettista/carrozziere (es: Pininfarina)
+  - "GARA"                          # Competizioni/eventi (es: Mille Miglia)
 
 output:
-  file_name: "results_oneshot.json"
+  file_name: "results_oneshot.json"  # File JSON con risultati dell'estrazione
   
 system_prompt: |
   Sei un assistente esperto in analisi di descrizioni di veicoli storici e automobilismo.
@@ -34,9 +34,11 @@ system_prompt: |
   - DESIGNER: nome del designer, carrozziere o ingegnere che ha progettato il veicolo
   - GARA: nomi di competizioni, gare o eventi sportivi citati
 
+# Esempio concreto per guidare il modello nell'estrazione (modalità oneshot)
 example_input: |
   Descrizione: La Ferrari F40 è stata prodotta dal 1987 al 1992 in Italia. Progettata da Pininfarina come tribute a Enzo Ferrari, montava un motore V8 biturbo da 2.9 litri capace di 478 CV. Fu guidata da piloti famosi come Nigel Mansell nelle competizioni GT e partecipò alla 24 Ore di Le Mans.
 
+# Output atteso che mostra il formato JSON corretto
 example_output: |
   {
     "MARCA": ["Ferrari"],

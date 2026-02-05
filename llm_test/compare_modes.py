@@ -1,41 +1,12 @@
 #!/usr/bin/env python3
 """
-Test comparativo tra modalità zeroshot e oneshot.
-Esegue entrambi i test e confronta i risultati.
+Confronto risultati tra modalità zeroshot e oneshot.
+Legge i file di output e genera statistiche comparative.
 """
 
 import json
 import os
-import sys
-import subprocess
 from datetime import datetime
-
-def run_test(mode, test_dir):
-    """Esegue test per una specifica modalità."""
-    print(f"\n{'='*50}")
-    print(f"ESEGUENDO TEST {mode.upper()}")
-    print(f"{'='*50}")
-    
-    original_dir = os.getcwd()
-    try:
-        os.chdir(test_dir)
-        
-        # Esegui test
-        result = subprocess.run([
-            sys.executable, "test_extraction.py"
-        ], capture_output=True, text=True, encoding='utf-8')
-        
-        print("STDOUT:")
-        print(result.stdout)
-        
-        if result.stderr:
-            print("STDERR:")
-            print(result.stderr)
-        
-        return result.returncode == 0
-        
-    finally:
-        os.chdir(original_dir)
 
 def load_results(results_file):
     """Carica risultati da file JSON."""
@@ -56,11 +27,13 @@ def compare_results():
     oneshot_results = load_results("oneshot/results_oneshot.json")
     
     if not zeroshot_results:
-        print("ERRORE: Risultati zeroshot non trovati")
+        print("ERRORE: File zeroshot/results_zeroshot.json non trovato")
+        print("Assicurati di aver eseguito il test zeroshot prima")
         return
         
     if not oneshot_results:
-        print("ERRORE: Risultati oneshot non trovati")
+        print("ERRORE: File oneshot/results_oneshot.json non trovato")
+        print("Assicurati di aver eseguito il test oneshot prima")
         return
     
     # Confronta prestazioni
@@ -98,20 +71,11 @@ def compare_results():
 
 def main():
     """Funzione principale."""
-    print("=== TEST COMPARATIVO ZEROSHOT vs ONESHOT ===")
+    print("=== CONFRONTO RISULTATI ZEROSHOT vs ONESHOT ===")
     print(f"Timestamp: {datetime.now().isoformat()}")
     
-    # Test zeroshot
-    zeroshot_success = run_test("zeroshot", "zeroshot")
-    
-    # Test oneshot  
-    oneshot_success = run_test("oneshot", "oneshot")
-    
-    # Confronta risultati
-    if zeroshot_success and oneshot_success:
-        compare_results()
-    else:
-        print("ERRORE: Alcuni test sono falliti, confronto non possibile")
+    # Confronta risultati esistenti
+    compare_results()
 
 if __name__ == "__main__":
     main()

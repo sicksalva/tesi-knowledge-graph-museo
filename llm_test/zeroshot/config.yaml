@@ -1,25 +1,25 @@
 model:
-  name: "Qwen/Qwen3-0.6B"
-  max_tokens: 300
-  temperature: 0.2
-  device: "cuda"
+  name: "Qwen/Qwen3-0.6B"          # Modello LLM (600M parametri)
+  max_tokens: 300                   # Numero massimo token generati (~200-250 parole output)
+  temperature: 0.2                  # Controllo creatività
+  device: "cuda"                    # Dispositivo di calcolo (cuda=GPU, cpu=processore)
 
 museum:
-  file_name: "../../data/museo.csv"
-  id_column_name: "N. inventario"
-  text_column_name: "TESTO"
+  file_name: "../../data/museo.csv" # Percorso relativo al dataset dei veicoli
+  id_column_name: "N. inventario"   # Colonna con ID univoco del veicolo
+  text_column_name: "TESTO"         # Colonna con descrizione da analizzare
 
-entities:
-  - "MARCA"
-  - "PAESE"  
-  - "PILOTA"
-  - "TIPO_VETTURA"
-  - "CILINDRATA"
-  - "DESIGNER"
-  - "GARA"
+entities:                           # Lista delle entità da estrarre dalle descrizioni
+  - "MARCA"                         # Marca/casa automobilistica (es: Ferrari, Alfa Romeo)
+  - "PAESE"                         # Paese di origine (es: Italia, Francia)
+  - "PILOTA"                        # Nomi piloti famosi (es: Nuvolari, Schumacher)
+  - "TIPO_VETTURA"                  # Categoria veicolo (es: Formula 1, berlina)
+  - "CILINDRATA"                    # Info motore (es: 2.0 litri, V8)
+  - "DESIGNER"                      # Progettista/carrozziere (es: Pininfarina)
+  - "GARA"                          # Competizioni/eventi (es: Mille Miglia)
 
 output:
-  file_name: "results_zeroshot.json"
+  file_name: "results_zeroshot.json" # File JSON con risultati dell'estrazione
   
 system_prompt: |
   Sei un assistente esperto in analisi di descrizioni di veicoli storici e automobilismo.

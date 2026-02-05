@@ -20,7 +20,7 @@ def load_config():
 
 def setup_model(config):
     """Inizializza modello su GPU."""
-    model_name = config['model']['name']
+    model_name = config['model']['name']              # Nome modello (Qwen/Qwen3-0.6B = 600M parametri)
     print(f"Caricando modello {model_name}...")
     
     tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -29,8 +29,8 @@ def setup_model(config):
     
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
-        torch_dtype=torch.float16,
-        device_map="auto"
+        torch_dtype=torch.float16,                   # Usa FP16 per risparmiare memoria GPU
+        device_map="auto"                            # Caricamento automatico su GPU disponibile
     )
     
     print(f"Modello caricato su: {model.device}")
@@ -38,19 +38,20 @@ def setup_model(config):
 
 def generate_response(tokenizer, model, prompt, config):
     """Genera risposta dal modello."""
-    max_tokens = config['model']['max_tokens']
-    temperature = config['model']['temperature']
+    # Parametri di generazione dal config
+    max_tokens = config['model']['max_tokens']        # Numero massimo token da generare (~200-250 parole)
+    temperature = config['model']['temperature']      # Controllo creatività: 0.0=deterministico, 1.0=creativo
     
     inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512).to(model.device)
     
     with torch.no_grad():
         outputs = model.generate(
             **inputs,
-            max_new_tokens=max_tokens,
-            temperature=temperature,
-            do_sample=True,
+            max_new_tokens=max_tokens,           # Limite output (300 token)
+            temperature=temperature,             # Controllo casualità (0.2 = poco creativo, ideale per JSON)
+            do_sample=True,                      # Abilita campionamento probabilistico (usa temperature)
             pad_token_id=tokenizer.eos_token_id,
-            repetition_penalty=1.1
+            repetition_penalty=1.1               # Penalizza ripetizioni (1.0=nessuna, 1.1=leggera)
         )
     
     response = tokenizer.decode(outputs[0], skip_special_tokens=True)

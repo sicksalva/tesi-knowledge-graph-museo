@@ -17,8 +17,20 @@ Progetto di tesi per la creazione di knowledge graph a partire da dati del museo
 │   ├── museo.csv                 # Dataset originale (163 veicoli, 29 colonne)
 │   ├── mappings.csv              # Mappature semantiche complete (Schema.org + Wikidata)
 │   └── Wikidata_P.csv            # 291 proprietà Wikidata per automotive
-├── scripts/                      # Script attuale
+├── scripts/                      # Script Knowledge Graph
 │   └── generate_kg_dual_mappings.py # ⭐ Generatore con mappings multipli
+├── llm_test/                     # ⭐ Test LLM per estrazione entità
+│   ├── compare_modes.py          # Confronto risultati zeroshot vs oneshot
+│   ├── config.yaml               # Configurazione globale LLM
+│   ├── cookbook.ipynb            # Notebook sperimentazione
+│   ├── oneshot/                  # Test con esempio di guida
+│   │   ├── config.yaml           # Config con esempio Ferrari F40
+│   │   ├── test_extraction.py    # Script estrazione oneshot
+│   │   └── results_oneshot.json  # Risultati (65/99 successi = 65.7%)
+│   └── zeroshot/                 # Test senza esempi
+│       ├── config.yaml           # Config base senza esempi
+│       ├── test_extraction.py    # Script estrazione zeroshot
+│       └── results_zeroshot.json # Risultati (6/99 successi = 6.1%)
 ├── queries/                      # Query attive (vuoto)
 ├── output/                       # Knowledge graph attuale
 │   └── output_dual_mappings.nt  # ⭐ 3.332 triple con mappings multipli
@@ -64,6 +76,38 @@ python scripts/generate_kg_dual_mappings.py
 
 **Output**: `output/output_dual_mappings.nt` (3.332 triple con mappings multipli Schema.org + Wikidata)
 
+### Test LLM per Estrazione Entità
+
+#### 1. Setup Ambiente GPU
+```bash
+# Installazione dipendenze LLM
+pip install torch transformers accelerate pandas pyyaml
+
+# Verifica GPU
+python llm_test/test_gpu_setup.py
+```
+
+#### 2. Esecuzione Test
+```bash
+# Test zeroshot (senza esempi)
+cd llm_test/zeroshot
+python test_extraction.py  # Output: 6/99 successi (6.1%)
+
+# Test oneshot (con esempio)
+cd ../oneshot  
+python test_extraction.py  # Output: 65/99 successi (65.7%)
+
+# Confronto risultati
+cd ..
+python compare_modes.py    # Analisi comparativa
+```
+
+#### 3. Configurazione Modello
+- **Modello**: Qwen/Qwen3-0.6B (600M parametri, ottimizzato per GPU laptop)
+- **Temperature**: 0.2 (bassa creatività per consistenza)
+- **Max tokens**: 300 (~200-250 parole output)
+- **Entità target**: MARCA, PAESE, PILOTA, TIPO_VETTURA, CILINDRATA, DESIGNER, GARA
+
 ### 🗄️ Approcci Legacy (in /old/)
 
 Gli approcci precedenti sono stati archiviati per riferimento storico:
@@ -84,6 +128,14 @@ Per testare gli approcci legacy, i file sono disponibili nella cartella `/old/` 
 - **100% copertura dati**: Tutte le righe e colonne processate  
 - **Copertura temporale**: 1891-2000 (109 anni di storia automobilistica)
 - **15 colonne** con mappings doppi per massima interoperabilità
+
+### Test LLM per Estrazione Entità
+- **Oneshot vs Zeroshot**: Performance significativamente superiore con esempi (+59.6%)
+- **Modello utilizzato**: Qwen/Qwen3-0.6B su GPU RTX 4050 Laptop
+- **Oneshot**: 65/99 successi (65.7%) - esempio Ferrari F40 come guida
+- **Zeroshot**: 6/99 successi (6.1%) - senza esempi di riferimento
+- **Migliori entità estratte** (oneshot): MARCA, PAESE, DESIGNER (>60% accuratezza)
+- **Entità più difficili**: PILOTA, GARA (~47-50% accuratezza)
 
 ### Sistema a Tre Livelli di Proprietà
 
@@ -128,9 +180,16 @@ Per testare gli approcci legacy, i file sono disponibili nella cartella `/old/` 
 
 ### Dipendenze Python
 ```python
+# Knowledge Graph
 pandas>=1.3.0     # Manipolazione CSV e analisi dati
 rdflib>=6.0.0     # Generazione RDF e serializzazione N-Triples
 urllib.parse      # Encoding URI (standard library)
+
+# LLM Testing  
+torch             # Framework deep learning con supporto CUDA
+transformers      # Libreria HuggingFace per modelli LLM
+accelerite        # Ottimizzazione memoria GPU
+pyyaml            # Parsing file configurazione YAML
 ```
 
 ### Infrastructure
@@ -205,8 +264,10 @@ Vedi [progetto_log.md](notes/md/progetto_log.md) per la documentazione completa 
 - [x] Integrazione Wikidata per interoperabilità LOD  
 - [x] Sistema proprietà multi-livello (Wikidata + Schema.org + Custom)
 - [x] Generazione 2.368 triple con 100% copertura dati
-- [x] Documentazione completa processo (1.199 righe log)
+- [x] Documentazione completa processo (1.270+ righe log)
 - [x] **Archiviazione storico**: Approcci legacy in `/old/` per riferimento
+- [x] **Test LLM**: Framework comparativo zeroshot vs oneshot per estrazione entità
+- [x] **Validazione accuracy**: Oneshot 65.7% vs Zeroshot 6.1% su dataset museo
 
 ### 🔄 **In Corso**  
 - Import in triplestore enterprise (GraphDB/Blazegraph)

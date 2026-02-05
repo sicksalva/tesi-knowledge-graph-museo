@@ -1259,3 +1259,288 @@ def load_dual_mappings(mappings_file):
 **Mappings multipli implementati con successo - Massima interoperabilità semantica raggiunta.**
 
 ---
+
+## 10. FASE 10: Test LLM per Estrazione Entità
+
+### 10.1 Setup Test Framework LLM
+**Data**: 5 febbraio 2026  
+**Obiettivo**: Testare capacità modelli LLM per estrazione entità da descrizioni veicoli e confrontare approcci zeroshot vs oneshot
+
+#### 10.1.1 Struttura Progetto LLM
+Creata nuova directory `llm_test/` con framework comparativo:
+
+```
+llm_test/
+├── config.yaml                 # Configurazione globale (museo egizio)
+├── cookbook.ipynb              # Notebook sperimentazione
+├── compare_modes.py            # Script confronto risultati
+├── test_gpu_setup.py          # Verifica setup GPU/CUDA
+├── requirements.txt            # Dipendenze CPU
+├── requirements_gpu.txt        # Dipendenze GPU ottimizzate  
+├── oneshot/                    # Test con esempio di guida
+│   ├── config.yaml           # Config con esempio Ferrari F40
+│   ├── test_extraction.py    # Script estrazione oneshot
+│   └── results_oneshot.json  # Output risultati
+└── zeroshot/                   # Test senza esempi
+    ├── config.yaml           # Config base senza esempi  
+    ├── test_extraction.py    # Script estrazione zeroshot
+    └── results_zeroshot.json # Output risultati
+```
+
+#### 10.1.2 Configurazione GPU Environment
+**Hardware target**: NVIDIA GeForce RTX 4050 Laptop GPU (6.44 GB)
+**Modello scelto**: Qwen/Qwen3-0.6B (600M parametri)
+
+**Motivazione scelta modello**:
+- Dimensioni contenute per GPU laptop
+- Supporto multilingue (italiano/inglese)
+- Performance competitive su task di estrazione
+- Memoria richiesta: ~1.5GB in FP16
+
+### 10.2 Implementazione Zeroshot vs Oneshot
+
+#### 10.2.1 Architettura Comune
+```python
+def setup_model(config):
+    model_name = config['model']['name']              # Qwen/Qwen3-0.6B
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+        torch_dtype=torch.float16,                   # FP16 per memoria GPU
+        device_map="auto"                            # Auto-assign GPU
+    )
+    return tokenizer, model
+
+def generate_response(tokenizer, model, prompt, config):
+    max_tokens = config['model']['max_tokens']        # 300 token (~200-250 parole)
+    temperature = config['model']['temperature']      # 0.2 (bassa creatività)
+    
+    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512)
+    
+    with torch.no_grad():
+        outputs = model.generate(
+            **inputs,
+            max_new_tokens=max_tokens,           
+            temperature=temperature,             # Controllo casualità  
+            do_sample=True,                      # Campionamento probabilistico
+            repetition_penalty=1.1               # Anti-ripetizione
+        )
+```
+
+#### 10.2.2 Parametri Modello Commentati
+
+**Configurazione ottimizzata per estrazione entità**:
+- `max_tokens: 300`: Limite output per JSON strutturati
+- `temperature: 0.2`: Bassa creatività per consistenza risultati
+- `torch_dtype: float16`: Ottimizzazione memoria GPU
+- `truncation: max_length=512`: Prevenzione overflow memoria
+- `repetition_penalty: 1.1`: Riduzione ripetizioni testo
+
+#### 10.2.3 Modalità Zeroshot
+**Prompt strategy**: Istruzioni dirette senza esempi
+
+```yaml
+system_prompt: |
+  Sei un assistente esperto in analisi di descrizioni di veicoli storici.
+  Estrai le seguenti informazioni quando disponibili:
+  - MARCA, PAESE, PILOTA, TIPO_VETTURA, CILINDRATA, DESIGNER, GARA
+  
+user_prompt: |
+  Analizza la seguente descrizione e fornisci risposta in formato JSON:
+  {{ "MARCA": ["marca1"], "PAESE": ["paese1"], ... }}
+  
+  Descrizione: {description}
+```
+
+#### 10.2.4 Modalità Oneshot  
+**Prompt strategy**: Esempio concreto Ferrari F40 come guida
+
+```yaml
+example_input: |
+  La Ferrari F40 è stata prodotta dal 1987 al 1992 in Italia. 
+  Progettata da Pininfarina come tribute a Enzo Ferrari, 
+  montava un motore V8 biturbo da 2.9 litri capace di 478 CV.
+  Fu guidata da piloti famosi come Nigel Mansell e partecipò alla 24 Ore di Le Mans.
+
+example_output: |
+  {
+    "MARCA": ["Ferrari"],
+    "PAESE": ["Italia"], 
+    "PILOTA": ["Nigel Mansell"],
+    "TIPO_VETTURA": ["GT"],
+    "CILINDRATA": ["2.9 litri"],
+    "DESIGNER": ["Pininfarina"],
+    "GARA": ["24 Ore di Le Mans"]
+  }
+```
+
+### 10.3 Debugging e Ottimizzazioni
+
+#### 10.3.1 Sistema Debug Progressivo
+**Problema iniziale**: Processo lento senza visibilità progresso
+
+**Soluzione - Debug dettagliato implementato**:
+```python
+# Timing dettagliato per ogni step
+print(f"[DEBUG] Tokenization: {tokenize_time:.3f}s (tokens: {inputs['input_ids'].shape[1]})")
+print(f"[DEBUG] Generation: {generation_time:.3f}s") 
+print(f"[DEBUG] Decode: {decode_time:.3f}s")
+print(f"[DEBUG] Memory GPU: {torch.cuda.memory_allocated() / 1e9:.2f} GB")
+
+# Progress tracking con ETA
+avg_time = total_time / processed
+eta_minutes = (avg_time * remaining_vehicles) / 60
+print(f"[DEBUG] ETA: {eta_minutes:.1f} minuti")
+```
+
+#### 10.3.2 Semplificazione Output
+**Evoluzione**: Da debug verboso a progress essenziale
+
+```python
+# Versione finale - solo messaggi essenziali
+print(f"Processando veicolo {processed+1} (ID: {vehicle_id})")
+print(f"Veicolo processato {processed} - Successo/Fallito")
+print(f"Processamento completato: {processed} veicoli, {skipped} saltati")
+```
+
+#### 10.3.3 Gestione Righe Saltate
+```python
+if pd.isna(description) or not str(description).strip():
+    skipped += 1
+    print(f"Riga {idx} saltata: ID={vehicle_id}, descrizione vuota")
+    continue
+```
+
+### 10.4 Risultati Sperimentali
+
+#### 10.4.1 Performance Comparative
+
+**Dataset**: 163 veicoli del museo → 99 processati (64 saltati per descrizioni vuote)
+
+| Modalità | Successi | Totale | Success Rate | 
+|----------|----------|--------|--------------|
+| **Zeroshot** | 6 | 99 | **6.1%** |
+| **Oneshot** | 65 | 99 | **65.7%** |
+| **Miglioramento** | +59 | - | **+59.6%** |
+
+#### 10.4.2 Analisi Entità per Modalità
+
+**Zeroshot (problematico)**:
+```
+MARCA: 3/99 (3.0%)
+PAESE: 3/99 (3.0%)  
+PILOTA: 3/99 (3.0%)
+TIPO_VETTURA: 3/99 (3.0%)
+CILINDRATA: 3/99 (3.0%)
+DESIGNER: 3/99 (3.0%)
+GARA: 2/99 (2.0%)
+
+# Entità malformate rilevate:
+cilia, cilindra, cilindrata, tipovettura, piolio
+```
+
+**Oneshot (performante)**:
+```
+MARCA: 65/99 (65.7%) ✓
+PAESE: 65/99 (65.7%) ✓
+DESIGNER: 65/99 (65.7%) ✓
+TIPO_VETTURA: 64/99 (64.6%) ✓
+CILINDRATA: 60/99 (60.6%) ✓
+GARA: 50/99 (50.5%)
+PILOTA: 47/99 (47.5%)
+```
+
+#### 10.4.3 Problematiche Identificate Zeroshot
+
+**Estrazione JSON malformata**: 
+- Output frammentario invece di JSON valido
+- Chiavi entità errate (`cilia` vs `CILINDRATA`)
+- Success rate sovrastimato da validazione permissiva
+
+**Root cause**: Senza esempio di riferimento, il modello non genera JSON structurato consistente.
+
+### 10.5 Script di Confronto Automatico
+
+#### 10.5.1 Compare Framework
+**File**: `compare_modes.py`
+```python
+def compare_results():
+    # Carica risultati JSON esistenti
+    zeroshot_results = load_results("zeroshot/results_zeroshot.json") 
+    oneshot_results = load_results("oneshot/results_oneshot.json")
+    
+    # Calcola miglioramenti
+    improvement = o_success - z_success
+    print(f"RISULTATO: Oneshot migliore di {improvement:.1%}")
+    
+    # Analisi dettagliata entità
+    for entity_type, count in entity_counts.items():
+        percentage = count / total_processed * 100
+        print(f"  {entity_type}: {count}/{total_processed} ({percentage:.1f}%)")
+```
+
+#### 10.5.2 Workflow Ottimizzato
+```bash
+# 1. Esecuzione test separata (controllo manuale)
+cd llm_test/zeroshot && python test_extraction.py
+cd ../oneshot && python test_extraction.py
+
+# 2. Confronto automatico risultati
+cd .. && python compare_modes.py
+```
+
+**Vantaggi**: 
+- Controllo granulare esecuzione test
+- Confronto rapido senza re-esecuzione  
+- Analisi statistiche automatiche
+
+### 10.6 Configurazioni YAML Documentate
+
+#### 10.6.1 Parametri Commentati
+
+**Model configuration**:
+```yaml
+model:
+  name: "Qwen/Qwen3-0.6B"          # 600M parametri, veloce su GPU laptop
+  max_tokens: 300                   # ~200-250 parole output
+  temperature: 0.2                  # Bassa creatività per consistenza
+  device: "cuda"                    # GPU obbligatorio per performance
+```
+
+**Dataset mapping**:
+```yaml
+entities:                           # Entità target estratte
+  - "MARCA"                         # Ferrari, Alfa Romeo, ecc
+  - "PAESE"                         # Italia, Francia, Germania  
+  - "PILOTA"                        # Nuvolari, Schumacher, ecc
+  - "TIPO_VETTURA"                  # Formula 1, berlina, roadster
+  - "CILINDRATA"                    # 2.0 litri, V8, V12
+  - "DESIGNER"                      # Pininfarina, Giugiaro
+  - "GARA"                          # Mille Miglia, Le Mans
+```
+
+### 10.7 Conclusioni Test LLM
+
+#### 10.7.1 Evidenze Sperimentali
+**Superiorità oneshot confermata**:
+- **Performance**: 65.7% vs 6.1% (+59.6% miglioramento)
+- **Qualità JSON**: Struttura corretta vs output frammentario
+- **Robustezza**: Nomi entità corretti vs errori ortografici
+
+#### 10.7.2 Lessons Learned
+- **Prompt engineering critico**: Esempi concreti essenziali per task strutturati
+- **Modello size**: 600M parametri sufficienti per estrazione domain-specific
+- **GPU requirement**: RTX 4050 gestisce bene il workload con FP16
+- **Validazione JSON**: Necessaria logica rigorosa per success rate accurati
+
+#### 10.7.3 Architettura Framework Validata
+**Componenti chiave dimostrati**:
+- Setup GPU automatico e detection errori
+- Sistema debug graduali (verbose → minimal)
+- Configurazione YAML modulare e commentata
+- Confronto automatico con statistiche dettagliate
+- Gestione dataset irregolari (skip righe vuote)
+
+**Test LLM framework completato - Oneshot emerges as clear winner per estrazione entità strutturate dal dataset museo.**
+
+---

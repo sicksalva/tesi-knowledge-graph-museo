@@ -6,6 +6,7 @@ Include sia Schema.org (Option 1) che Wikidata (Option 1) per massimizzare i map
 
 import pandas as pd
 import os
+import csv
 from rdflib import Graph, URIRef, Literal, Namespace
 from rdflib.namespace import RDF, XSD
 import re
@@ -18,6 +19,10 @@ WD = Namespace("http://www.wikidata.org/prop/direct/")
 
 def clean_value(value):
     """Pulisce e normalizza un valore dal CSV."""
+    # Se è una Serie pandas, prendi il primo valore
+    if hasattr(value, 'iloc') and len(value) > 0:
+        value = value.iloc[0]
+    
     if pd.isna(value):
         return None
     
@@ -48,6 +53,123 @@ def decode_source_column(encoded_source):
         return None
     except:
         return None
+
+def preprocess_museo_csv(csv_file):
+    """
+    Preprocessa il CSV del museo per gestire le righe di continuazione.
+    Le righe che non iniziano con un identificativo (V_numero, COM_numero) 
+    vengono considerate continuazioni del testo del veicolo precedente.
+    """
+    
+    processed_rows = []
+    current_vehicle_row = None
+    
+    print("Preprocessing CSV per gestire righe di continuazione...")
+    
+    with open(csv_file, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+    
+    # Salta le prime due righe di header
+    for i, line in enumerate(lines[2:], start=3):
+        line = line.strip()
+        if not line:
+            continue
+            
+        # Dividi la riga per virgole, ma rispetta le virgolette
+        parts = []
+        current_part = ""
+        in_quotes = False
+        
+        j = 0
+        while j < len(line):
+            char = line[j]
+            
+            if char == '"' and (j == 0 or line[j-1] != '\\'):
+                in_quotes = not in_quotes
+                current_part += char
+            elif char == ',' and not in_quotes:
+                parts.append(current_part)
+                current_part = ""
+            else:
+                current_part += char
+            j += 1
+        
+        # Aggiungi l'ultima parte
+        if current_part:
+            parts.append(current_part)
+        
+        # Rimuovi le virgolette eccessive
+        parts = [part.strip().strip('"').strip() for part in parts]
+        
+        # Assicurati che ci siano abbastanza colonne (29 colonne attese)
+        while len(parts) < 29:
+            parts.append("")
+        
+        # Se la riga inizia con un identificativo, marca o modello valido, è un nuovo veicolo
+        first_col = parts[0] if parts else ""
+        second_col = parts[1] if len(parts) > 1 else ""
+        third_col = parts[2] if len(parts) > 2 else ""
+        
+        # Controlla identificativo (V numero, COM numero)
+        is_vehicle_id = (first_col.startswith('V ') or 
+                        first_col.startswith('COM ') or
+                        first_col.startswith('V') and re.match(r'^V\s*\d+', first_col.strip()))
+        
+        # Controlla se inizia con marca conosciuta
+        known_brands = [
+            'ACMA', 'Alfa Romeo', 'Aquila Italiana', 'Austin', 'Autobianchi', 'BMW', 
+            'Benz', 'Bernardi', 'Bedelia', 'Brixia-Züst', 'Bugatti', 'Cadillac',
+            'Citroen', 'Citroën', 'De Dion-Bouton', 'Ferrari', 'Fiat', 'Ford',
+            'Isotta Fraschini', 'Lancia', 'Maserati', 'Mercedes', 'Panhard',
+            'Peugeot', 'Renault', 'Rolls-Royce', 'Stanley', 'Torpedo'
+        ]
+        
+        is_brand_start = any(first_col.startswith(brand) for brand in known_brands)
+        
+        # Controlla se il secondo campo sembra un modello (contiene numeri/lettere tipici di modelli)
+        is_model_pattern = (second_col and 
+                           (re.match(r'.*\d+.*', second_col) or  # Contiene numeri
+                            any(word in second_col.lower() for word in ['spider', 'coupe', 'sedan', 'touring', 'sport'])))
+        
+        # È un nuovo veicolo se ha ID O marca nota O pattern di modello
+        is_new_vehicle = is_vehicle_id or is_brand_start or is_model_pattern
+        
+        if is_new_vehicle:
+            # Se c'era un veicolo precedente, aggiungilo alla lista
+            if current_vehicle_row is not None:
+                processed_rows.append(current_vehicle_row)
+            
+            # Inizia un nuovo veicolo
+            current_vehicle_row = parts.copy()
+            
+        else:
+            # È una riga di continuazione
+            if current_vehicle_row is not None:
+                # Concatena al campo TESTO (indice 6)
+                if len(parts) > 0 and parts[0]:  # Se la riga di continuazione ha contenuto
+                    current_vehicle_row[6] += " " + parts[0]
+        
+        # Progress ogni 50 righe
+        if i % 50 == 0:
+            print(f"  Processate {i-2} righe...")
+    
+    # Aggiungi l'ultimo veicolo
+    if current_vehicle_row is not None:
+        processed_rows.append(current_vehicle_row)
+    
+    print(f"Preprocessing completato: {len(processed_rows)} veicoli identificati")
+    
+    # Crea il DataFrame
+    columns = [
+        'N. inventario', 'Marca', 'Modello', 'Anno', 'Anni di produzione', 'Paese', 'TESTO',
+        'Piano', 'Sezione', 'Acquisizione', 'Anno', 'Tipo di motore', 'Motore', 
+        'Alimentazione', 'Cilindrata', 'Potenza', 'Cambio', 'Trasmissione', 'Trazione',
+        'Autonomia', 'Velocità', 'Consumo', 'Telaio', 'Batterie', 'Carrozzeria',
+        'Piloti', 'Corse ', 'Anno', 'Carrozzeria/Designer'
+    ]
+    
+    df = pd.DataFrame(processed_rows, columns=columns)
+    return df
 
 def create_wikidata_predicate(wikidata_value):
     """Crea un predicato Wikidata valido dal valore della colonna."""
@@ -184,9 +306,10 @@ def generate_dual_mappings_kg():
     print()
     
     try:
-        # Leggi il CSV originale saltando la prima riga
+        # Leggi il CSV originale con gestione delle righe malformate
         print(f"Leggendo {museo_file}...")
-        df_raw = pd.read_csv(museo_file, skiprows=1)
+        df_raw = pd.read_csv(museo_file, skiprows=1, quoting=csv.QUOTE_MINIMAL, 
+                           on_bad_lines='skip', engine='python')
         
         print(f"Dataset caricato: {df_raw.shape[0]} righe, {df_raw.shape[1]} colonne")
         print()
@@ -207,7 +330,7 @@ def generate_dual_mappings_kg():
         for idx, row in df_raw.iterrows():
             
             # Crea URI del veicolo
-            inventario = clean_value(row.get('N. inventario'))
+            inventario = clean_value(row['N. inventario'] if 'N. inventario' in row else None)
             vehicle_uri = create_vehicle_uri(inventario, idx)
             
             # Aggiungi tipo veicolo
@@ -216,7 +339,7 @@ def generate_dual_mappings_kg():
             
             # Processa tutte le colonne
             for column in df_raw.columns:
-                value = clean_value(row.get(column))
+                value = clean_value(row[column] if column in row else None)
                 if not value:
                     continue
                 

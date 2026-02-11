@@ -1,0 +1,80 @@
+{
+  "juan manuel fangio": {
+    "qid": "Q2069",
+    "type": "Q5",
+    "confidence": 0.8,
+    "original_value": "Juan Manuel Fangio"
+  },
+  "elettrico": {
+    "qid": "Q3721923",
+    "type": "Q35120",
+    "confidence": 0.8,
+    "original_value": "elettrico"
+  },
+  "a carbone": {
+    "qid": "Q67211560",
+    "type": "Q35120",
+    "confidence": 0.8,
+    "original_value": "a carbone"
+  },
+  "vapore": {
+    "qid": "Q255722",
+    "type": "Q35120",
+    "confidence": 0.5936700336700337,
+    "original_value": "vapore"
+  },
+  "cesare sala": {
+    "qid": "Q21543051",
+    "type": "Q5",
+    "confidence": 0.8,
+    "original_value": "Cesare Sala"
+  },
+  "alberto ascari": {
+    "qid": "Q2086",
+    "type": "Q5",
+    "confidence": 0.8,
+    "original_value": "Alberto Ascari"
+  },
+  "flaminio bertoni": {
+    "qid": "Q654827",
+    "type": "Q5",
+    "confidence": 0.8500000000000001,
+    "original_value": "Flaminio Bertoni"
+  },
+  "pininfarina": {
+    "qid": "Q62005011",
+    "type": "Q5",
+    "confidence": 1.0,
+    "original_value": "Pininfarina"
+  },
+  "nino farina": {
+    "qid": "Q2040",
+    "type": "Q5",
+    "confidence": 0.4188729874776387,
+    "original_value": "Nino Farina"
+  },
+  "ermenegildo preti": {
+    "qid": "Q3731978",
+    "type": "Q5",
+    "confidence": 0.8,
+    "original_value": "Ermenegildo Preti"
+  },
+  "pierluigi raggi": {
+    "qid": "Q3903128",
+    "type": "Q5",
+    "confidence": 0.8,
+    "original_value": "Pierluigi Raggi"
+  },
+  "phil hill": {
+    "qid": "Q3112",
+    "type": "Q5",
+    "confidence": 0.8500000000000001,
+    "original_value": "Phil Hill"
+  },
+  "zagato": {
+    "qid": "Q2602742",
+    "type": "Q5",
+    "confidence": 1.0,
+    "original_value": "Zagato"
+  }
+}

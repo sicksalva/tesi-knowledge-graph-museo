@@ -1544,3 +1544,103 @@ entities:                           # Entità target estratte
 **Test LLM framework completato - Oneshot emerges as clear winner per estrazione entità strutturate dal dataset museo.**
 
 ---
+
+## 11. FASE 9: Sistema Integrato di Arricchimento Semantico
+
+### 11.1 Obiettivo Principale
+**Goal**: "Trasformare più dati possibili in IRI. Evitare di lasciare sempre stringhe"
+
+**Problema identificato**: Row_X URI in GraphDB invece di identificatori semantici corretti
+**Soluzione**: Sistema integrato che combina entity linking + normalizzazione tecnica + IRI personalizzati
+
+### 11.2 Architettura Sistema Integrato
+
+#### 11.2.1 Componenti Core
+1. **robust_wikidata_linker.py**: Entity linking con API Wikidata ufficiale
+2. **integrated_semantic_enricher.py**: Sistema unificato finale
+
+#### 11.2.2 Strategie di Trasformazione Literas → IRI
+
+**Strategia 1: Normalizzazione Valori Tecnici**
+- **Pattern**: P2109 (potenza), P8628 (cilindrata), velocità
+- **Conversioni**: "68 HP" → 68.9452 CV, "2.3 litri" → 2300 cc
+- **Output**: `ex:power_68cv`, `ex:displacement_2300cc`, `ex:speed_180kmh`
+
+**Strategia 2: Entity Linking Automotive**
+- **Database statico**: 50+ brand (Ferrari → Q27586, Autobianchi → Q784873)
+- **API Wikidata**: Fallback con multi-lingua + scoring avanzato
+- **Risultati**: Fuzzy matching + confidence scoring + cache persistente
+
+**Strategia 3: Esclusioni Museo-Specifiche**  
+- **Proprietà escluse**: Piano, Sezione, Allestimento (rimangono literals)
+- **Pattern museo**: "Piano Terra", "Open Garage", "donata al Museo"
+
+**Strategia 4: IRI Personalizzati**
+- **Pattern frequenti**: Anni, numeri tecnici, valori ricorrenti
+- **Namespace**: `ex:year_1925`, `ex:custom_4_cilindri`
+
+### 11.3 Test e Validazione
+
+#### 11.3.1 Test Integrazione Singoli Valori
+**Valori tecnici**:
+- "20 CV a 3400 giri/min" → `power_20cv_at_3400rpm` (20.0 CV)
+- "942 cc" → `displacement_942cc` (942.0 cc)  
+- "110 km/h" → `speed_110kmh` (110.0 km/h)
+
+**Brand automotive**:
+- "Autobianchi" → wd:Q784873 (database statico)
+- "Alfa Romeo" → wd:Q26921 (database statico)
+
+#### 11.3.2 Test Campione 100 Righe  
+**Input**: 100 triple da output_dual_mappings.nt
+**Output**: 174 triple (+74% arricchimento)
+
+**Breakdown arricchimenti**:
+- Brand/Luoghi (database): 18 trasformazioni
+- Valori tecnici normalizzati: 9 trasformazioni  
+- IRI personalizzati: 31 trasformazioni
+- Metadati aggiunti: 98 triple (rdfs:label + rdf:type)
+
+**Successi specifici**:
+- Alfa Romeo → Q26921 (3 occorrenze risolte)
+- Autobianchi → Q784873 (2 occorrenze risolte)
+- Potenza `power_156_cv_a_3400_girimin` normalizzata
+
+#### 11.3.3 Leonardo Detection Success
+**Test completo**: "Automobile a molla di Leonardo" 
+**Risultato**: QID Q3660752 identificato con confidenza 0.510
+**Query vincente**: "leonardo's self-propelled cart"
+**Multi-lingua**: Italiano → Inglese automatico
+
+### 11.4 Cleanup e Riorganizzazione
+
+#### 11.4.1 File Structure Final
+**Scripts mantenuti**:
+- `integrated_semantic_enricher.py` - Sistema finale
+- `robust_wikidata_linker.py` - Core entity linking
+
+**Scripts moved to OLD/**:
+- `advanced_semantic_enrichment.py` - Versione intermedia
+- `automatic_semantic_enrichment.py` - Versione precedente  
+- `entity_linking_enrichment.py` - Versione precedente
+- `generate_and_enrich.py` - Script intermedio
+- `generate_kg_dual_mappings.py` - Script precedente
+
+**Output cleaned**:
+- Mantenuto: `output_dual_mappings.nt` (input principale)
+- Spostati in OLD/: test files, output intermedi
+
+### 11.5 Sistema Pronto per Produzione
+
+**Status**: ✅ Sistema integrato funzionante e testato
+**Input**: output_dual_mappings.nt (3,332 triple)
+**Capacità dimostrata**: 
+- Trasformazione automatica stringhe → IRI semantici
+- Normalizzazione unità tecniche con conversioni
+- Entity linking robusto con API Wikidata
+- Esclusione intelligente proprietà museo-specifiche
+- Metadati RDF completi per ogni arricchimento
+
+**Ready for full production run su dataset completo.**
+
+---

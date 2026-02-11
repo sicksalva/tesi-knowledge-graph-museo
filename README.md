@@ -1,14 +1,14 @@
 # Knowledge Graph per Museo Automobilistico
 
-Progetto di tesi per la creazione di knowledge graph a partire da dati del museo utilizzando tecnologie del web semantico e integrazione con Wikidata.
+Progetto di tesi per la creazione di knowledge graph a partire da dati del museo utilizzando tecnologie del web semantico, entity linking automatico e integrazione avanzata con Wikidata.
 
 ## 🎯 Obiettivi
 
-- Trasformazione di dati CSV in knowledge graph RDF con massima interoperabilità
-- Implementazione di tre approcci: SPARQL Anything, Python con Schema.org, Python con Wikidata
-- Sistema a tre livelli di proprietà semantiche per copertura totale
-- Integrazione con Linked Open Data (Wikidata) per connettività globale
-- Creazione di un grafo semantico enterprise-ready per triplestore
+- **Trasformazione massiva stringhe → IRI**: Sistema di arricchimento semantico che elimina i literal stringhe trasformandoli in IRI strutturate
+- **Entity linking automatico**: Integrazione con Wikidata API per risoluzione automatica di brand, luoghi e entità
+- **Normalizzazione valori tecnici**: Sistema di conversione automatica (HP→CV, litri→cc, categorizzazione velocità)  
+- **Conservazione contesto museo**: Mantenimento di literals per proprietà museo-specifiche (Piano, Sezione, Allestimento)
+- **Knowledge graph semantico**: Grafo RDF enterprise-ready per триplestore con metadati completi
 
 ## 📁 Struttura del Progetto
 
@@ -17,8 +17,9 @@ Progetto di tesi per la creazione di knowledge graph a partire da dati del museo
 │   ├── museo.csv                 # Dataset originale (163 veicoli, 29 colonne)
 │   ├── mappings.csv              # Mappature semantiche complete (Schema.org + Wikidata)
 │   └── Wikidata_P.csv            # 291 proprietà Wikidata per automotive
-├── scripts/                      # Script Knowledge Graph
-│   └── generate_kg_dual_mappings.py # ⭐ Generatore con mappings multipli
+├── scripts/                      # 🚀 Sistema Arricchimento Semantico Finale
+│   ├── integrated_semantic_enricher.py  # ⭐ Sistema integrato principale
+│   └── robust_wikidata_linker.py        # Core entity linking + normalizzazione tecnica
 ├── llm_test/                     # ⭐ Test LLM per estrazione entità
 │   ├── compare_modes.py          # Confronto risultati zeroshot vs oneshot
 │   ├── config.yaml               # Configurazione globale LLM
@@ -32,21 +33,29 @@ Progetto di tesi per la creazione di knowledge graph a partire da dati del museo
 │       ├── test_extraction.py    # Script estrazione zeroshot
 │       └── results_zeroshot.json # Risultati (6/99 successi = 6.1%)
 ├── queries/                      # Query attive (vuoto)
-├── output/                       # Knowledge graph attuale
-│   └── output_dual_mappings.nt  # ⭐ 3.332 triple con mappings multipli
-├── old/                          # 🗄️ Archivio sviluppo storico
-│   ├── scripts/
-│   │   ├── clean_museo_data.py      # Approccio SPARQL Anything
-│   │   ├── generate_kg.py           # Prima implementazione Python
-│   │   ├── generate_kg_complete.py  # Implementazione Schema.org completa
-│   │   └── generate_kg_wikidata.py  # Implementazione Wikidata singola
-│   ├── mappings_kg.csv              # Mappings intermedi legacy
-│   ├── queries/
-│   │   └── mappings.sparql      # Query SPARQL Anything legacy
-│   └── output/
-│       ├── output.nt            # Output SPARQL Anything (1.579 triple)
-│       ├── output_complete.nt   # Output Schema.org completo (2.368 triple)
-│       └── output_wikidata.nt   # Output Wikidata singolo (2.368 triple)
+├── output/                       # 📊 Output finale
+│   └── output_dual_mappings.nt  # Input per arricchimento semantico (3,332 triple)
+├── old/                          # 🗄️ Archivio completo sviluppo storico
+│   ├── scripts/                 # Script evolutivi precedenti
+│   │   ├── generate_kg_dual_mappings.py    # Generatore con mappings multipli  
+│   │   ├── advanced_semantic_enrichment.py # Versione intermedia arricchimento
+│   │   ├── automatic_semantic_enrichment.py # Prima versione entity linking
+│   │   ├── entity_linking_enrichment.py     # Sistema brand fuzzy matching
+│   │   ├── generate_and_enrich.py           # Script combinato generazione+arricchimento
+│   │   ├── clean_museo_data.py              # Approccio SPARQL Anything legacy
+│   │   ├── generate_kg.py                   # Prima implementazione Python
+│   │   ├── generate_kg_complete.py          # Implementazione Schema.org completa
+│   │   └── generate_kg_wikidata.py          # Implementazione Wikidata singola
+│   ├── output/                  # Output storici e test
+│   │   ├── output_semantic_enriched*.nt     # Versioni arricchimento intermedie
+│   │   ├── test_sample*.nt                  # File test campione (cancellati)
+│   │   ├── output.nt                        # Output SPARQL Anything (1,579 triple)
+│   │   ├── output_complete.nt               # Output Schema.org completo (2,368 triple)
+│   │   └── output_wikidata.nt               # Output Wikidata singolo (2,368 triple)
+│   ├── cache/                   # File cache test (*.pkl)
+│   ├── mappings_kg.csv          # Mappings intermedi legacy
+│   └── queries/
+│       └── mappings.sparql      # Query SPARQL Anything legacy
 ├── .venv/                        # Ambiente virtuale Python
 ├── sparql-anything-1.2.0-NIGHTLY-SNAPSHOT.jar  # Tool legacy
 └── notes/

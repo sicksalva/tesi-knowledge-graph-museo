@@ -32,15 +32,28 @@ def clean_value(value):
     
     return value
 
-def create_vehicle_uri(inventario, row_index):
-    """Crea URI per un veicolo. Se manca inventario, usa index della riga."""
+def create_vehicle_uri(inventario, row_index, marca=None, modello=None, anno=None):
+    """Crea URI per un veicolo usando inventario, o marca-modello-anno se manca."""
     if inventario and inventario.strip():
         # Pulisce il numero di inventario per l'URI
         clean_inv = re.sub(r'[^a-zA-Z0-9_-]', '_', inventario.strip())
         return EX[f"vehicle/{clean_inv}"]
     else:
-        # Se non c'è inventario, usa l'indice della riga
-        return EX[f"vehicle/row_{row_index}"]
+        # Se non c'è inventario, prova marca-modello-anno
+        if marca and modello:
+            clean_marca = re.sub(r'[^a-zA-Z0-9_-]', '_', marca.strip())
+            clean_modello = re.sub(r'[^a-zA-Z0-9_-]', '_', modello.strip())
+            if anno:
+                clean_anno = re.sub(r'[^a-zA-Z0-9_-]', '_', str(anno).strip())
+                return EX[f"vehicle/{clean_marca}_{clean_modello}_{clean_anno}"]
+            else:
+                return EX[f"vehicle/{clean_marca}_{clean_modello}"]
+        elif marca:
+            clean_marca = re.sub(r'[^a-zA-Z0-9_-]', '_', marca.strip())
+            return EX[f"vehicle/{clean_marca}_{row_index}"]
+        else:
+            # Ultimo resort: usa l'indice della riga
+            return EX[f"vehicle/unknown_{row_index}"]
 
 def decode_source_column(encoded_source):
     """Decodifica il nome della colonna dal Source URL-encoded."""
@@ -331,7 +344,10 @@ def generate_dual_mappings_kg():
             
             # Crea URI del veicolo
             inventario = clean_value(row['N. inventario'] if 'N. inventario' in row else None)
-            vehicle_uri = create_vehicle_uri(inventario, idx)
+            marca = clean_value(row['Marca'] if 'Marca' in row else None)
+            modello = clean_value(row['Modello'] if 'Modello' in row else None)
+            anno = clean_value(row['Anno'] if 'Anno' in row else None)
+            vehicle_uri = create_vehicle_uri(inventario, idx, marca, modello, anno)
             
             # Aggiungi tipo veicolo
             g.add((vehicle_uri, RDF.type, SCHEMA.Vehicle))

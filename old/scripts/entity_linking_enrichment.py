@@ -17,60 +17,63 @@ SCHEMA = Namespace("http://schema.org/")
 WD = Namespace("http://www.wikidata.org/entity/")
 WDT = Namespace("http://www.wikidata.org/prop/direct/")
 
-# Database di entity linking per brand automobilistici
+# Database di entity linking per brand automobilistici (espanso)
 AUTOMOTIVE_BRANDS = {
-    "Fiat": {
-        "wikidata_id": "Q27597",
-        "type": WD.Q786820,  # car manufacturer
-    },
-    "Ferrari": {
-        "wikidata_id": "Q27586", 
-        "type": WD.Q786820,  # car manufacturer
-    },
-    "Lancia": {
-        "wikidata_id": "Q35886",
-        "type": WD.Q786820,  # car manufacturer
-    },
-    "Alfa Romeo": {
-        "wikidata_id": "Q26921",
-        "type": WD.Q786820,  # car manufacturer
-    },
-    "Maserati": {
-        "wikidata_id": "Q35962",
-        "type": WD.Q786820,  # car manufacturer
-    },
-    "Citroen": {
-        "wikidata_id": "Q6746",
-        "type": WD.Q786820,  # car manufacturer
-    },
-    "Citroën": {
-        "wikidata_id": "Q6746",
-        "type": WD.Q786820,  # car manufacturer
-    },
-    "Renault": {
-        "wikidata_id": "Q6686",
-        "type": WD.Q786820,  # car manufacturer
-    },
-    "Peugeot": {
-        "wikidata_id": "Q6742",
-        "type": WD.Q786820,  # car manufacturer
-    },
-    "Panhard & Levassor": {
-        "wikidata_id": "Q743224",
-        "type": WD.Q786820,  # car manufacturer
-    },
-    "Iso Rivolta": {
-        "wikidata_id": "Q1676042",
-        "type": WD.Q786820,  # car manufacturer
-    },
-    "Isotta Fraschini": {
-        "wikidata_id": "Q640651",
-        "type": WD.Q786820,  # car manufacturer
-    },
-    "Stanley": {
-        "wikidata_id": "Q1967513",  # Stanley Motor Carriage Company
-        "type": WD.Q786820,  # car manufacturer
-    }
+    # Brand italiani
+    "Fiat": {"wikidata_id": "Q27597", "type": WD.Q786820},
+    "Ferrari": {"wikidata_id": "Q27586", "type": WD.Q786820},
+    "Lancia": {"wikidata_id": "Q35886", "type": WD.Q786820},
+    "Alfa Romeo": {"wikidata_id": "Q26921", "type": WD.Q786820}, 
+    "Maserati": {"wikidata_id": "Q35962", "type": WD.Q786820},
+    "Autobianchi": {"wikidata_id": "Q784873", "type": WD.Q786820},
+    "Isotta Fraschini": {"wikidata_id": "Q640651", "type": WD.Q786820},
+    "Itala": {"wikidata_id": "Q502768", "type": WD.Q786820},
+    "Diatto": {"wikidata_id": "Q1209912", "type": WD.Q786820},
+    "Spa": {"wikidata_id": "Q2301540", "type": WD.Q786820},  # Spa (car manufacturer)
+    "Aquila Italiana": {"wikidata_id": "Q4782446", "type": WD.Q786820},
+    "Cisitalia": {"wikidata_id": "Q917751", "type": WD.Q786820},
+    "Storero": {"wikidata_id": "Q7620144", "type": WD.Q786820},
+    
+    # Brand francesi
+    "Citroen": {"wikidata_id": "Q6746", "type": WD.Q786820},
+    "Citroën": {"wikidata_id": "Q6746", "type": WD.Q786820},
+    "Renault": {"wikidata_id": "Q6686", "type": WD.Q786820},
+    "Peugeot": {"wikidata_id": "Q6742", "type": WD.Q786820},
+    "Panhard": {"wikidata_id": "Q743224", "type": WD.Q786820},
+    "Panhard & Levassor": {"wikidata_id": "Q743224", "type": WD.Q786820},
+    "De Dion-Bouton": {"wikidata_id": "Q858039", "type": WD.Q786820},
+    "De Dion Bouton": {"wikidata_id": "Q858039", "type": WD.Q786820},
+    "Darracq": {"wikidata_id": "Q1166743", "type": WD.Q786820},
+    "Clément-Panhard": {"wikidata_id": "Q2979712", "type": WD.Q786820},
+    "Vinot & Deguingand": {"wikidata_id": "Q3558832", "type": WD.Q786820},
+    "Hurtu": {"wikidata_id": "Q3143651", "type": WD.Q786820},
+    "Bedelia": {"wikidata_id": "Q4879326", "type": WD.Q786820},
+    
+    # Brand tedeschi
+    "Mercedes": {"wikidata_id": "Q36008", "type": WD.Q786820},
+    "Mercedes Benz": {"wikidata_id": "Q36008", "type": WD.Q786820},
+    "Mercedes-Benz": {"wikidata_id": "Q36008", "type": WD.Q786820}, 
+    "BMW": {"wikidata_id": "Q26678", "type": WD.Q786820},
+    "Benz": {"wikidata_id": "Q835203", "type": WD.Q786820},
+    
+    # Brand americani
+    "Ford": {"wikidata_id": "Q44294", "type": WD.Q786820},
+    "Cadillac": {"wikidata_id": "Q27856", "type": WD.Q786820},
+    "Chevrolet": {"wikidata_id": "Q29570", "type": WD.Q786820},
+    "Oldsmobile": {"wikidata_id": "Q30630", "type": WD.Q786820},
+    "Stanley": {"wikidata_id": "Q1967513", "type": WD.Q786820},
+    "Cord": {"wikidata_id": "Q1138918", "type": WD.Q786820},
+    
+    # Brand britannici
+    "Rolls-Royce": {"wikidata_id": "Q34756", "type": WD.Q786820},
+    "Bentley": {"wikidata_id": "Q27077", "type": WD.Q786820},
+    "Jaguar": {"wikidata_id": "Q30055", "type": WD.Q786820},
+    "Austin": {"wikidata_id": "Q852751", "type": WD.Q786820},
+    
+    # Altri brand
+    "Bugatti": {"wikidata_id": "Q27038", "type": WD.Q786820},
+    "Iso Rivolta": {"wikidata_id": "Q1676042", "type": WD.Q786820},
+    "ACMA": {"wikidata_id": "Q4651134", "type": WD.Q786820}
 }
 
 # Database per luoghi (paesi/regioni)
@@ -118,21 +121,60 @@ def create_entity_uri(wikidata_id):
     return WD[wikidata_id]
 
 def normalize_brand_name(brand_name):
-    """Normalizza il nome del brand per il matching."""
+    """Normalizza il nome del brand per il matching migliorato."""
     if not brand_name:
         return None
     
     # Rimuovi caratteri speciali e normalizza
     normalized = brand_name.strip()
     
-    # Gestione casi speciali
-    if "citro" in normalized.lower():
+    # Gestione casi speciali e sinonimi
+    normalized_lower = normalized.lower()
+    
+    # Normalizzazioni comuni
+    if "citro" in normalized_lower:
         return "Citroen"
+    elif "mercedes" in normalized_lower:
+        return "Mercedes Benz"  # Unifica tutte le varianti Mercedes
+    elif "de dion" in normalized_lower:
+        return "De Dion-Bouton"
+    elif "panhard" in normalized_lower and "special" not in normalized_lower:
+        return "Panhard"
+    elif "alfa" in normalized_lower and "romeo" in normalized_lower:
+        return "Alfa Romeo"
     
     return normalized
 
+def find_brand_fuzzy_match(brand_name, brands_database):
+    """Trova match fuzzy per brand con variazioni nei nomi."""
+    if not brand_name:
+        return None
+        
+    normalized = normalize_brand_name(brand_name)
+    normalized_lower = normalized.lower()
+    
+    # Match esatto
+    if normalized in brands_database:
+        return brands_database[normalized]
+    
+    # Match case-insensitive
+    for key, info in brands_database.items():
+        if key.lower() == normalized_lower:
+            return info
+    
+    # Match parziale per brand compound o con variazioni
+    for key, info in brands_database.items():
+        key_lower = key.lower()
+        # Cerca corrispondenze parziali (evita match troppo generici)
+        if len(normalized_lower) > 3 and normalized_lower in key_lower:
+            return info
+        elif len(key_lower) > 3 and key_lower in normalized_lower:
+            return info
+    
+    return None
+
 def find_entity_info(value, entity_databases):
-    """Trova informazioni sull'entità nei database disponibili."""
+    """Trova informazioni sull'entità nei database disponibili con matching migliorato."""
     if not value:
         return None
     
@@ -140,13 +182,20 @@ def find_entity_info(value, entity_databases):
     
     # Cerca nei database forniti
     for db in entity_databases:
-        if normalized_value in db:
-            return db[normalized_value]
-        
-        # Cerca con normalizzazione case-insensitive
-        for key, info in db.items():
-            if key.lower() == normalized_value.lower():
-                return info
+        # Se è il database dei brand, usa matching fuzzy
+        if db == AUTOMOTIVE_BRANDS:
+            fuzzy_result = find_brand_fuzzy_match(normalized_value, db)
+            if fuzzy_result:
+                return fuzzy_result
+        else:
+            # Per altri database, usa matching standard
+            if normalized_value in db:
+                return db[normalized_value]
+            
+            # Cerca con normalizzazione case-insensitive
+            for key, info in db.items():
+                if key.lower() == normalized_value.lower():
+                    return info
     
     return None
 

@@ -9,6 +9,14 @@ sparql-anything-*
 # Output files (can be regenerated)
 output/output_temp.nt
 
+# Old/archived files
+old/
+
+# Cache files
+cache/*.pkl
+*.pkl
+production_cache_entities.json
+
 # Notes folder (except markdown)
 notes/*
 !notes/md/

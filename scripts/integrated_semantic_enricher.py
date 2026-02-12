@@ -1,28 +1,40 @@
 #!/usr/bin/env python3
 """
-Sistema integrato per arricchimento semantico avanzato che combina:
-1. Entity linking robusto con API Wikidata  
-2. Normalizzazione di valori tecnici (P2109, P8628, P2052)
-3. Database brand espanso
-4. IRI personalizzati per dati frequenti
-5. Mappings museum personalizzati per guida semantica
+Sistema integrato per generazione RDF con arricchimento semantico avanzato.
+
+Questo sistema legge direttamente da museo.csv e genera un grafo RDF applicando:
+1. Mappings da museum_column_mapping.csv per determinare i predicati
+2. Logica da museum_mappings.py per decidere se creare IRI o literal
+3. Entity linking robusto con API Wikidata per entità concettuali
+4. Normalizzazione di valori tecnici (potenza, cilindrata, velocità)
+5. IRI personalizzati per concetti riutilizzabili
+
+IMPORTANTE: Tutta la logica hardcoded è stata spostata in museum_mappings.py.
+Questo file contiene SOLO la logica di:
+- Lettura CSV e generazione RDF
+- Chiamate API Wikidata
+- Cache delle entità risolte
+- Coordinamento del processo di arricchimento
 """
 
 import sys
 import os
-from typing import Dict, Optional
+import csv
+import pandas as pd
+import glob
+from typing import Dict, Optional, List
 # Aggiungi la directory scripts al path per importare il linker E i mappings
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
 from robust_wikidata_linker import WikidataEntityLinker
-import museum_mappings  # NUOVO: Importa i mappings personalizzati
+import museum_mappings  # Importa i mappings personalizzati
 from rdflib import Graph, URIRef, Literal, Namespace
 from rdflib.namespace import RDF, RDFS, XSD
 import re
 
 # Namespace
 EX = Namespace("http://example.org/")
-SCHEMA = Namespace("http://schema.org/")
+SCHEMA = Namespace("https://schema.org/")  # HTTPS per Schema.org
 WD = Namespace("http://www.wikidata.org/entity/")
 WDT = Namespace("http://www.wikidata.org/prop/direct/")
 
@@ -49,8 +61,8 @@ class AdvancedSemanticEnricher:
         Divide valori con più entità (persone, designer, etc.) separati da connettori.
         """
         import re
-        # divide su virgole, " e ", "&", ";", "per", e A CAPO
-        parts = re.split(r'\s*(?:,| e | & |;|\bper\b|\n)\s*', value)
+        # divide su virgole, " e ", "&", ";", "/", "per", e A CAPO
+        parts = re.split(r'\s*(?:,| e | & |;|/|\bper\b|\n)\s*', value)
         # pulisce spazi vuoti e rimuove parti troppo corte o generiche
         entities = []
         for p in parts:
@@ -62,21 +74,6 @@ class AdvancedSemanticEnricher:
                 entities.append(p)
         return entities
     
-    def _is_multiple_entities_predicate(self, predicate_str: str) -> bool:
-        """
-        Determina se un predicato può contenere multiple entità (persone, designer, etc.).
-        """
-        person_predicates = [
-            'http://example.org/Carrozzeria_Designer',
-            'http://www.wikidata.org/prop/direct/P287',  # designed by
-            'http://example.org/Piloti',
-            'http://example.org/racing/drivers',
-            'http://schema.org/Person',
-            'http://schema.org/manufacturer'  # può contenere più designer/manufacturer
-        ]
-        
-        return any(pred in predicate_str for pred in person_predicates)
-    
     def enrich_single_value(self, value: str, predicate_str: str) -> Dict:
         """
         Arricchisce un singolo valore usando tutte le strategie disponibili.
@@ -85,42 +82,25 @@ class AdvancedSemanticEnricher:
             return {'action': 'keep_original', 'value': value}
         
         # 0.1 NUOVO: Ignora completamente descrizioni lunghe - NON DEVONO DIVENTARE IRI
-        if self._is_long_description(value):
+        if museum_mappings.is_long_description(value):
             return {'action': 'keep_original', 'value': value}
         
         # 0.2 PRIORITÀ ASSOLUTA: ANNI DEVONO RIMANERE LITERAL - CONTROLLO ESPLICITO
-        import re
-        if (re.match(r'^\d{4}$', value.strip()) or 
-            re.match(r'^\d{4}[-–]\d{4}$', value.strip()) or
-            re.match(r'^(19|20)\d{2}$', value.strip()) or
-            re.match(r'^(19|20)\d{2}[-–](19|20)\d{2}$', value.strip())):
+        if museum_mappings.is_year_value(value):
             return {'action': 'keep_original', 'value': value}
         
         # 0.3. USA I MAPPINGS per determinare se il predicato deve rimanere literal
         if self._should_keep_literal_by_mapping(predicate_str):
             return {'action': 'keep_original', 'value': value}
 
-        # 1. Prova normalizzazione tecnica SOLO se NON è nei literal_only mappings
-        if (self.wikidata_linker and 
-            not self._should_keep_literal_by_mapping(predicate_str)):
-            technical_result = self.wikidata_linker.normalize_technical_value(value)
-            if technical_result:
-                return {
-                    'action': 'create_technical_iri',
-                    'original_value': value,
-                    'iri': technical_result['iri'],
-                    'rdf_type': technical_result['rdf_type'],
-                    'normalized_value': technical_result['normalized_value'],
-                    'normalized_unit': technical_result['normalized_unit'],
-                    'property': technical_result['property'],
-                    'details': technical_result
-                }
+        # 1. NON CREARE IRI TECNICI - cilindrata, potenza, velocità rimangono LITERAL
+        # (La normalizzazione tecnica è disabilitata - questi dati devono essere literal)
         
         # 2. Entity linking automatico SOLO per proprietà che devono essere IRI (guidato da mappings)
         if self._should_create_iri_by_mapping(predicate_str):
             
             # NUOVO: Gestione multiple entità (persone, designer, etc.)
-            if self._is_multiple_entities_predicate(predicate_str):
+            if museum_mappings.is_multiple_entities_predicate(predicate_str):
                 entities = self.split_entities(value)
                 if len(entities) > 1:
                     # Multiple entità trovate - processale separatamente
@@ -142,14 +122,8 @@ class AdvancedSemanticEnricher:
             if single_result:
                 return single_result
         
-        # 3. Fallback: IRI personalizzato per valori frequenti
-        if self._should_create_custom_iri(value, predicate_str):
-            return {
-                'action': 'create_custom_iri',
-                'original_value': value,
-                'iri': self._create_custom_iri(value, predicate_str),
-                'rdf_type': EX['CustomValue']
-            }
+        # 3. NON creare custom IRI - se non trovato su Wikidata, resta literal
+        # Gli unici custom IRI sono i veicoli (subject)
         
         # 4. Mantieni originale
         return {'action': 'keep_original', 'value': value}
@@ -172,17 +146,12 @@ class AdvancedSemanticEnricher:
         
         # Se non in cache, usa API Wikidata
         if self.wikidata_linker:
-            # Determina tipo suggerito dai mappings (può essere None)
-            suggested_type = self._determine_entity_type_by_mapping(predicate_str, value)
+            # Determina tipo suggerito dai mappings
+            entity_type = museum_mappings.get_entity_type_for_predicate(predicate_str)
             
-            # Chiama API con o senza tipo suggerito
-            api_result = self.wikidata_linker.find_best_entity(value, min_confidence=0.4)
+            # Chiama API con confidence più alta per evitare falsi positivi
+            api_result = self.wikidata_linker.find_best_entity(value, min_confidence=0.6)
             if api_result:
-                # Se non c'è tipo suggerito dai mappings, usa quello dell'API o default
-                if suggested_type is None:
-                    entity_type = api_result.get('type', 'Q35120')  # entity generico
-                else:
-                    entity_type = suggested_type
                 
                 # Salva in cache dinamico per future ricerche
                 self._save_to_entity_cache(value, api_result['qid'], entity_type, api_result['confidence'])
@@ -233,13 +202,6 @@ class AdvancedSemanticEnricher:
         except Exception as e:
             print(f"Warning: Impossibile salvare cache entità: {e}")
     
-    def _is_museum_specific_property(self, predicate_str: str, value: str) -> bool:
-        """
-        DEPRECATO: Usa _should_keep_literal_by_mapping() per logica pulita.
-        """
-        # Redirigi alla nuova logica basata sui mappings
-        return self._should_keep_literal_by_mapping(predicate_str)
-    
     def _should_create_custom_iri(self, value: str, predicate_str: str) -> bool:
         """
         Determina se creare IRI personalizzato usando SOLO i mappings.
@@ -272,110 +234,7 @@ class AdvancedSemanticEnricher:
         """
         return predicate_str in museum_mappings.iri_target_properties
     
-    def _determine_entity_type_by_mapping(self, predicate_str: str, value: str) -> str:
-        """
-        Determina il tipo di entità usando i mappings in modo dinamico.
-        """
-        # Logica semplificata basata sui predicati dei mappings:
-        
-        # Persone/People (designer, piloti)
-        person_predicates = [
-            'http://example.org/Carrozzeria_Designer',
-            'http://www.wikidata.org/prop/direct/P287',  # designed by
-            'http://example.org/Piloti',
-            'http://example.org/racing/drivers',
-            'http://schema.org/Person'
-        ]
-        
-        # Competizioni/Awards
-        competition_predicates = [
-            'http://example.org/Corse',
-            'http://schema.org/award',
-            'http://www.wikidata.org/prop/direct/P166',  # award received
-            'http://www.wikidata.org/prop/direct/P641'   # sport
-        ]
-        
-        # Controllo diretto sui predicati
-        if predicate_str in person_predicates:
-            return 'Q5'  # human/person
-            
-        if predicate_str in competition_predicates:
-            return 'Q18649705'  # competition/event
-            
-        # Default per entità generiche (alimentazione, tipo motore, carrozzeria)
-        return 'Q35120'  # entity (generic)
-    
-    def _determine_entity_type(self, predicate_str: str, value: str) -> str:
-        """
-        DEPRECATO: Usa _determine_entity_type_by_mapping() per logica pulita.
-        """
-        # Redirigi alla nuova logica basata sui mappings
-        return self._determine_entity_type_by_mapping(predicate_str, value)
-    
-    def _is_long_description(self, text: str) -> bool:
-        """
-        Determina se il testo è una descrizione lunga che dovrebbe usare rdfs:comment.
-        """
-        if not text or len(text.strip()) < 50:
-            return False
-            
-        # Indicatori di descrizioni lunghe vs labels brevi
-        description_indicators = [
-            # Presenza di frasi complete (contiene punti)
-            r'\.\s+[A-Z]',  # Punto seguito da spazio e maiuscola (nuova frase)
-            
-            # Testo molto lungo (>200 caratteri)
-            lambda t: len(t.strip()) > 200,
-            
-            # Pattern tipici di descrizioni storiche/narrative
-            r'\b(fu|venne|era|divenne|nacque|fondò|produsse|costruì)\b',
-            r'\b(nel|dal|al|tra il|durante|epoca|periodo)\s+\d{4}',
-            r'\b(storia|fondazione|caratteristiche|descrizione)\b',
-            
-            # Presenza di più di 3 virgole (elenchi dettagliati)
-            lambda t: t.count(',') > 3,
-            
-            # Pattern narrativi specifici del museo
-            r'(al Museo|esposto|vettura|automobile|modello.*fu|prodotta.*tra)'
-        ]
-        
-        # Controlla pattern regex
-        import re
-        for indicator in description_indicators:
-            if callable(indicator):
-                if indicator(text):
-                    return True
-            else:
-                if re.search(indicator, text, re.IGNORECASE):
-                    return True
-        
-        return False
-    
-    def _generate_appropriate_label(self, description: str, predicate_str: str) -> str:
-        """
-        Genera un label appropriato da una descrizione lunga.
-        """
-        # Estratti comuni per diversi tipi di predicati
-        if 'brand' in predicate_str.lower():
-            # Per brand: cerca nomi di aziende
-            brands = re.findall(r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\b', description[:100])
-            if brands:
-                return brands[0]
-                
-        elif 'anno' in predicate_str.lower() or 'year' in predicate_str.lower():
-            # Per anni: cerca date a 4 cifre
-            years = re.findall(r'\b(1[89]\d{2}|20\d{2})\b', description)
-            if years:
-                return years[0]
-                
-        # Fallback: prime 3-4 parole significative
-        words = re.findall(r'\b[A-Za-z]+\b', description)
-        if words:
-            significant_words = [w for w in words[:6] if len(w) > 2][:4]
-            return ' '.join(significant_words)
-        
-        # Ultimo fallback: primi 30 caratteri
-        return description[:30].strip() + "..." if len(description) > 30 else description.strip()
+
     
     def _create_custom_iri(self, value: str, predicate_str: str) -> URIRef:
         """Crea IRI personalizzato SOLO per concetti riutilizzabili (non anni/dati numerici)."""
@@ -383,133 +242,335 @@ class AdvancedSemanticEnricher:
         normalized = re.sub(r'[^a-zA-Z0-9\s]', '', value)
         normalized = re.sub(r'\s+', '_', normalized.strip()).lower()
         
-        # Prefisso basato sul tipo concettuale (non anni!)
-        if 'motore' in predicate_str.lower() or 'engine' in predicate_str.lower():
-            prefix = "engine_type"
-        elif 'carrozzeria' in predicate_str.lower() or 'body' in predicate_str.lower():
-            prefix = "body_type"
-        elif 'alimentazione' in predicate_str.lower() or 'fuel' in predicate_str.lower():
-            prefix = "fuel_type"
-        else:
-            prefix = "concept"
+        # Prefisso basato sul tipo concettuale (delegato ai mappings)
+        prefix = museum_mappings.get_custom_iri_prefix(predicate_str)
         
         return EX[f"{prefix}_{normalized}"]
     
-    def process_rdf_file(self, input_file: str, output_file: str) -> bool:
+    def _load_column_mappings(self, mapping_file: str) -> Dict[str, Dict]:
+        """Carica mappings colonne CSV -> proprietà RDF."""
+        mappings = {}
+        try:
+            df = pd.read_csv(mapping_file, encoding='utf-8')
+            for _, row in df.iterrows():
+                col_name = row['column_name']
+                wd_prop = row['wikidata_property']
+                
+                # Determina URI completo del predicato Wikidata
+                if wd_prop.startswith('P') and len(wd_prop) <= 6:
+                    # Proprietà Wikidata
+                    predicate_uri = f"http://www.wikidata.org/prop/direct/{wd_prop}"
+                elif wd_prop.startswith('custom:'):
+                    # Proprietà custom
+                    custom_name = wd_prop.replace('custom:', '')
+                    predicate_uri = f"http://example.org/{custom_name}"
+                else:
+                    predicate_uri = wd_prop
+                
+                mappings[col_name] = {
+                    'predicate': predicate_uri,
+                    'property_id': wd_prop,
+                    'label': row['property_label'],
+                    'category': row['macro_category'],
+                    'schema_predicates': []  # Sarà popolato da mappings.csv
+                }
+            
+            print(f"Caricati {len(mappings)} mappings colonne")
+            return mappings
+        except Exception as e:
+            print(f"Errore caricamento mappings: {e}")
+            return {}
+    
+    def _load_schema_mappings(self, mappings_file: str, column_mappings: Dict) -> Dict[str, Dict]:
+        """Carica mappings aggiuntivi da mappings.csv (Schema.org, etc.)."""
+        try:
+            df = pd.read_csv(mappings_file, encoding='utf-8')
+            schema_count = 0
+            
+            for _, row in df.iterrows():
+                # La colonna 'Source' contiene URI come 'http://sparql.xyz/facade-x/data/Marca'
+                source = row.get('Source', '')
+                if pd.isna(source) or source == '':
+                    continue
+                
+                # Estrai il nome della colonna dal Source URI
+                # Es: 'http://sparql.xyz/facade-x/data/Marca' -> 'Marca'
+                if '/data/' in source:
+                    col_name_encoded = source.split('/data/')[-1]
+                    # Decodifica URL encoding (es: %2520 -> spazio)
+                    import urllib.parse
+                    col_name = urllib.parse.unquote(col_name_encoded).replace('%20', ' ')
+                    
+                    # Trova match nelle colonne mappate
+                    matched_col = None
+                    for mapped_col in column_mappings.keys():
+                        if col_name.lower() == mapped_col.lower() or \
+                           col_name.replace('_', ' ').lower() == mapped_col.lower():
+                            matched_col = mapped_col
+                            break
+                    
+                    if matched_col:
+                        # Estrai predicati Schema.org da varie colonne
+                        schema_props = []
+                        
+                        # Controlla colonna Schema.org
+                        schema_org = row.get('Schema.org', '')
+                        if not pd.isna(schema_org) and schema_org.strip() != '':
+                            schema_props.append(schema_org.strip())
+                        
+                        # Controlla anche Option 1, 2, 3, 4 (colonne alternate)
+                        for i in [1, 2, 3, 4]:
+                            opt = row.get(f'Option {i}', '')
+                            if not pd.isna(opt) and opt.strip() != '':
+                                schema_props.append(opt.strip())
+                        
+                        # Valida e aggiungi solo predicati validi
+                        for schema_prop in schema_props:
+                            # Valida: non deve contenere virgole, numeri all'inizio, spazi multipli
+                            if self._is_valid_predicate(schema_prop):
+                                # Costruisci URI completo Schema.org (sempre HTTPS)
+                                if schema_prop.startswith('http://schema.org/'):
+                                    schema_uri = schema_prop.replace('http://', 'https://')
+                                elif schema_prop.startswith('https://schema.org/'):
+                                    schema_uri = schema_prop
+                                elif schema_prop.startswith('http'):
+                                    schema_uri = schema_prop
+                                else:
+                                    schema_uri = f"https://schema.org/{schema_prop}"
+                                
+                                # Aggiungi a column_mappings (evita duplicati)
+                                if schema_uri not in column_mappings[matched_col]['schema_predicates']:
+                                    column_mappings[matched_col]['schema_predicates'].append(schema_uri)
+                                    schema_count += 1
+            
+            print(f"Aggiunti {schema_count} mappings Schema.org per interoperabilità")
+            return column_mappings
+            
+        except Exception as e:
+            print(f"Warning: Impossibile caricare mappings.csv: {e}")
+            return column_mappings
+    
+    def _is_valid_predicate(self, value: str) -> bool:
+        """Valida se un valore sembra essere un predicato valido."""
+        if not value or len(value) < 3:
+            return False
+        
+        value = value.strip()
+        
+        # Esclude valori che sembrano dati invece di predicati
+        # Se contiene virgola, è probabilmente una lista di valori
+        if ',' in value:
+            return False
+        
+        # Se inizia con numero seguito da spazio, è probabilmente un valore
+        # Es: "3 differenziali", "4 ruote motrici"
+        if re.match(r'^\d+\s', value):
+            return False
+        
+        # Se contiene più di 2 spazi, è probabilmente una frase/descrizione
+        if value.count(' ') > 2:
+            return False
+        
+        # Se è un URL completo, è valido
+        if value.startswith('http://') or value.startswith('https://'):
+            return True
+        
+        # Altrimenti deve essere un identificatore camelCase o snake_case
+        # Es: "brand", "engineType", "numberOfForwardGears", "AllWheelDriveConfiguration"
+        if re.match(r'^[a-zA-Z][a-zA-Z0-9_]*$', value):
+            return True
+        
+        return False
+    
+    def _create_subject_iri(self, inventory_number: str) -> URIRef:
+        """Crea IRI per subject (veicolo) basato su numero inventario."""
+        # Normalizza numero inventario per IRI
+        normalized = re.sub(r'[^a-zA-Z0-9]', '_', inventory_number.strip())
+        return EX[f"vehicle_{normalized}"]
+    
+    def process_csv_to_rdf(self, csv_file: str, mapping_file: str, output_file: str) -> bool:
         """
-        Processa file RDF applicando arricchimento semantico avanzato.
+        Processa CSV museo generando RDF con entity linking e arricchimento semantico.
         """
         
-        print("=== ARRICCHIMENTO SEMANTICO AUTOMATICO ===")
-        print(f"Input: {input_file}")
+        print("=== GENERAZIONE RDF CON ENTITY LINKING ===")
+        print(f"Input CSV: {csv_file}")
+        print(f"Mappings: {mapping_file}")
         print(f"Output: {output_file}")
         print(f"Wikidata API: {'Attiva' if self.use_wikidata_api else 'Disattivata'}")
         print()
         
-        if not os.path.exists(input_file):
-            print(f"Errore: File {input_file} non trovato!")
+        if not os.path.exists(csv_file):
+            print(f"Errore: File {csv_file} non trovato!")
+            return False
+        
+        if not os.path.exists(mapping_file):
+            print(f"Errore: File {mapping_file} non trovato!")
             return False
         
         try:
-            # Carica grafo
-            print("Caricando grafo RDF...")
-            original_graph = Graph()
-            original_graph.parse(input_file, format='nt')
-            print(f"Grafo caricato: {len(original_graph)} triple")
+            # Carica mappings colonne
+            column_mappings = self._load_column_mappings(mapping_file)
+            if not column_mappings:
+                print("Errore: Nessun mapping caricato!")
+                return False
             
-            # Nuovo grafo arricchito
-            enriched_graph = Graph()
+            # Carica mappings Schema.org aggiuntivi da mappings.csv
+            mappings_csv = os.path.join(os.path.dirname(csv_file), 'mappings.csv')
+            if os.path.exists(mappings_csv):
+                column_mappings = self._load_schema_mappings(mappings_csv, column_mappings)
+            else:
+                print("Warning: File mappings.csv non trovato, skip mappings Schema.org")
+            
+            # Carica CSV (la prima riga contiene categorie, la seconda le vere intestazioni)
+            print("Caricando dati CSV...")
+            df = pd.read_csv(csv_file, encoding='utf-8', header=1)  # Usa la seconda riga come header
+            print(f"Caricate {len(df)} righe, {len(df.columns)} colonne")
+            
+            # Crea grafo RDF
+            graph = Graph()
             
             # Namespace
-            enriched_graph.bind("ex", EX)
-            enriched_graph.bind("schema", SCHEMA)
-            enriched_graph.bind("wdt", WDT)
-            enriched_graph.bind("wd", WD)
-            enriched_graph.bind("rdf", RDF)
-            enriched_graph.bind("rdfs", RDFS)
+            graph.bind("ex", EX)
+            graph.bind("schema", SCHEMA)
+            graph.bind("wdt", WDT)
+            graph.bind("wd", WD)
+            graph.bind("rdf", RDF)
+            graph.bind("rdfs", RDFS)
             
             # Contatori
-            processed = 0
+            total_triples = 0
+            total_vehicles = 0
             dynamic_cache_hits = 0
             api_new_entities = 0
             technical_values = 0
             custom_iris = 0
-            added_triples = 0
+            literals_kept = 0
             
-            print("Processando triple...")
+            print("Generando triple RDF...")
             
-            for subject, predicate, obj in original_graph:
-                processed += 1
+            # Processa ogni riga (veicolo)
+            for idx, row in df.iterrows():
+                # Skip righe vuote
+                if pd.isna(row.get('N. inventario')) or str(row.get('N. inventario')).strip() == '':
+                    continue
                 
-                # Copia tripla originale (per ora)
-                enriched_graph.add((subject, predicate, obj))
+                total_vehicles += 1
+                inventory_num = str(row['N. inventario']).strip()
                 
-                # Arricchisci se è un Literal
-                if isinstance(obj, Literal):
-                    enrichment = self.enrich_single_value(str(obj), str(predicate))
+                # Crea subject per questo veicolo
+                subject = self._create_subject_iri(inventory_num)
+                
+                # Aggiungi tipo: questo è un veicolo
+                graph.add((subject, RDF.type, SCHEMA.Vehicle))
+                total_triples += 1
+                
+                # Processa ogni colonna
+                for col_name, value in row.items():
+                    # Skip colonne senza mapping o valori vuoti
+                    if col_name not in column_mappings:
+                        continue
                     
-                    if enrichment['action'] != 'keep_original':
-                        # Rimuovi tripla originale
-                        enriched_graph.remove((subject, predicate, obj))
+                    if pd.isna(value) or str(value).strip() == '' or str(value).strip() == 'nan':
+                        continue
+                    
+                    value_str = str(value).strip()
+                    mapping = column_mappings[col_name]
+                    predicate_uri = mapping['predicate']
+                    schema_predicates = mapping.get('schema_predicates', [])
+                    
+                    # SPECIAL CASE: Acquisizione con "Dono" -> usa predicato DONOR
+                    if col_name == 'Acquisizione' and museum_mappings.is_donation(value_str):
+                        donor_predicates = museum_mappings.get_donor_predicates()
+                        predicate_uri = donor_predicates['wikidata']
+                        schema_predicates = [donor_predicates['schema']]
+                    
+                    # SPECIAL CASE: Aggiungi productionDate per "Anni di produzione"
+                    if col_name == 'Anni di produzione':
+                        if 'https://schema.org/productionDate' not in schema_predicates:
+                            schema_predicates.append('https://schema.org/productionDate')
+                    
+                    # Arricchisci il valore (usa predicato Wikidata per decidere)
+                    enrichment = self.enrich_single_value(value_str, predicate_uri)
+                    
+                    if enrichment['action'] == 'keep_original':
+                        # Mantieni come literal - genera triple con tutti i predicati
+                        graph.add((subject, URIRef(predicate_uri), Literal(value_str, datatype=XSD.string)))
+                        total_triples += 1
+                        literals_kept += 1
                         
-                        # Gestione multiple entità
-                        if enrichment['action'] == 'create_multiple_entities':
-                            # Crea una tripla separata per ogni entità
-                            for entity_data in enrichment['entities']:
-                                enriched_graph.add((subject, predicate, entity_data['iri']))
-                                enriched_graph.add((entity_data['iri'], RDF.type, entity_data['rdf_type']))
-                                enriched_graph.add((entity_data['iri'], RDFS.label, Literal(entity_data['original_value'], datatype=XSD.string)))
-                                added_triples += 2
-                                
-                                # Conteggi per tipo
-                                if entity_data['action'] == 'create_wikidata_iri':
-                                    if entity_data['source'] == 'dynamic_cache':
-                                        dynamic_cache_hits += 1
-                                    else:
-                                        api_new_entities += 1
-                        else:
-                            # Gestione singola entità (logica originale)
-                            enriched_graph.add((subject, predicate, enrichment['iri']))
+                        # Aggiungi anche predicati Schema.org per interoperabilità
+                        for schema_pred in schema_predicates:
+                            graph.add((subject, URIRef(schema_pred), Literal(value_str, datatype=XSD.string)))
+                            total_triples += 1
+                    
+                    elif enrichment['action'] == 'create_multiple_entities':
+                        # Multiple entità (persone, piloti, etc.)
+                        for entity_data in enrichment['entities']:
+                            # Triple con predicato Wikidata
+                            graph.add((subject, URIRef(predicate_uri), entity_data['iri']))
+                            graph.add((entity_data['iri'], RDF.type, entity_data['rdf_type']))
+                            graph.add((entity_data['iri'], RDFS.label, Literal(entity_data['original_value'], datatype=XSD.string)))
+                            total_triples += 3
                             
-                            # Aggiungi metadati
-                            enriched_graph.add((enrichment['iri'], RDF.type, enrichment['rdf_type']))
-                            enriched_graph.add((enrichment['iri'], RDFS.label, Literal(enrichment['original_value'], datatype=XSD.string)))
+                            # Aggiungi anche predicati Schema.org
+                            for schema_pred in schema_predicates:
+                                graph.add((subject, URIRef(schema_pred), entity_data['iri']))
+                                total_triples += 1
                             
-                            added_triples += 2
-                            
-                            # Conteggi per tipo
-                            if enrichment['action'] == 'create_technical_iri':
-                                technical_values += 1
-                            elif enrichment['action'] == 'create_wikidata_iri':
-                                if enrichment['source'] == 'dynamic_cache':
+                            # Conteggi
+                            if entity_data['action'] == 'create_wikidata_iri':
+                                if entity_data['source'] == 'dynamic_cache':
                                     dynamic_cache_hits += 1
                                 else:
                                     api_new_entities += 1
-                            elif enrichment['action'] == 'create_custom_iri':
-                                custom_iris += 1
+                    
+                    else:
+                        # Singola entità o IRI
+                        # Triple con predicato Wikidata
+                        graph.add((subject, URIRef(predicate_uri), enrichment['iri']))
+                        graph.add((enrichment['iri'], RDF.type, enrichment['rdf_type']))
+                        graph.add((enrichment['iri'], RDFS.label, Literal(enrichment['original_value'], datatype=XSD.string)))
+                        total_triples += 3
+                        
+                        # Aggiungi anche predicati Schema.org per interoperabilità
+                        for schema_pred in schema_predicates:
+                            graph.add((subject, URIRef(schema_pred), enrichment['iri']))
+                            total_triples += 1
+                        
+                        # Conteggi per tipo
+                        if enrichment['action'] == 'create_technical_iri':
+                            technical_values += 1
+                        elif enrichment['action'] == 'create_wikidata_iri':
+                            if enrichment['source'] == 'dynamic_cache':
+                                dynamic_cache_hits += 1
+                            else:
+                                api_new_entities += 1
+                        elif enrichment['action'] == 'create_custom_iri':
+                            custom_iris += 1
                 
-                if processed % 100 == 0:
-                    print(f"  Processate {processed} triple...")
+                if (idx + 1) % 10 == 0:
+                    print(f"  Processati {idx + 1}/{len(df)} veicoli...")
             
-            # Salva
-            print("Salvando grafo arricchito...")
+            # Salva grafo
+            print("Salvando grafo RDF...")
             output_dir = os.path.dirname(output_file)
-            if output_dir:  # Solo se c'è una directory da creare
+            if output_dir:
                 os.makedirs(output_dir, exist_ok=True)
-            enriched_graph.serialize(destination=output_file, format='nt', encoding='utf-8')
+            graph.serialize(destination=output_file, format='nt', encoding='utf-8')
             
-            # Risultati 
-            print(f"\n=== RISULTATI ARRICCHIMENTO AUTOMATICO ===\n")
-            print(f"Triple originali: {len(original_graph)}")
-            print(f"Triple finali: {len(enriched_graph)}")
-            print(f"Triple aggiunte: {added_triples}")
-            print(f"Arricchimenti totali: {dynamic_cache_hits + api_new_entities + technical_values + custom_iris}")
-            print(f"  - Entità (cache dinamico): {dynamic_cache_hits}")
-            print(f"  - Entità nuove (Wikidata API): {api_new_entities}")
+            # Risultati
+            print(f"\n=== RISULTATI GENERAZIONE RDF ===\n")
+            print(f"Veicoli processati: {total_vehicles}")
+            print(f"Triple generate: {total_triples}")
+            print(f"\nDettaglio arricchimento:")
+            print(f"  - Literal mantenuti: {literals_kept}")
+            print(f"  - Entità Wikidata (da cache): {dynamic_cache_hits}")
+            print(f"  - Entità Wikidata (nuove da API): {api_new_entities}")
             print(f"  - Valori tecnici normalizzati: {technical_values}")
             print(f"  - IRI personalizzati: {custom_iris}")
-            print(f"File salvato: {output_file}")
-            print(f"Cache dinamico espanso: {len(self.entity_cache)} entità totali")
+            print(f"\nFile salvato: {output_file}")
+            print(f"Cache entità espanso: {len(self.entity_cache)} entità totali")
             print("=" * 60)
             
             return True
@@ -521,19 +582,43 @@ class AdvancedSemanticEnricher:
             return False
 
 def main():
-    """Funzione principale per uso autonomo - completamente automatico."""
+    """Funzione principale per uso autonomo - generazione RDF da CSV."""
+    # Chiedi se cancellare le cache
+    clear_cache = input("Vuoi cancellare le cache prima di iniziare? (s/n): ").strip().lower()
+    
+    if clear_cache in ['s', 'si', 'sì', 'y', 'yes']:
+        cache_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "cache")
+        cache_files = glob.glob(os.path.join(cache_dir, "*"))
+        
+        if cache_files:
+            print(f"\nEliminazione di {len(cache_files)} file dalla cache...")
+            for cache_file in cache_files:
+                try:
+                    if os.path.isfile(cache_file):
+                        os.remove(cache_file)
+                        print(f"  ✓ Eliminato: {os.path.basename(cache_file)}")
+                except Exception as e:
+                    print(f"  ✗ Errore nell'eliminare {os.path.basename(cache_file)}: {e}")
+            print("Cache pulita!\n")
+        else:
+            print("Nessun file di cache da eliminare.\n")
+    else:
+        print("Cache mantenuta.\n")
+    
     enricher = AdvancedSemanticEnricher(use_wikidata_api=True, cache_file="production_cache.pkl")
     
-    input_file = "output/output_dual_mappings.nt"
+    # File di input e output
+    csv_file = "data/museo.csv"
+    mapping_file = "data/museum_column_mapping.csv"
     output_file = "output/output_automatic_enriched.nt"
     
-    success = enricher.process_rdf_file(input_file, output_file)
+    success = enricher.process_csv_to_rdf(csv_file, mapping_file, output_file)
     
     if success:
-        print("\nArricchimento automatico completato con successo!")
-        print(f"Cache dinamico finale: {len(enricher.entity_cache)} entità risolte")
+        print("\nGenerazione RDF completata con successo!")
+        print(f"Cache entità finale: {len(enricher.entity_cache)} entità risolte")
     else:
-        print("\nErrore nell'arricchimento automatico!")
+        print("\nErrore nella generazione RDF!")
 
 if __name__ == "__main__":
     main()

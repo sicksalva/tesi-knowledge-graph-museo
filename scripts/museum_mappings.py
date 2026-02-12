@@ -48,9 +48,10 @@ museum_mappings = {
 # Proprietà che DEVONO rimanere literal (seguendo tabella decisionale + mappings.csv)
 literal_only_properties = [
     # Museo specifici
-    "http://example.org/museum/floorLevel",
-    "http://example.org/museum/section", 
+    "http://example.org/floorLevel",
+    "http://example.org/museumSection", 
     "http://example.org/N_inventario",
+    "http://www.wikidata.org/prop/direct/P217",   # inventory number
     "http://www.wikidata.org/prop/direct/P528",   # catalogue code
     
     # ANNI e DATE (PRIORITÀ ASSOLUTA - mai IRI)
@@ -67,17 +68,13 @@ literal_only_properties = [
     "http://www.wikidata.org/prop/direct/P585",   # point in time
     "http://www.wikidata.org/prop/direct/P5444",  # model year
     
-    # BRAND/MARCA (sempre literal come specificato dall'utente)
-    "http://example.org/Marca",
-    "http://schema.org/brand",                   # brand
-    "https://schema.org/brand",                  # brand (HTTPS version)
-    "http://www.wikidata.org/prop/direct/P176",  # manufacturer
-    "http://www.wikidata.org/prop/direct/P1716", # brand
-    
-    # DATI NUMERICI TECNICI (seguendo tabella + mappings.csv)
+    # MODELLO (sempre literal)
     "http://example.org/Modello",
     "http://schema.org/model",                    # model name
     "https://schema.org/model",                   # model name (HTTPS)
+    "http://www.wikidata.org/prop/direct/P1559", # name in native language
+    
+    # DATI NUMERICI TECNICI (seguendo tabella + mappings.csv)
     "http://example.org/Potenza",
     "http://schema.org/EnginePower",             # engine power
     "https://schema.org/EnginePower",            # engine power (HTTPS)
@@ -124,6 +121,18 @@ literal_only_properties = [
 
 # Proprietà per entità che DEVONO diventare IRI (solo entità concettuali)
 iri_target_properties = [
+    # BRAND/MARCA - Entity linking a Wikidata
+    "http://example.org/Marca",
+    "http://schema.org/brand",                   # brand
+    "https://schema.org/brand",                  # brand (HTTPS version)
+    "http://www.wikidata.org/prop/direct/P176",  # manufacturer
+    "http://www.wikidata.org/prop/direct/P1716", # brand
+    
+    # PAESE - Entity linking a Wikidata
+    "http://example.org/Paese",
+    "http://schema.org/countryOfOrigin",         # country of origin
+    "http://www.wikidata.org/prop/direct/P495",  # country of origin
+    
     # ENTITÀ CONCETTUALI - Alimentazione/fuel type
     "http://example.org/Alimentazione",
     "http://schema.org/fuelType",               # fuel type
@@ -162,3 +171,184 @@ description_properties = [
     "http://example.org/TESTO",
     "http://schema.org/Description"              # description da mappings.csv
 ]
+
+# ============================================================================
+# LOGICA PER ENTITÀ MULTIPLE (designer, piloti, etc.)
+# ============================================================================
+multiple_entities_predicates = [
+    'http://example.org/Carrozzeria_Designer',
+    'http://www.wikidata.org/prop/direct/P287',  # designed by
+    'http://example.org/Piloti',
+    'http://example.org/racing/drivers',
+    'http://schema.org/Person',
+    'http://schema.org/manufacturer'  # può contenere più designer/manufacturer
+]
+
+# ============================================================================
+# PATTERN PER RICONOSCERE ANNI (devono rimanere LITERAL)
+# ============================================================================
+import re
+
+def is_year_value(value: str) -> bool:
+    """Determina se un valore è un anno o range di anni."""
+    if not value or not isinstance(value, str):
+        return False
+    
+    value = value.strip()
+    year_patterns = [
+        r'^\d{4}$',                              # 1990
+        r'^\d{4}[-–]\d{4}$',                     # 1990-1995
+        r'^(19|20)\d{2}$',                       # 1900-2099
+        r'^(19|20)\d{2}[-–](19|20)\d{2}$'        # 1990-1995 con range completo
+    ]
+    
+    for pattern in year_patterns:
+        if re.match(pattern, value):
+            return True
+    return False
+
+# ============================================================================
+# TIPI DI ENTITÀ WIKIDATA PER PREDICATI
+# ============================================================================
+entity_type_mappings = {
+    # Persone/People (designer, piloti)
+    'http://example.org/Carrozzeria_Designer': 'Q5',  # human/person
+    'http://www.wikidata.org/prop/direct/P287': 'Q5',  # designed by
+    'http://example.org/Piloti': 'Q5',                 # human/person
+    'http://example.org/racing/drivers': 'Q5',         # human/person
+    'http://schema.org/Person': 'Q5',                  # human/person
+    
+    # Competizioni/Awards/Eventi
+    'http://example.org/Corse': 'Q18649705',           # competition/event
+    'http://schema.org/award': 'Q18649705',            # competition/event
+    'http://www.wikidata.org/prop/direct/P166': 'Q18649705',  # award received
+    'http://www.wikidata.org/prop/direct/P641': 'Q18649705',  # sport
+    
+    # Default per entità generiche (alimentazione, tipo motore, carrozzeria, etc.)
+    'default': 'Q35120'  # entity (generic)
+}
+
+# ============================================================================
+# PREFISSI PER IRI PERSONALIZZATI (basati su tipo concettuale)
+# ============================================================================
+custom_iri_prefixes = {
+    'motore': 'engine_type',
+    'engine': 'engine_type',
+    'carrozzeria': 'body_type',
+    'body': 'body_type',
+    'alimentazione': 'fuel_type',
+    'fuel': 'fuel_type',
+    'default': 'concept'
+}
+
+# ============================================================================
+# LOGICA PER DESCRIZIONI LUNGHE
+# ============================================================================
+def is_long_description(text: str) -> bool:
+    """
+    Determina se il testo è una descrizione lunga che dovrebbe usare rdfs:comment.
+    """
+    if not text or len(text.strip()) < 50:
+        return False
+        
+    # Indicatori di descrizioni lunghe vs labels brevi
+    description_indicators = [
+        # Presenza di frasi complete (contiene punti)
+        r'\.\s+[A-Z]',  # Punto seguito da spazio e maiuscola (nuova frase)
+        
+        # Testo molto lungo (>200 caratteri)
+        lambda t: len(t.strip()) > 200,
+        
+        # Pattern tipici di descrizioni storiche/narrative
+        r'\b(fu|venne|era|divenne|nacque|fondò|produsse|costruì)\b',
+        r'\b(nel|dal|al|tra il|durante|epoca|periodo)\s+\d{4}',
+        r'\b(storia|fondazione|caratteristiche|descrizione)\b',
+        
+        # Presenza di più di 3 virgole (elenchi dettagliati)
+        lambda t: t.count(',') > 3,
+        
+        # Pattern narrativi specifici del museo
+        r'(al Museo|esposto|vettura|automobile|modello.*fu|prodotta.*tra)'
+    ]
+    
+    # Controlla pattern regex
+    for indicator in description_indicators:
+        if callable(indicator):
+            if indicator(text):
+                return True
+        else:
+            if re.search(indicator, text, re.IGNORECASE):
+                return True
+    
+    return False
+
+def generate_appropriate_label(description: str, predicate_str: str) -> str:
+    """
+    Genera un label appropriato da una descrizione lunga.
+    """
+    # Estratti comuni per diversi tipi di predicati
+    if 'brand' in predicate_str.lower():
+        # Per brand: cerca nomi di aziende
+        brands = re.findall(r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\b', description[:100])
+        if brands:
+            return brands[0]
+            
+    elif 'anno' in predicate_str.lower() or 'year' in predicate_str.lower():
+        # Per anni: cerca date a 4 cifre
+        years = re.findall(r'\b(1[89]\d{2}|20\d{2})\b', description)
+        if years:
+            return years[0]
+            
+    # Fallback: prime 3-4 parole significative
+    words = re.findall(r'\b[A-Za-z]+\b', description)
+    if words:
+        significant_words = [w for w in words[:6] if len(w) > 2][:4]
+        return ' '.join(significant_words)
+    
+    # Ultimo fallback: primi 30 caratteri
+    return description[:30].strip() + "..." if len(description) > 30 else description.strip()
+
+def get_custom_iri_prefix(predicate_str: str) -> str:
+    """
+    Determina il prefisso appropriato per un IRI personalizzato basato sul predicato.
+    """
+    predicate_lower = predicate_str.lower()
+    
+    for keyword, prefix in custom_iri_prefixes.items():
+        if keyword != 'default' and keyword in predicate_lower:
+            return prefix
+    
+    return custom_iri_prefixes['default']
+
+def get_entity_type_for_predicate(predicate_str: str) -> str:
+    """
+    Determina il tipo di entità Wikidata appropriato per un predicato.
+    """
+    return entity_type_mappings.get(predicate_str, entity_type_mappings['default'])
+
+def is_multiple_entities_predicate(predicate_str: str) -> bool:
+    """
+    Determina se un predicato può contenere multiple entità (persone, designer, etc.).
+    """
+    return predicate_str in multiple_entities_predicates
+
+def is_donation(value: str) -> bool:
+    """
+    Determina se un valore di acquisizione è una donazione.
+    """
+    if not value or not isinstance(value, str):
+        return False
+    
+    value_lower = value.lower()
+    donation_keywords = ['dono', 'donazione', 'donato', 'gift', 'donated', 'donation']
+    
+    return any(keyword in value_lower for keyword in donation_keywords)
+
+def get_donor_predicates():
+    """
+    Ritorna i predicati per donatore (Wikidata e Schema.org).
+    """
+    return {
+        'wikidata': 'http://www.wikidata.org/prop/direct/P1028',  # donated by
+        'schema': 'https://schema.org/sponsor'  # sponsor/donatore
+    }

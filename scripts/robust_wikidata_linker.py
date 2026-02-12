@@ -60,6 +60,74 @@ class WikidataEntityLinker:
             'Q838948': 1.8,    # land vehicle
             'Q18810912': 2.0,  # experimental vehicle
         }
+        
+        # QID di tipi INCOMPATIBILI con dominio automotive
+        self.incompatible_types = {
+            'Q215380',   # musical group/band
+            'Q482994',   # album
+            'Q7366',     # song
+            'Q5398426',  # TV series
+            'Q11424',    # film
+            'Q571',      # book
+            'Q3305213',  # painting
+            'Q838948',   # artwork (quando non è veicolo)
+            'Q15632617', # fictional entity
+            'Q4830453',  # business (generico, non automotive)
+        }
+    
+    def _validate_ontology(self, entity_id: str, instance_of_ids: List[str], predicate_context: str = None, label: str = "") -> bool:
+        """
+        Valida la compatibilità ontologica dell'entità con il contesto automotive.
+        
+        Args:
+            entity_id: QID dell'entità
+            instance_of_ids: Lista di QID di instance_of (P31)
+            predicate_context: Predicato di contesto (opzionale)
+            label: Label dell'entità per logging
+            
+        Returns:
+            True se l'entità è compatibile, False altrimenti
+        """
+        # Step 1: Rifiuta entità con tipi incompatibili
+        for instance_id in instance_of_ids:
+            if instance_id in self.incompatible_types:
+                print(f"  [REJECTED] {entity_id} ({label}) - incompatibile: {instance_id} (band/album/song/film)")
+                return False
+        
+        # Step 2: Validazione basata sul predicato (se fornito)
+        if predicate_context:
+            # Brand/Manufacturer - deve essere azienda automotive
+            if 'P176' in predicate_context or 'P1716' in predicate_context or 'brand' in predicate_context.lower():
+                # Deve essere un manufacturer o azienda
+                valid_brand_types = {'Q786820', 'Q936518', 'Q4830453', 'Q783794', 'Q891723'}
+                if instance_of_ids and not any(t in valid_brand_types for t in instance_of_ids):
+                    # Se non ha nessun tipo valido per brand, rifiuta
+                    if instance_of_ids:  # Solo se ha dei tipi definiti
+                        print(f"  [REJECTED] {entity_id} ({label}) - non è un manufacturer valido")
+                        return False
+            
+            # Country - deve essere un paese
+            if 'P495' in predicate_context or 'country' in predicate_context.lower():
+                valid_country_types = {'Q6256', 'Q3024240', 'Q3336843', 'Q7275'}
+                if instance_of_ids and not any(t in valid_country_types for t in instance_of_ids):
+                    print(f"  [REJECTED] {entity_id} ({label}) - non è un paese")
+                    return False
+            
+            # Person - deve essere umano (Q5)
+            if 'P287' in predicate_context or 'Person' in predicate_context:
+                if 'Q5' not in instance_of_ids:
+                    print(f"  [REJECTED] {entity_id} ({label}) - non è una persona")
+                    return False
+        
+        # Step 3: Per acronimi brevi (<= 3 caratteri), richiedi tipo automotive esplicito
+        if len(label.strip()) <= 3:
+            # Deve avere almeno un tipo automotive
+            if not any(t in self.vehicle_types for t in instance_of_ids):
+                print(f"  [REJECTED] {entity_id} ({label}) - acronimo senza tipo automotive")
+                return False
+        
+        print(f"  [VALIDATED] {entity_id} ({label})")
+        return True
     
     def _load_cache(self) -> Dict:
         """Carica cache da file se esiste."""
@@ -157,31 +225,78 @@ class WikidataEntityLinker:
         
         return query, None
     
-    def _generate_alternative_queries(self, query: str) -> List[str]:
+    def _generate_alternative_queries(self, query: str) -> Tuple[List[str], List[str]]:
         """
         Genera query alternative per migliorare il matching, inclusi termini storici e traduzioni.
+        PRIORITÀ MASSIMA: traduzioni vengono messe PRIMA della query originale!
+        
+        Returns:
+            Tupla (alternative_queries, translated_queries) per tracciare quali sono traduzioni
         """
-        alternatives = [query]  # Query originale sempre prima
+        alternatives = []  # Lista vuota - priorità alle traduzioni
+        translated_queries = []  # Traccia traduzioni per bonus priorità
         
         # Dizionario di traduzioni specifiche per veicoli storici
         historical_translations = {
             "automobile a molla di leonardo": ["leonardo's self-propelled cart", "leonardo cart", "da vinci cart"],
-            "automobile di leonardo": ["leonardo's self-propelled cart", "leonardo cart"],
+            "automobile di leonardo": ["leonardo's self-propelled cart", "leonardo cart", "da vinci cart"],
+            "auto di leonardo": ["leonardo's self-propelled cart", "leonardo cart"],
+            "leonardo": ["leonardo's self-propelled cart", "leonardo cart", "da vinci cart"],
             "molla di leonardo": ["leonardo's self-propelled cart"],
             "jamais contente": ["la jamais contente", "never satisfied car"],
             "carro di cugnot": ["cugnot's steam wagon", "cugnot steamer"],
             "vapor carriage": ["steam carriage", "cugnot"],
+            # NUOVE TRADUZIONI CRITICHE - priorità massima
+            "italia": ["italy"],
+            "francia": ["france"],
+            "spagna": ["spain"],
+            "germania": ["germany"],
+            "austria": ["austria"],
+            "svizzera": ["switzerland"],
+            "belgio": ["belgium"],
+            "olanda": ["netherlands"],
+            "portogallo": ["portugal"],
+            "grecia": ["greece"]
         }
         
-        # Cerca traduzioni specifiche
+        # Cerca traduzioni specifiche CON PRIORITÀ MASSIMA
         query_lower = query.lower()
-        for italian_term, english_terms in historical_translations.items():
-            if italian_term in query_lower:
-                alternatives.extend(english_terms)
-                break
+        translation_found = False
         
-        # Genera varianti linguistiche generiche
-        if any(word in query_lower for word in ["automobile", "auto", "veicolo", "carro", "macchina"]):
+        print(f"  [SEARCH] Cercando traduzioni per: '{query_lower}'")
+        
+        for italian_term, english_terms in historical_translations.items():
+            # Match diretto completo
+            if query_lower == italian_term:
+                translated_queries.extend(english_terms)
+                alternatives.extend(english_terms)
+                translation_found = True
+                print(f"  [MATCH] Esatto: '{query_lower}' -> {english_terms}")
+                break
+            # Match contenuto nel termine
+            elif italian_term in query_lower:
+                translated_queries.extend(english_terms)
+                alternatives.extend(english_terms)
+                translation_found = True
+                print(f"  [MATCH] Contenuto: '{italian_term}' in '{query_lower}' -> {english_terms}")
+                break
+            # Match parziale per termini con più parole
+            elif len(italian_term.split()) > 1:
+                italian_words = set(italian_term.split())
+                query_words = set(query_lower.split())
+                overlap = italian_words.intersection(query_words)
+                if len(overlap) >= 2:  # Almeno 2 parole in comune
+                    translated_queries.extend(english_terms)
+                    alternatives.extend(english_terms)
+                    translation_found = True
+                    print(f"  [MATCH] Parziale: '{italian_term}' ~ '{query_lower}' (overlap: {overlap}) -> {english_terms}")
+                    break
+        
+        # AGGIUNGI LA QUERY ORIGINALE SOLO DOPO LE TRADUZIONI
+        alternatives.append(query)
+        
+        # Genera varianti linguistiche generiche SOLO se non ci sono traduzioni specifiche
+        if not translation_found and any(word in query_lower for word in ["automobile", "auto", "veicolo", "carro", "macchina"]):
             # Sostituisci termini italiani con inglesi
             english_variant = query_lower
             italian_to_english = {
@@ -199,10 +314,12 @@ class WikidataEntityLinker:
                 english_variant = english_variant.replace(it_term, en_term)
             
             if english_variant != query_lower:
+                translated_queries.append(english_variant)
                 alternatives.append(english_variant)
         
-        return list(dict.fromkeys(alternatives))  # Rimuovi duplicati
-    
+        # Restituisci insieme alle traduzioni per tracciamento bonus
+        return alternatives, translated_queries
+
     def _search_wikidata_entities_multilang(self, query: str, limit: int = 10) -> List[Dict]:
         """
         Cerca entità su Wikidata in più lingue (IT + EN) per massimizzare i risultati.
@@ -392,7 +509,7 @@ class WikidataEntityLinker:
         
         return min(total_score, 1.0)
     
-    def find_best_entity(self, query: str, min_confidence: float = 0.3) -> Optional[Dict]:
+    def find_best_entity(self, query: str, min_confidence: float = 0.25) -> Optional[Dict]:
         """
         Trova la migliore entità Wikidata per una query con sistema robusto.
         
@@ -412,7 +529,7 @@ class WikidataEntityLinker:
         best_score = 0.0
         
         # Genera query alternative (include traduzioni e varianti storiche)
-        query_alternatives = self._generate_alternative_queries(query)
+        query_alternatives, translated_queries = self._generate_alternative_queries(query)
         
         # Aggiungi anche varianti semplificate tradizionali
         simplified_variations = []
@@ -455,22 +572,50 @@ class WikidataEntityLinker:
                 if not entity_details:
                     continue
                 
-                # Calcola similarity score (usa query originale per consistency)
+                # Ottieni label e description prima della validazione
                 label = candidate.get('label', '')
                 description = candidate.get('description', '')
-                similarity_score = self._calculate_similarity_score(query, label, description)
                 
-                # Calcola priority score basato su P31
+                # VALIDAZIONE ONTOLOGICA - Recupera P31 e valida
                 claims = entity_details.get('claims', {})
                 instance_of_ids = self._extract_instance_of(claims)
+                
+                # Valida compatibilità ontologica PRIMA di calcolare score
+                if not self._validate_ontology(entity_id, instance_of_ids, predicate_context=None, label=label):
+                    print(f"  [SKIPPED] Saltato {entity_id} per incompatibilità ontologica")
+                    continue
+                
+                # Calcola similarity score - USA LA VARIANTE CORRENTE per traduzioni!
+                is_translated_query = variation in translated_queries
+                
+                # CRUCIALE: se è una traduzione, usa la variante tradotta per similarity
+                comparison_query = variation if is_translated_query else query
+                similarity_score = self._calculate_similarity_score(comparison_query, label, description)
+                
+                if is_translated_query:
+                    print(f"  [TRANSLATED] Usando query tradotta '{comparison_query}' per similarity (invece di '{query}')")
+                
+                # Calcola priority score basato su P31
                 priority_score = self._calculate_vehicle_priority_score(instance_of_ids)
                 
                 # Calcola score totale
                 total_score = self._calculate_total_score(query, candidate, similarity_score, priority_score)
                 
-                # Bonus per query storiche specifiche trovate con traduzione
-                if i < len(query_alternatives) and any(term in variation.lower() for term in ["leonardo", "cart", "cugnot", "jamais"]):
-                    total_score += 0.2  # Bonus per match storico specifico
+                # BONUS MASSIMO per query TRADOTTE - priorità assoluta!
+                is_translated_query = variation in translated_queries
+                if is_translated_query:
+                    total_score += 0.7  # BONUS ENORME per query tradotte!
+                    print(f"  *** BONUS TRADUZIONE (+0.7): query tradotta '{variation}' ***")
+                
+                # Bonus per query storiche specifiche
+                if any(term in variation.lower() for term in ["leonardo", "cart", "cugnot", "jamais"]):
+                    if not is_translated_query:  # Solo se non ha già bonus traduzione
+                        total_score += 0.3
+                
+                # Bonus extra per veicoli storici famosi 
+                if any(historical_term in label.lower() for historical_term in ["leonardo", "cugnot", "jamais contente", "molla"]):
+                    if not is_translated_query:  # Solo se non ha già bonus traduzione
+                        total_score += 0.2
                 
                 print(f"  {entity_id} - {label}: sim={similarity_score:.3f}, pri={priority_score:.3f}, tot={total_score:.3f}")
                 
@@ -684,7 +829,7 @@ if __name__ == "__main__":
         result = linker.find_best_entity(query, min_confidence=0.2)
         
         if result:
-            print(f"✓ Trovato: {result['qid']} - {result['label']}")
+            print(f"[OK] Trovato: {result['qid']} - {result['label']}")
             print(f"  Confidenza: {result['confidence']:.3f}")
             print(f"  Similarità: {result['similarity_score']:.3f}")
             print(f"  Priorità: {result['priority_score']:.3f}")

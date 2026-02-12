@@ -73,6 +73,15 @@ class WikidataEntityLinker:
             'Q838948',   # artwork (quando non è veicolo)
             'Q15632617', # fictional entity
             'Q4830453',  # business (generico, non automotive)
+            # Entità geografiche (città, comuni, regioni)
+            'Q515',      # city
+            'Q484170',   # comune
+            'Q15220960', # municipality
+            'Q1549591',  # big city
+            'Q3957',     # town
+            'Q532',      # village
+            'Q486972',   # human settlement
+            'Q5119',     # capital city
         }
     
     def _validate_ontology(self, entity_id: str, instance_of_ids: List[str], predicate_context: str = None, label: str = "") -> bool:
@@ -98,6 +107,12 @@ class WikidataEntityLinker:
         if predicate_context:
             # Brand/Manufacturer - deve essere azienda automotive
             if 'P176' in predicate_context or 'P1716' in predicate_context or 'brand' in predicate_context.lower():
+                # Rifiuta esplicitamente entità geografiche
+                geographic_types = {'Q515', 'Q484170', 'Q15220960', 'Q1549591', 'Q3957', 'Q532', 'Q486972', 'Q5119', 'Q6256'}
+                if any(t in geographic_types for t in instance_of_ids):
+                    print(f"  [REJECTED] {entity_id} ({label}) - è un'entità geografica, non un brand")
+                    return False
+                
                 # Deve essere un manufacturer o azienda
                 valid_brand_types = {'Q786820', 'Q936518', 'Q4830453', 'Q783794', 'Q891723'}
                 if instance_of_ids and not any(t in valid_brand_types for t in instance_of_ids):

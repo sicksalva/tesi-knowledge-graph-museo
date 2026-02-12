@@ -218,6 +218,16 @@ entity_type_mappings = {
     'http://example.org/racing/drivers': 'Q5',         # human/person
     'http://schema.org/Person': 'Q5',                  # human/person
     
+    # Brand/Manufacturer
+    'https://schema.org/brand': 'Q786820',             # car manufacturer
+    'http://www.wikidata.org/prop/direct/P176': 'Q786820',  # manufacturer
+    'http://www.wikidata.org/prop/direct/P1716': 'Q786820',  # brand
+    
+    # Country/Paese
+    'https://schema.org/countryOfOrigin': 'Q6256',     # country
+    'http://www.wikidata.org/prop/direct/P495': 'Q6256',    # country of origin
+    'http://www.wikidata.org/prop/direct/P17': 'Q6256',     # country
+    
     # Competizioni/Awards/Eventi
     'http://example.org/Corse': 'Q18649705',           # competition/event
     'http://schema.org/award': 'Q18649705',            # competition/event
@@ -325,6 +335,64 @@ def get_entity_type_for_predicate(predicate_str: str) -> str:
     Determina il tipo di entità Wikidata appropriato per un predicato.
     """
     return entity_type_mappings.get(predicate_str, entity_type_mappings['default'])
+
+def select_best_type_from_instance_of(instance_of_list: list, predicate_hint: str = None) -> str:
+    """
+    Seleziona il tipo più appropriato da una lista di tipi P31 (instance_of).
+    
+    Args:
+        instance_of_list: Lista di QID dai claims P31
+        predicate_hint: Tipo suggerito dal predicato (opzionale)
+    
+    Returns:
+        Il QID del tipo più appropriato
+    """
+    if not instance_of_list:
+        return predicate_hint if predicate_hint else 'Q35120'
+    
+    # Definizione di priorità per categorie di tipi
+    priority_types = {
+        # Brand/Manufacturer automotive (massima priorità)
+        'Q786820': 100,   # car manufacturer
+        'Q167270': 95,    # brand
+        'Q4830453': 90,    # business
+        'Q43229': 85,     # organization
+        
+        # Country (alta priorità)
+        'Q6256': 100,     # country
+        'Q3024240': 95,   # historical country
+        'Q7275': 90,      # state
+        
+        # Person
+        'Q5': 100,        # human
+        
+        # Vehicle types
+        'Q1420': 90,      # automobile
+        'Q752870': 85,    # motor vehicle
+        'Q936518': 80,    # car model
+        
+        # Event/Competition
+        'Q18669875': 100, # competition event
+        'Q18649705': 95,  # competition
+    }
+    
+    # Trova il tipo con la priorità più alta
+    best_type = None
+    best_score = -1
+    
+    for qid in instance_of_list:
+        score = priority_types.get(qid, 0)
+        if score > best_score:
+            best_score = score
+            best_type = qid
+    
+    # Se non troviamo nessun tipo prioritario, usa il primo della lista
+    # (è quello più comune/generale in Wikidata)
+    if best_type is None and instance_of_list:
+        best_type = instance_of_list[0]
+    
+    # Fallback al suggerimento dal predicato o default generico
+    return best_type if best_type else (predicate_hint if predicate_hint else 'Q35120')
 
 def is_multiple_entities_predicate(predicate_str: str) -> bool:
     """

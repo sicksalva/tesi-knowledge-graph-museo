@@ -138,6 +138,7 @@ class AdvancedSemanticEnricher:
             return {
                 'action': 'create_wikidata_iri',
                 'original_value': value,
+                'wikidata_label': cached_result.get('label', value),  # Usa label da cache
                 'iri': WD[cached_result['qid']],
                 'rdf_type': WD[cached_result['type']],  # Usa il tipo dal cache 
                 'source': 'dynamic_cache',
@@ -147,20 +148,29 @@ class AdvancedSemanticEnricher:
         # Se non in cache, usa API Wikidata
         if self.wikidata_linker:
             # Determina tipo suggerito dai mappings
-            entity_type = museum_mappings.get_entity_type_for_predicate(predicate_str)
+            suggested_type = museum_mappings.get_entity_type_for_predicate(predicate_str)
             
             # Chiama API con confidence più alta per evitare falsi positivi
             api_result = self.wikidata_linker.find_best_entity(value, min_confidence=0.6)
             if api_result:
                 
-                # Salva in cache dinamico per future ricerche
-                self._save_to_entity_cache(value, api_result['qid'], entity_type, api_result['confidence'])
+                # Seleziona il tipo più appropriato da instance_of invece di usare solo il suggerito
+                instance_of_types = api_result.get('instance_of', [])
+                best_type = museum_mappings.select_best_type_from_instance_of(
+                    instance_of_types, 
+                    predicate_hint=suggested_type
+                )
+                
+                # Salva in cache dinamico per future ricerche (includi label)
+                wikidata_label = api_result.get('label', value)
+                self._save_to_entity_cache(value, api_result['qid'], best_type, api_result['confidence'], wikidata_label)
                 
                 return {
                     'action': 'create_wikidata_iri',
                     'original_value': value,
+                    'wikidata_label': wikidata_label,  # Label da Wikidata
                     'iri': WD[api_result['qid']],
-                    'rdf_type': WD[entity_type],
+                    'rdf_type': WD[best_type],
                     'source': 'wikidata_api_new',
                     'confidence': api_result['confidence']
                 }
@@ -183,7 +193,7 @@ class AdvancedSemanticEnricher:
         normalized = value.strip().lower()
         return self.entity_cache.get(normalized)
     
-    def _save_to_entity_cache(self, value: str, qid: str, entity_type: str, confidence: float):
+    def _save_to_entity_cache(self, value: str, qid: str, entity_type: str, confidence: float, label: str = None):
         """Salva risultato in cache dinamico (si espande automaticamente)."""
         import json
         normalized = value.strip().lower()
@@ -192,7 +202,8 @@ class AdvancedSemanticEnricher:
             'qid': qid,
             'type': entity_type,
             'confidence': confidence,
-            'original_value': value
+            'original_value': value,
+            'label': label if label else value  # Salva label Wikidata o fallback a value
         }
         
         # Salva su disco immediatamente
@@ -333,6 +344,10 @@ class AdvancedSemanticEnricher:
                         for schema_prop in schema_props:
                             # Valida: non deve contenere virgole, numeri all'inizio, spazi multipli
                             if self._is_valid_predicate(schema_prop):
+                                # SKIP predicati non-Schema.org (purl.org, dc/terms, etc.)
+                                if 'purl.org' in schema_prop or '/dc/terms' in schema_prop:
+                                    continue
+                                
                                 # Costruisci URI completo Schema.org (sempre HTTPS)
                                 if schema_prop.startswith('http://schema.org/'):
                                     schema_uri = schema_prop.replace('http://', 'https://')
@@ -515,7 +530,9 @@ class AdvancedSemanticEnricher:
                             # Triple con predicato Wikidata
                             graph.add((subject, URIRef(predicate_uri), entity_data['iri']))
                             graph.add((entity_data['iri'], RDF.type, entity_data['rdf_type']))
-                            graph.add((entity_data['iri'], RDFS.label, Literal(entity_data['original_value'], datatype=XSD.string)))
+                            # Usa label da Wikidata se disponibile, altrimenti valore originale
+                            label_value = entity_data.get('wikidata_label', entity_data['original_value'])
+                            graph.add((entity_data['iri'], RDFS.label, Literal(label_value, datatype=XSD.string)))
                             total_triples += 3
                             
                             # Aggiungi anche predicati Schema.org
@@ -535,7 +552,9 @@ class AdvancedSemanticEnricher:
                         # Triple con predicato Wikidata
                         graph.add((subject, URIRef(predicate_uri), enrichment['iri']))
                         graph.add((enrichment['iri'], RDF.type, enrichment['rdf_type']))
-                        graph.add((enrichment['iri'], RDFS.label, Literal(enrichment['original_value'], datatype=XSD.string)))
+                        # Usa label da Wikidata se disponibile, altrimenti valore originale
+                        label_value = enrichment.get('wikidata_label', enrichment['original_value'])
+                        graph.add((enrichment['iri'], RDFS.label, Literal(label_value, datatype=XSD.string)))
                         total_triples += 3
                         
                         # Aggiungi anche predicati Schema.org per interoperabilità

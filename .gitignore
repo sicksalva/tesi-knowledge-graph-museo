@@ -13,7 +13,8 @@ output/output_temp.nt
 old/
 
 # Cache files
-cache/*.pkl
+caches/*.pkl
+caches/*.json
 *.pkl
 production_cache_entities.json
 

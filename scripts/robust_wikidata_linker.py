@@ -143,6 +143,11 @@ class WikidataEntityLinker:
     def _save_cache(self):
         """Salva cache su file."""
         try:
+            # Crea la directory se non esiste
+            cache_dir = os.path.dirname(self.cache_file)
+            if cache_dir and not os.path.exists(cache_dir):
+                os.makedirs(cache_dir, exist_ok=True)
+            
             with open(self.cache_file, 'wb') as f:
                 pickle.dump(self.cache, f)
         except Exception as e:

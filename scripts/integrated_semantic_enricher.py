@@ -197,6 +197,11 @@ class AdvancedSemanticEnricher:
         
         # Salva su disco immediatamente
         try:
+            # Crea la directory se non esiste
+            cache_dir = os.path.dirname(self.entity_cache_file)
+            if cache_dir and not os.path.exists(cache_dir):
+                os.makedirs(cache_dir, exist_ok=True)
+                
             with open(self.entity_cache_file, 'w', encoding='utf-8') as f:
                 json.dump(self.entity_cache, f, ensure_ascii=False, indent=2)
         except Exception as e:
@@ -587,7 +592,7 @@ def main():
     clear_cache = input("Vuoi cancellare le cache prima di iniziare? (s/n): ").strip().lower()
     
     if clear_cache in ['s', 'si', 'sì', 'y', 'yes']:
-        cache_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "cache")
+        cache_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "caches")
         cache_files = glob.glob(os.path.join(cache_dir, "*"))
         
         if cache_files:
@@ -605,7 +610,7 @@ def main():
     else:
         print("Cache mantenuta.\n")
     
-    enricher = AdvancedSemanticEnricher(use_wikidata_api=True, cache_file="production_cache.pkl")
+    enricher = AdvancedSemanticEnricher(use_wikidata_api=True, cache_file="caches/production_cache.pkl")
     
     # File di input e output
     csv_file = "data/museo.csv"

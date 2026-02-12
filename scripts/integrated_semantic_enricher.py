@@ -151,7 +151,8 @@ class AdvancedSemanticEnricher:
             suggested_type = museum_mappings.get_entity_type_for_predicate(predicate_str)
             
             # Chiama API con confidence più alta per evitare falsi positivi
-            api_result = self.wikidata_linker.find_best_entity(value, min_confidence=0.6)
+            # PASSA il predicate_str per validazione ontologica stretta
+            api_result = self.wikidata_linker.find_best_entity(value, min_confidence=0.6, predicate_context=predicate_str)
             if api_result:
                 
                 # Seleziona il tipo più appropriato da instance_of invece di usare solo il suggerito
@@ -262,6 +263,62 @@ class AdvancedSemanticEnricher:
         prefix = museum_mappings.get_custom_iri_prefix(predicate_str)
         
         return EX[f"{prefix}_{normalized}"]
+    
+    def _search_vehicle_entity(self, marca: str, modello: str) -> Optional[Dict]:
+        """
+        Cerca l'entità Wikidata per il veicolo completo usando Marca + Modello.
+        
+        Args:
+            marca: Nome della marca
+            modello: Nome del modello
+            
+        Returns:
+            Dizionario con informazioni entità o None
+        """
+        if not marca or not modello:
+            return None
+        
+        # Crea query combinata
+        combined_query = f"{marca} {modello}"
+        
+        # Cache check
+        cache_key = f"vehicle:{combined_query.lower().strip()}"
+        if cache_key in self.entity_cache:
+            cached = self.entity_cache[cache_key]
+            return {
+                'qid': cached['qid'],
+                'label': cached.get('label', combined_query),
+                'confidence': cached.get('confidence', 0.8),
+                'source': 'vehicle_cache'
+            }
+        
+        # Cerca su Wikidata
+        if not self.wikidata_linker:
+            return None
+        
+        print(f"  [VEHICLE SEARCH] Cercando veicolo: '{combined_query}'")
+        result = self.wikidata_linker.find_best_entity(combined_query, min_confidence=0.65)
+        
+        if result and result.get('qid'):
+            # Salva in cache
+            self.entity_cache[cache_key] = {
+                'qid': result['qid'],
+                'label': result.get('label', combined_query),
+                'confidence': result['confidence'],
+                'original_value': combined_query
+            }
+            
+            # Salva su disco
+            try:
+                with open(self.entity_cache_file, 'w', encoding='utf-8') as f:
+                    json.dump(self.entity_cache, f, ensure_ascii=False, indent=2)
+            except Exception as e:
+                print(f"Warning: Impossibile salvare cache veicoli: {e}")
+            
+            print(f"  [VEHICLE FOUND] {result['qid']} - {result.get('label', result['qid'])} (score: {result['confidence']:.3f})")
+            return result
+        
+        return None
     
     def _load_column_mappings(self, mapping_file: str) -> Dict[str, Dict]:
         """Carica mappings colonne CSV -> proprietà RDF."""
@@ -572,6 +629,19 @@ class AdvancedSemanticEnricher:
                                 api_new_entities += 1
                         elif enrichment['action'] == 'create_custom_iri':
                             custom_iris += 1
+                
+                # DOPO aver processato tutte le colonne, cerca il veicolo completo su Wikidata
+                marca = row.get('Marca')
+                modello = row.get('Modello')
+                if marca and modello and not pd.isna(marca) and not pd.isna(modello):
+                    vehicle_entity = self._search_vehicle_entity(str(marca).strip(), str(modello).strip())
+                    if vehicle_entity and vehicle_entity.get('qid'):
+                        vehicle_uri = URIRef(f"http://www.wikidata.org/entity/{vehicle_entity['qid']}")
+                        # Aggiungi triple che collegano il veicolo all'entità Wikidata
+                        graph.add((subject, SCHEMA.sameAs, vehicle_uri))
+                        graph.add((subject, URIRef("http://www.wikidata.org/prop/direct/P31"), vehicle_uri))  # instance of
+                        total_triples += 2
+                        api_new_entities += 1
                 
                 if (idx + 1) % 10 == 0:
                     print(f"  Processati {idx + 1}/{len(df)} veicoli...")

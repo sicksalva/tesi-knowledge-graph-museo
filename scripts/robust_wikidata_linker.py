@@ -24,15 +24,17 @@ class WikidataEntityLinker:
     Sistema robusto di entity linking verso Wikidata utilizzando l'API ufficiale.
     """
     
-    def __init__(self, cache_file="wikidata_cache.pkl", rate_limit_delay=0.1):
+    def __init__(self, cache_file="wikidata_cache.pkl", ontology_config_file="data/wikidata_ontology_config.json", rate_limit_delay=0.1):
         """
         Inizializza il linker con cache locale e rate limiting.
         
         Args:
             cache_file: File per il caching locale
+            ontology_config_file: File JSON con configurazione ontologia Wikidata
             rate_limit_delay: Delay tra richieste API in secondi
         """
         self.cache_file = cache_file
+        self.ontology_config_file = ontology_config_file
         self.rate_limit_delay = rate_limit_delay
         self.session = requests.Session()
         self.session.headers.update({
@@ -42,47 +44,50 @@ class WikidataEntityLinker:
         # Carica cache esistente
         self.cache = self._load_cache()
         
-        # QID di tipi vehicoli per scoring prioritario
-        self.vehicle_types = {
-            'Q1420': 3.0,      # automobile - massima priorità
-            'Q752870': 2.5,    # motor vehicle
-            'Q42889': 2.0,     # vehicle
-            'Q786820': 2.5,    # car manufacturer - alta priorità per brand
-            'Q936518': 2.0,    # car model
-            'Q1144312': 1.8,   # motorcycle
-            'Q5638': 1.5,      # bicycle
-            'Q274': 1.2,       # vehicle (generico)
-            'Q3231690': 2.8,   # electric car (per Jamais Contente)
-            'Q5152161': 2.6,   # prototype vehicle  
-            'Q848403': 2.4,    # concept car
-            'Q1228946': 2.2,   # historical vehicle
-            'Q15142889': 2.0,  # steam vehicle
-            'Q838948': 1.8,    # land vehicle
-            'Q18810912': 2.0,  # experimental vehicle
-        }
-        
-        # QID di tipi INCOMPATIBILI con dominio automotive
-        self.incompatible_types = {
-            'Q215380',   # musical group/band
-            'Q482994',   # album
-            'Q7366',     # song
-            'Q5398426',  # TV series
-            'Q11424',    # film
-            'Q571',      # book
-            'Q3305213',  # painting
-            'Q838948',   # artwork (quando non è veicolo)
-            'Q15632617', # fictional entity
-            'Q4830453',  # business (generico, non automotive)
-            # Entità geografiche (città, comuni, regioni)
-            'Q515',      # city
-            'Q484170',   # comune
-            'Q15220960', # municipality
-            'Q1549591',  # big city
-            'Q3957',     # town
-            'Q532',      # village
-            'Q486972',   # human settlement
-            'Q5119',     # capital city
-        }
+        # Carica configurazione ontologia da file esterno
+        self._load_ontology_config()
+    
+    def _load_ontology_config(self):
+        """Carica configurazione ontologia da file JSON esterno."""
+        try:
+            if os.path.exists(self.ontology_config_file):
+                with open(self.ontology_config_file, 'r', encoding='utf-8') as f:
+                    config = json.load(f)
+                    
+                # Carica tipi vehicoli con pesi
+                self.vehicle_types = {k: float(v) for k, v in config.get('vehicle_types', {}).items()}
+                
+                # Carica tipi incompatibili (converti lista a set)
+                self.incompatible_types = set(config.get('incompatible_types', []))
+                
+                # Carica pesi per scoring
+                weights = config.get('scoring_weights', {})
+                self.label_weight = weights.get('label_weight', 0.8)
+                self.description_weight = weights.get('description_weight', 0.2)
+                
+                # Carica traduzioni storiche
+                self.historical_translations = config.get('historical_translations', {})
+                
+                print(f"Configurazione ontologia caricata da {self.ontology_config_file}")
+                print(f"  - {len(self.vehicle_types)} tipi vehicoli")
+                print(f"  - {len(self.incompatible_types)} tipi incompatibili")
+                print(f"  - {len(self.historical_translations)} traduzioni storiche")
+            else:
+                print(f"ATTENZIONE: File configurazione {self.ontology_config_file} non trovato!")
+                print("Uso configurazione di default vuota.")
+                self.vehicle_types = {}
+                self.incompatible_types = set()
+                self.label_weight = 0.8
+                self.description_weight = 0.2
+                self.historical_translations = {}
+        except Exception as e:
+            print(f"Errore caricamento configurazione ontologia: {e}")
+            print("Uso configurazione di default vuota.")
+            self.vehicle_types = {}
+            self.incompatible_types = set()
+            self.label_weight = 0.8
+            self.description_weight = 0.2
+            self.historical_translations = {}
     
     def _validate_ontology(self, entity_id: str, instance_of_ids: List[str], predicate_context: str = None, label: str = "") -> bool:
         """
@@ -97,29 +102,27 @@ class WikidataEntityLinker:
         Returns:
             True se l'entità è compatibile, False altrimenti
         """
-        # Step 1: Rifiuta entità con tipi incompatibili
-        for instance_id in instance_of_ids:
-            if instance_id in self.incompatible_types:
-                print(f"  [REJECTED] {entity_id} ({label}) - incompatibile: {instance_id} (band/album/song/film)")
-                return False
-        
-        # Step 2: Validazione basata sul predicato (se fornito)
+        # Step 1: Validazione BRAND (priorità massima)
         if predicate_context:
-            # Brand/Manufacturer - deve essere azienda automotive
-            if 'P176' in predicate_context or 'P1716' in predicate_context or 'brand' in predicate_context.lower():
+            # Brand/Manufacturer - DEVE OBBLIGATORIAMENTE avere tipo automotive
+            if 'P176' in predicate_context or 'P1716' in predicate_context or 'brand' in predicate_context.lower() or 'Marca' in predicate_context:
                 # Rifiuta esplicitamente entità geografiche
                 geographic_types = {'Q515', 'Q484170', 'Q15220960', 'Q1549591', 'Q3957', 'Q532', 'Q486972', 'Q5119', 'Q6256'}
                 if any(t in geographic_types for t in instance_of_ids):
                     print(f"  [REJECTED] {entity_id} ({label}) - è un'entità geografica, non un brand")
                     return False
                 
-                # Deve essere un manufacturer o azienda
-                valid_brand_types = {'Q786820', 'Q936518', 'Q4830453', 'Q783794', 'Q891723'}
-                if instance_of_ids and not any(t in valid_brand_types for t in instance_of_ids):
-                    # Se non ha nessun tipo valido per brand, rifiuta
-                    if instance_of_ids:  # Solo se ha dei tipi definiti
-                        print(f"  [REJECTED] {entity_id} ({label}) - non è un manufacturer valido")
-                        return False
+                # OBBLIGATORIO: deve avere tipo automotive/manufacturer
+                valid_brand_types = {'Q786820', 'Q936518', 'Q783794', 'Q891723', 'Q1420', 'Q752870', 'Q3231690', 'Q5152161', 'Q848403'}
+                has_automotive_type = any(t in valid_brand_types or t in self.vehicle_types for t in instance_of_ids)
+                
+                if not has_automotive_type:
+                    print(f"  [REJECTED] {entity_id} ({label}) - brand SENZA tipo automotive (P31: {instance_of_ids})")
+                    return False
+                
+                # Se ha tipo automotive, PASSA anche se ha business/altri tipi
+                print(f"  [VALIDATED BRAND] {entity_id} ({label}) - tipo automotive confermato (ignoro altri tipi come business)")
+                return True
             
             # Country - deve essere un paese
             if 'P495' in predicate_context or 'country' in predicate_context.lower():
@@ -133,6 +136,12 @@ class WikidataEntityLinker:
                 if 'Q5' not in instance_of_ids:
                     print(f"  [REJECTED] {entity_id} ({label}) - non è una persona")
                     return False
+        
+        # Step 2: Rifiuta entità con tipi incompatibili (solo per NON-brand)
+        for instance_id in instance_of_ids:
+            if instance_id in self.incompatible_types:
+                print(f"  [REJECTED] {entity_id} ({label}) - incompatibile: {instance_id} (band/album/song/film/business non-automotive)")
+                return False
         
         # Step 3: Per acronimi brevi (<= 3 caratteri), richiedi tipo automotive esplicito
         if len(label.strip()) <= 3:
@@ -196,8 +205,8 @@ class WikidataEntityLinker:
         if desc_clean:
             desc_score = SequenceMatcher(None, query_clean, desc_clean).ratio()
         
-        # Score combinato con peso maggiore per label
-        combined_score = (label_score * 0.8) + (desc_score * 0.2)
+        # Score combinato con pesi da configurazione
+        combined_score = (label_score * self.label_weight) + (desc_score * self.description_weight)
         
         # Bonus per match esatto
         if query_clean.lower() == label_clean.lower():
@@ -256,61 +265,30 @@ class WikidataEntityLinker:
         alternatives = []  # Lista vuota - priorità alle traduzioni
         translated_queries = []  # Traccia traduzioni per bonus priorità
         
-        # Dizionario di traduzioni specifiche per veicoli storici
-        historical_translations = {
-            "automobile a molla di leonardo": ["leonardo's self-propelled cart", "leonardo cart", "da vinci cart"],
-            "automobile di leonardo": ["leonardo's self-propelled cart", "leonardo cart", "da vinci cart"],
-            "auto di leonardo": ["leonardo's self-propelled cart", "leonardo cart"],
-            "leonardo": ["leonardo's self-propelled cart", "leonardo cart", "da vinci cart"],
-            "molla di leonardo": ["leonardo's self-propelled cart"],
-            "jamais contente": ["la jamais contente", "never satisfied car"],
-            "carro di cugnot": ["cugnot's steam wagon", "cugnot steamer"],
-            "vapor carriage": ["steam carriage", "cugnot"],
-            # NUOVE TRADUZIONI CRITICHE - priorità massima
-            "italia": ["italy"],
-            "francia": ["france"],
-            "spagna": ["spain"],
-            "germania": ["germany"],
-            "austria": ["austria"],
-            "svizzera": ["switzerland"],
-            "belgio": ["belgium"],
-            "olanda": ["netherlands"],
-            "portogallo": ["portugal"],
-            "grecia": ["greece"]
-        }
-        
-        # Cerca traduzioni specifiche CON PRIORITÀ MASSIMA
+        # Cerca traduzioni specifiche CON PRIORITÀ MASSIMA (caricat da file esterno)
         query_lower = query.lower()
         translation_found = False
         
         print(f"  [SEARCH] Cercando traduzioni per: '{query_lower}'")
         
-        for italian_term, english_terms in historical_translations.items():
-            # Match diretto completo
+        for italian_term, english_terms in self.historical_translations.items():
+            # Match diretto completo (parola intera)
             if query_lower == italian_term:
                 translated_queries.extend(english_terms)
                 alternatives.extend(english_terms)
                 translation_found = True
                 print(f"  [MATCH] Esatto: '{query_lower}' -> {english_terms}")
                 break
-            # Match contenuto nel termine
-            elif italian_term in query_lower:
+            # Match di parole intere separate (evita substring come "italia" in "cisitalia")
+            query_words = set(query_lower.split())
+            italian_words = set(italian_term.split())
+            # Match solo se tutte le parole del termine italiano sono nel query
+            if italian_words.issubset(query_words) and len(italian_words) > 0:
                 translated_queries.extend(english_terms)
                 alternatives.extend(english_terms)
                 translation_found = True
-                print(f"  [MATCH] Contenuto: '{italian_term}' in '{query_lower}' -> {english_terms}")
+                print(f"  [MATCH] Parole: '{italian_term}' trovato in '{query_lower}' -> {english_terms}")
                 break
-            # Match parziale per termini con più parole
-            elif len(italian_term.split()) > 1:
-                italian_words = set(italian_term.split())
-                query_words = set(query_lower.split())
-                overlap = italian_words.intersection(query_words)
-                if len(overlap) >= 2:  # Almeno 2 parole in comune
-                    translated_queries.extend(english_terms)
-                    alternatives.extend(english_terms)
-                    translation_found = True
-                    print(f"  [MATCH] Parziale: '{italian_term}' ~ '{query_lower}' (overlap: {overlap}) -> {english_terms}")
-                    break
         
         # AGGIUNGI LA QUERY ORIGINALE SOLO DOPO LE TRADUZIONI
         alternatives.append(query)
@@ -529,7 +507,7 @@ class WikidataEntityLinker:
         
         return min(total_score, 1.0)
     
-    def find_best_entity(self, query: str, min_confidence: float = 0.25) -> Optional[Dict]:
+    def find_best_entity(self, query: str, min_confidence: float = 0.25, predicate_context: str = None) -> Optional[Dict]:
         """
         Trova la migliore entità Wikidata per una query con sistema robusto.
         
@@ -601,7 +579,7 @@ class WikidataEntityLinker:
                 instance_of_ids = self._extract_instance_of(claims)
                 
                 # Valida compatibilità ontologica PRIMA di calcolare score
-                if not self._validate_ontology(entity_id, instance_of_ids, predicate_context=None, label=label):
+                if not self._validate_ontology(entity_id, instance_of_ids, predicate_context=predicate_context, label=label):
                     print(f"  [SKIPPED] Saltato {entity_id} per incompatibilità ontologica")
                     continue
                 
@@ -856,4 +834,4 @@ if __name__ == "__main__":
             print(f"  Descrizione: {result['description']}")
             print(f"  Tipi: {result['instance_of']}")
         else:
-            print("✗ Nessun risultato trovato")
+            print("Nessun risultato trovato")

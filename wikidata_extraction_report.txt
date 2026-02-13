@@ -1,0 +1,494 @@
+====================================================================================================
+REPORT ESTRAZIONE ATTRIBUTI WIKIDATA - output_automatic_enriched.nt
+====================================================================================================
+
+PROPRIETA' WIKIDATA UTILIZZATE (P-CODES)
+----------------------------------------------------------------------------------------------------
+
+Totale proprietà uniche utilizzate: 18
+Totale utilizzi: 1782
+
+P-Code     Descrizione                              Utilizzi   URL
+----------------------------------------------------------------------------------------------------
+P176       manufacturer                             160        https://www.wikidata.org/wiki/Property:P176
+P217       inventory number                         160        https://www.wikidata.org/wiki/Property:P217
+P585       point in time                            159        https://www.wikidata.org/wiki/Property:P585
+P1559      name in native language                  154        https://www.wikidata.org/wiki/Property:P1559
+P495       country of origin                        154        https://www.wikidata.org/wiki/Property:P495
+P1002      engine configuration                     130        https://www.wikidata.org/wiki/Property:P1002
+P2052      maximum speed                            129        https://www.wikidata.org/wiki/Property:P2052
+P2109      power                                    129        https://www.wikidata.org/wiki/Property:P2109
+P516       Sconosciuta                              129        https://www.wikidata.org/wiki/Property:P516
+P8628      displacement                             123        https://www.wikidata.org/wiki/Property:P8628
+P1343      described by source                      99         https://www.wikidata.org/wiki/Property:P1343
+P2754      production date                          97         https://www.wikidata.org/wiki/Property:P2754
+P1028      donated by                               91         https://www.wikidata.org/wiki/Property:P1028
+P31        instance of                              53         https://www.wikidata.org/wiki/Property:P31
+P287       Sconosciuta                              10         https://www.wikidata.org/wiki/Property:P287
+P7045      Sconosciuta                              3          https://www.wikidata.org/wiki/Property:P7045
+P2283      uses                                     1          https://www.wikidata.org/wiki/Property:P2283
+P4140      Sconosciuta                              1          https://www.wikidata.org/wiki/Property:P4140
+
+
+====================================================================================================
+ESEMPI DI VALORI PER OGNI PROPRIETA'
+====================================================================================================
+
+
+P1002 - engine configuration
+----------------------------------------------------------------------------------------------------
+  - 1 cil
+  - Guzzi motociclistico a 1 cilindro
+  - posteriore a 1 cilindro orizzontale
+  - posteriore a 2 cilindri a V
+  - 2 cilindri in linea, posteriore
+  - 4 cilindri in linea
+  - posteriore 4 cilindri contrapposti raffreddato ad aria
+  - 8 cil
+  - 12 cilindri a 180°
+  - 2 cilindri in linea, 2 tempi
+  ... e altri 120 valori
+
+P1028 - donated by
+----------------------------------------------------------------------------------------------------
+  - Dono della Famiglia Michetti, Francavilla a Mare (CH)
+  - Dono di Fiat S.p.A., Torino
+  - Dono delle Officine Alfieri Maserati, Modena
+  - Dono di Enrico Nardi, Torino
+  - Dono di Adriana e Chiara Rogliatti, Torino
+  - Dono della Famiglia Castronuovo, Bisuschio (VA)
+  - Dono di Giuseppina Cirani Sfrondini, Milano
+  - Dono di Luigi Damevino, Torino
+  - Dono di Itala S.A.C.A., Torino
+  - Dono di Giovanni Agnelli, Torino
+  ... e altri 81 valori
+
+P1343 - described by source
+----------------------------------------------------------------------------------------------------
+  - Con il nome Nibbio I e II vennero denominate due speciali vetture da record c...
+  - L’Isotta Fraschini è stata una delle più famose fabbriche italiane. Automobil...
+  - Per il mondo dell’automobile la Lancia modello Lambda è una vera rivoluzione:...
+  - La Cisitalia fu fondata da Piero Dusio a Torino nel 1946 e si distinse per la...
+  - Frutto dell’ambizioso progetto che vide l’unione tra Fiat, Bianchi e Pirelli,...
+  - L’Alfa Romeo 6 cilindri 2600, vettura confortevole, di alta classe, elegante ...
+  - Una vettura da corsa di concezione rivoluzionaria, progettata dal tecnico Aug...
+  - Primo progetto eseguito sotto la responsabilità del direttore tecnico, l’inge...
+  - La Cadillac fu fondata a Detroit nel 1902 da William H. Murphy ed Henry Lelan...
+  - La Florentia è una delle marche d’automobili più antiche d’Italia, tanto da e...
+  ... e altri 89 valori
+
+P1559 - name in native language
+----------------------------------------------------------------------------------------------------
+  - 3½ HP
+  - Mini T
+  - L-29
+  - Jeep
+  - Prototipo di Formula 3
+  - Tipo Zero A
+  - B1
+  - GP Tipo 158 \Alfetta\
+  - 365 GT4 2+2
+  - 601
+  ... e altri 144 valori
+
+P176 - manufacturer
+----------------------------------------------------------------------------------------------------
+  - <http://www.wikidata.org/entity/Q136661830>
+  - FOD
+  - Stanley
+  - F.I.A.L. Legnano
+  - <http://www.wikidata.org/entity/Q28616>
+  - <http://www.wikidata.org/entity/Q246>
+  - <http://www.wikidata.org/entity/Q23301320>
+  - Bernardi
+  - Sizare-Naudin
+  - <http://www.wikidata.org/entity/Q243278>
+  ... e altri 150 valori
+
+P2052 - maximum speed
+----------------------------------------------------------------------------------------------------
+  - 242 km/h
+  - 45 km/h
+  - 30 km/h
+  - 245 km/h
+  - 145 km/h
+  - 55 km/h
+  - 250 km/h
+  - 225 km/h
+  - 160 km/h
+  - 212 km/h
+  ... e altri 119 valori
+
+P2109 - power
+----------------------------------------------------------------------------------------------------
+  - 21,5 hp - 4600 rpm
+  - 18 CV a 1700 giri/min.
+  - 240 CV a 7200 giri/min.
+  - 15 CV a 1200 giri/min.
+  - 45 CV a 1250 giri/min.
+  - 35 CV a 1400 giri/min.
+  - 83 CV a 3600 giri/min.
+  - 156 CV a 3400 giri/min.
+  - 3,5 hp
+  - 20 CV a 3400 giri/min.
+  ... e altri 119 valori
+
+P217 - inventory number
+----------------------------------------------------------------------------------------------------
+  - V035
+  - V057
+  - V047
+  - COM 018
+  - V 180
+  - V021
+  - V 195
+  - V087
+  - V067
+  - V034
+  ... e altri 150 valori
+
+P2283 - uses
+----------------------------------------------------------------------------------------------------
+  - a carbone
+
+P2754 - production date
+----------------------------------------------------------------------------------------------------
+  - 1966-1994
+  - 1948
+  - 1972-1976
+  - 1957-1961
+  - 1973-1976
+  - 1945-1987
+  - 1954-1960
+  - 1979-1982
+  - 1922-1924
+  - 1951-1955
+  ... e altri 87 valori
+
+P287 - Sconosciuta
+----------------------------------------------------------------------------------------------------
+  - <http://www.wikidata.org/entity/Q654827>
+  - <http://www.wikidata.org/entity/Q21543051>
+  - <http://www.wikidata.org/entity/Q721488>
+  - <http://www.wikidata.org/entity/Q3731978>
+  - I.D.E.A. Institute (rielaborazione)
+  - fibra in carbonio semiportante
+  - Zagato
+  - Pininfarina
+  - <http://www.wikidata.org/entity/Q3903128>
+
+P31 - instance of
+----------------------------------------------------------------------------------------------------
+  - <http://www.wikidata.org/entity/Q172686>
+  - <http://www.wikidata.org/entity/Q1907023>
+  - <http://www.wikidata.org/entity/Q3932858>
+  - <http://www.wikidata.org/entity/Q1856900>
+  - <http://www.wikidata.org/entity/Q105975708>
+  - <http://www.wikidata.org/entity/Q1054074>
+  - <http://www.wikidata.org/entity/Q749810>
+  - <http://www.wikidata.org/entity/Q781028>
+  - <http://www.wikidata.org/entity/Q1407704>
+  - <http://www.wikidata.org/entity/Q2660817>
+  ... e altri 43 valori
+
+P4140 - Sconosciuta
+----------------------------------------------------------------------------------------------------
+  - 4 Marelli 12 V 150 Ah
+
+P495 - country of origin
+----------------------------------------------------------------------------------------------------
+  - <http://www.wikidata.org/entity/Q38>
+  - <http://www.wikidata.org/entity/Q142>
+  - <http://www.wikidata.org/entity/Q145>
+  - <http://www.wikidata.org/entity/Q183>
+  - <http://www.wikidata.org/entity/Q159>
+  - Corea del sud
+  - <http://www.wikidata.org/entity/Q30>
+  ... e altri 144 valori
+
+P516 - Sconosciuta
+----------------------------------------------------------------------------------------------------
+  - elettrico
+  - a vapore
+  - elettrosolare
+  - vapore
+  - combustione interna
+  - idrogeno
+  ... e altri 119 valori
+
+P585 - point in time
+----------------------------------------------------------------------------------------------------
+  - 1924
+  - 1895
+  - 1948
+  - XVII sec
+  - 1916
+  - 2005
+  - 1903
+  - 2012
+  - 1938
+  - 1936
+  ... e altri 149 valori
+
+P7045 - Sconosciuta
+----------------------------------------------------------------------------------------------------
+  - Tubolare
+  - struttura reticolare in acciaio cromo
+  - monoscocca in acciaio con roll-bar integrato, alloggiamento serbatoio posteri...
+
+P8628 - displacement
+----------------------------------------------------------------------------------------------------
+  - 679 cc
+  - 1206 cc
+  - 1570 cc
+  - 942 cc
+  - 2992 cc
+  - 4179 cc
+  - 1911 cc
+  - 2994 cc
+  - 1050 cc
+  - 855 cc
+  ... e altri 113 valori
+
+
+====================================================================================================
+ENTITA' WIKIDATA COLLEGATE (Q-CODES)
+====================================================================================================
+
+Totale entità uniche collegate: 110
+Totale collegamenti: 818
+
+Q-Code       Label                                    Utilizzi   URL
+----------------------------------------------------------------------------------------------------
+Q38          Italy                                    206        https://www.wikidata.org/wiki/Q38
+Q27597       Fiat                                     64         https://www.wikidata.org/wiki/Q27597
+Q142         France                                   52         https://www.wikidata.org/wiki/Q142
+Q786820      Sconosciuta                              37         https://www.wikidata.org/wiki/Q786820
+Q30          United States                            24         https://www.wikidata.org/wiki/Q30
+Q26921       Alfa Romeo                               24         https://www.wikidata.org/wiki/Q26921
+Q35896       Lancia                                   20         https://www.wikidata.org/wiki/Q35896
+Q183         Germany                                  20         https://www.wikidata.org/wiki/Q183
+Q27586       Ferrari                                  20         https://www.wikidata.org/wiki/Q27586
+Q145         United Kingdom                           12         https://www.wikidata.org/wiki/Q145
+Q6746        Citroën                                  10         https://www.wikidata.org/wiki/Q6746
+Q29852       Itala                                    10         https://www.wikidata.org/wiki/Q29852
+Q35962       Maserati                                 10         https://www.wikidata.org/wiki/Q35962
+Q136661830   Panhard & Levassor                       8          https://www.wikidata.org/wiki/Q136661830
+Q27110       Autobianchi                              8          https://www.wikidata.org/wiki/Q27110
+Q1179850     De Dion–Bouton                           8          https://www.wikidata.org/wiki/Q1179850
+Q44294       Ford Motor Company                       6          https://www.wikidata.org/wiki/Q44294
+Q6686        Renault                                  6          https://www.wikidata.org/wiki/Q6686
+Q541477      Daimler-Benz AG                          6          https://www.wikidata.org/wiki/Q541477
+Q23301320    Temperino 8/10 HP                        6          https://www.wikidata.org/wiki/Q23301320
+Q1093218     Cisitalia                                6          https://www.wikidata.org/wiki/Q1093218
+Q6256        Sconosciuta                              6          https://www.wikidata.org/wiki/Q6256
+Q1674581     Isotta Fraschini                         6          https://www.wikidata.org/wiki/Q1674581
+Q5           Sconosciuta                              5          https://www.wikidata.org/wiki/Q5
+Q35349       Kia                                      4          https://www.wikidata.org/wiki/Q35349
+Q1664128     Innocenti                                4          https://www.wikidata.org/wiki/Q1664128
+Q5137275     Clément-Panhard                          4          https://www.wikidata.org/wiki/Q5137275
+Q30055       Jaguar Cars                              4          https://www.wikidata.org/wiki/Q30055
+Q40971       Packard                                  4          https://www.wikidata.org/wiki/Q40971
+Q3702812     Darracq Type SS 20/28                    4          https://www.wikidata.org/wiki/Q3702812
+Q27401       Bugatti                                  4          https://www.wikidata.org/wiki/Q27401
+Q243278      Rolls-Royce                              4          https://www.wikidata.org/wiki/Q243278
+Q39898       NSU Motorenwerke                         4          https://www.wikidata.org/wiki/Q39898
+Q3320084     Monaco-Trossi Grand Prix car             4          https://www.wikidata.org/wiki/Q3320084
+Q1129734     Prinetti & Stucchi                       4          https://www.wikidata.org/wiki/Q1129734
+Q27550       Delage                                   4          https://www.wikidata.org/wiki/Q27550
+Q463627      Ferrari F40                              4          https://www.wikidata.org/wiki/Q463627
+Q55097400    Vinot & Deguingand BP 10CV               4          https://www.wikidata.org/wiki/Q55097400
+Q3231690     Sconosciuta                              4          https://www.wikidata.org/wiki/Q3231690
+Q1129747     SCAT                                     4          https://www.wikidata.org/wiki/Q1129747
+Q159         Russia                                   4          https://www.wikidata.org/wiki/Q159
+Q204327      Oldsmobile                               4          https://www.wikidata.org/wiki/Q204327
+Q26678       BMW Group                                4          https://www.wikidata.org/wiki/Q26678
+Q35907       Land Rover                               4          https://www.wikidata.org/wiki/Q35907
+Q749810      Fiat 4 HP                                4          https://www.wikidata.org/wiki/Q749810
+Q246         Volkswagen                               4          https://www.wikidata.org/wiki/Q246
+Q921301      Brixia-Zust                              4          https://www.wikidata.org/wiki/Q921301
+Q27415       Buick                                    4          https://www.wikidata.org/wiki/Q27415
+Q28616       GAZ                                      4          https://www.wikidata.org/wiki/Q28616
+Q177846      Società Torinese Automobili Elettrici    4          https://www.wikidata.org/wiki/Q177846
+Q1209227     Diatto                                   4          https://www.wikidata.org/wiki/Q1209227
+Q426892      Iso Rivolta                              4          https://www.wikidata.org/wiki/Q426892
+Q623274      Aquila Italiana                          4          https://www.wikidata.org/wiki/Q623274
+Q654827      Flaminio Bertoni                         4          https://www.wikidata.org/wiki/Q654827
+Q27436       Cadillac                                 4          https://www.wikidata.org/wiki/Q27436
+Q1052719     Ceirano GB & C                           4          https://www.wikidata.org/wiki/Q1052719
+Q721488      Franco Scaglione                         3          https://www.wikidata.org/wiki/Q721488
+Q3731978     Ermenegildo Preti                        3          https://www.wikidata.org/wiki/Q3731978
+Q21543051    Cesare Sala                              3          https://www.wikidata.org/wiki/Q21543051
+Q3903128     Pierluigi Raggi                          3          https://www.wikidata.org/wiki/Q3903128
+Q1407683     Ferrari 365 GT4 2+2                      2          https://www.wikidata.org/wiki/Q1407683
+Q173634      Lancia D50                               2          https://www.wikidata.org/wiki/Q173634
+Q2553983     Alfa Romeo P2                            2          https://www.wikidata.org/wiki/Q2553983
+Q3826655     Lancia Aurelia B20                       2          https://www.wikidata.org/wiki/Q3826655
+Q636082      Fiat 500 Topolino                        2          https://www.wikidata.org/wiki/Q636082
+Q173741      Maserati 250F                            2          https://www.wikidata.org/wiki/Q173741
+Q951502      Lancia Lambda                            2          https://www.wikidata.org/wiki/Q951502
+Q3042099     Mercedes-Benz 540K                       2          https://www.wikidata.org/wiki/Q3042099
+Q105975708   Kia EV6                                  2          https://www.wikidata.org/wiki/Q105975708
+Q1907023     Maserati Mexico                          2          https://www.wikidata.org/wiki/Q1907023
+Q786136      Autobianchi Primula                      2          https://www.wikidata.org/wiki/Q786136
+Q2736928     Fiat 8 HP                                2          https://www.wikidata.org/wiki/Q2736928
+Q174095      Ferrari 312T5                            2          https://www.wikidata.org/wiki/Q174095
+Q182323      Ford Model T                             2          https://www.wikidata.org/wiki/Q182323
+Q740150      Siata Spring                             2          https://www.wikidata.org/wiki/Q740150
+Q3678223     Cisitalia 202                            2          https://www.wikidata.org/wiki/Q3678223
+Q692348      NSU Ro 80                                2          https://www.wikidata.org/wiki/Q692348
+Q1054074     Fiat 600 Multipla                        2          https://www.wikidata.org/wiki/Q1054074
+Q16039838    Alfa Romeo 179B                          2          https://www.wikidata.org/wiki/Q16039838
+Q849372      Fiat Barchetta                           2          https://www.wikidata.org/wiki/Q849372
+Q781028      Austin 7                                 2          https://www.wikidata.org/wiki/Q781028
+Q1407704     Ferrari Tipo 500                         2          https://www.wikidata.org/wiki/Q1407704
+Q3744400     Fiat 500 Lizard                          2          https://www.wikidata.org/wiki/Q3744400
+Q36024       Mini                                     2          https://www.wikidata.org/wiki/Q36024
+Q90018657    Citroën DS 19                            2          https://www.wikidata.org/wiki/Q90018657
+Q3932858     Renault Floride                          2          https://www.wikidata.org/wiki/Q3932858
+Q1664136     Innocenti Mini                           2          https://www.wikidata.org/wiki/Q1664136
+Q3893267     Panhard & Levassor type B1/B2            2          https://www.wikidata.org/wiki/Q3893267
+Q1512553     Jeep CJ                                  2          https://www.wikidata.org/wiki/Q1512553
+Q1472912     Alfa Romeo 8C                            2          https://www.wikidata.org/wiki/Q1472912
+Q1410661     Fiat Turbina                             2          https://www.wikidata.org/wiki/Q1410661
+Q926873      Lancia Aprilia                           2          https://www.wikidata.org/wiki/Q926873
+Q2660817     Fiat 520                                 2          https://www.wikidata.org/wiki/Q2660817
+Q1407659     Ferrari 308                              2          https://www.wikidata.org/wiki/Q1407659
+Q2746144     Fiat 130 HP                              2          https://www.wikidata.org/wiki/Q2746144
+Q7821918     Ferrari 208 GTB/GTS                      2          https://www.wikidata.org/wiki/Q7821918
+Q281228      Peugeot Type 3                           2          https://www.wikidata.org/wiki/Q281228
+Q172686      Ferrari 156 F1                           2          https://www.wikidata.org/wiki/Q172686
+Q2165508     Alfa Romeo Disco Volante (1952)          2          https://www.wikidata.org/wiki/Q2165508
+Q3610959     Alfa Romeo 155 V6 TI                     2          https://www.wikidata.org/wiki/Q3610959
+Q3803337     Isotta Fraschini Tipo 8A                 2          https://www.wikidata.org/wiki/Q3803337
+Q644067      Trabant 601                              2          https://www.wikidata.org/wiki/Q644067
+Q1856900     Vespa 400                                2          https://www.wikidata.org/wiki/Q1856900
+Q1133985     Lancia D24                               2          https://www.wikidata.org/wiki/Q1133985
+Q172705      Ferrari 246 F1                           2          https://www.wikidata.org/wiki/Q172705
+Q1125433     Fiat 600                                 2          https://www.wikidata.org/wiki/Q1125433
+Q869076      Cord L-29                                2          https://www.wikidata.org/wiki/Q869076
+Q20010009    Lancia Flaminia presidenziale            2          https://www.wikidata.org/wiki/Q20010009
+Q1144312     Sconosciuta                              1          https://www.wikidata.org/wiki/Q1144312
+Q4830453     Sconosciuta                              1          https://www.wikidata.org/wiki/Q4830453
+
+
+====================================================================================================
+ENTITA' PER CATEGORIA
+====================================================================================================
+
+
+Tipo non specificato (51 entità):
+----------------------------------------------------------------------------------------------------
+  - Q23301320    Temperino 8/10 HP                        (6 utilizzi)
+  - Q463627      Ferrari F40                              (4 utilizzi)
+  - Q749810      Fiat 4 HP                                (4 utilizzi)
+  - Q1407683     Ferrari 365 GT4 2+2                      (2 utilizzi)
+  - Q173634      Lancia D50                               (2 utilizzi)
+  - Q2553983     Alfa Romeo P2                            (2 utilizzi)
+  - Q3826655     Lancia Aurelia B20                       (2 utilizzi)
+  - Q636082      Fiat 500 Topolino                        (2 utilizzi)
+  - Q173741      Maserati 250F                            (2 utilizzi)
+  - Q951502      Lancia Lambda                            (2 utilizzi)
+  - Q3042099     Mercedes-Benz 540K                       (2 utilizzi)
+  - Q105975708   Kia EV6                                  (2 utilizzi)
+  - Q1907023     Maserati Mexico                          (2 utilizzi)
+  - Q786136      Autobianchi Primula                      (2 utilizzi)
+  - Q2736928     Fiat 8 HP                                (2 utilizzi)
+  - Q174095      Ferrari 312T5                            (2 utilizzi)
+  - Q182323      Ford Model T                             (2 utilizzi)
+  - Q740150      Siata Spring                             (2 utilizzi)
+  - Q3678223     Cisitalia 202                            (2 utilizzi)
+  - Q692348      NSU Ro 80                                (2 utilizzi)
+  ... e altre 31 entità
+
+Q786820 (37 entità):
+----------------------------------------------------------------------------------------------------
+  - Q27597       Fiat                                     (64 utilizzi)
+  - Q26921       Alfa Romeo                               (24 utilizzi)
+  - Q35896       Lancia                                   (20 utilizzi)
+  - Q27586       Ferrari                                  (20 utilizzi)
+  - Q6746        Citroën                                  (10 utilizzi)
+  - Q29852       Itala                                    (10 utilizzi)
+  - Q35962       Maserati                                 (10 utilizzi)
+  - Q136661830   Panhard & Levassor                       (8 utilizzi)
+  - Q27110       Autobianchi                              (8 utilizzi)
+  - Q1179850     De Dion–Bouton                           (8 utilizzi)
+  - Q44294       Ford Motor Company                       (6 utilizzi)
+  - Q6686        Renault                                  (6 utilizzi)
+  - Q541477      Daimler-Benz AG                          (6 utilizzi)
+  - Q1093218     Cisitalia                                (6 utilizzi)
+  - Q1674581     Isotta Fraschini                         (6 utilizzi)
+  - Q35349       Kia                                      (4 utilizzi)
+  - Q1664128     Innocenti                                (4 utilizzi)
+  - Q30055       Jaguar Cars                              (4 utilizzi)
+  - Q40971       Packard                                  (4 utilizzi)
+  - Q27401       Bugatti                                  (4 utilizzi)
+  ... e altre 17 entità
+
+Q6256 (6 entità):
+----------------------------------------------------------------------------------------------------
+  - Q38          Italy                                    (206 utilizzi)
+  - Q142         France                                   (52 utilizzi)
+  - Q30          United States                            (24 utilizzi)
+  - Q183         Germany                                  (20 utilizzi)
+  - Q145         United Kingdom                           (12 utilizzi)
+  - Q159         Russia                                   (4 utilizzi)
+
+Altro (6 entità):
+----------------------------------------------------------------------------------------------------
+  - Q786820      Sconosciuta                              (37 utilizzi)
+  - Q6256        Sconosciuta                              (6 utilizzi)
+  - Q5           Sconosciuta                              (5 utilizzi)
+  - Q3231690     Sconosciuta                              (4 utilizzi)
+  - Q1144312     Sconosciuta                              (1 utilizzi)
+  - Q4830453     Sconosciuta                              (1 utilizzi)
+
+Q5 (5 entità):
+----------------------------------------------------------------------------------------------------
+  - Q654827      Flaminio Bertoni                         (4 utilizzi)
+  - Q721488      Franco Scaglione                         (3 utilizzi)
+  - Q3731978     Ermenegildo Preti                        (3 utilizzi)
+  - Q21543051    Cesare Sala                              (3 utilizzi)
+  - Q3903128     Pierluigi Raggi                          (3 utilizzi)
+
+Q3231690 (3 entità):
+----------------------------------------------------------------------------------------------------
+  - Q3702812     Darracq Type SS 20/28                    (4 utilizzi)
+  - Q3320084     Monaco-Trossi Grand Prix car             (4 utilizzi)
+  - Q55097400    Vinot & Deguingand BP 10CV               (4 utilizzi)
+
+Q1144312 (1 entità):
+----------------------------------------------------------------------------------------------------
+  - Q5137275     Clément-Panhard                          (4 utilizzi)
+
+Q4830453 (1 entità):
+----------------------------------------------------------------------------------------------------
+  - Q243278      Rolls-Royce                              (4 utilizzi)
+
+
+====================================================================================================
+STATISTICHE RIEPILOGATIVE
+====================================================================================================
+
+Proprietà Wikidata uniche utilizzate: 18
+Entità Wikidata uniche collegate: 110
+Totale riferimenti a proprietà: 1782
+Totale collegamenti a entità: 818
+
+Top 5 Proprietà più utilizzate:
+  1. P176 (manufacturer): 160 utilizzi
+  2. P217 (inventory number): 160 utilizzi
+  3. P585 (point in time): 159 utilizzi
+  4. P1559 (name in native language): 154 utilizzi
+  5. P495 (country of origin): 154 utilizzi
+
+Top 5 Entità più collegate:
+  1. Q38 (Italy): 206 collegamenti
+  2. Q27597 (Fiat): 64 collegamenti
+  3. Q142 (France): 52 collegamenti
+  4. Q786820 (Sconosciuta): 37 collegamenti
+  5. Q30 (United States): 24 collegamenti
+
+====================================================================================================
+Report generato: C:\Users\salva\Desktop\Tesi\wikidata_extraction_report.txt
+====================================================================================================

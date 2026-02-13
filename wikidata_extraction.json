@@ -1,0 +1,1055 @@
+{
+  "properties": {
+    "P1559": {
+      "count": 154,
+      "description": "name in native language",
+      "url": "https://www.wikidata.org/wiki/Property:P1559",
+      "examples": [
+        "\"3½ HP\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Mini T\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"L-29\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Jeep\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Prototipo di Formula 3\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Tipo Zero A\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"B1\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"GP Tipo 158 \\\"Alfetta\\\"\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"365 GT4 2+2\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"601\"^^<http://www.w3.org/2001/XMLSchema#string>"
+      ]
+    },
+    "P1028": {
+      "count": 91,
+      "description": "donated by",
+      "url": "https://www.wikidata.org/wiki/Property:P1028",
+      "examples": [
+        "\"Dono della Famiglia Michetti, Francavilla a Mare (CH)\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Dono di Fiat S.p.A., Torino\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Dono delle Officine Alfieri Maserati, Modena\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Dono di Enrico Nardi, Torino\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Dono di Adriana e Chiara Rogliatti, Torino\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Dono della Famiglia Castronuovo, Bisuschio (VA)\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Dono di Giuseppina Cirani Sfrondini, Milano\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Dono di Luigi Damevino, Torino\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Dono di Itala S.A.C.A., Torino\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Dono di Giovanni Agnelli, Torino\"^^<http://www.w3.org/2001/XMLSchema#string>"
+      ]
+    },
+    "P585": {
+      "count": 159,
+      "description": "point in time",
+      "url": "https://www.wikidata.org/wiki/Property:P585",
+      "examples": [
+        "\"1924\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1895\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1948\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"XVII sec\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1916\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"2005\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1903\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"2012\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1938\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1936\"^^<http://www.w3.org/2001/XMLSchema#string>"
+      ]
+    },
+    "P495": {
+      "count": 154,
+      "description": "country of origin",
+      "url": "https://www.wikidata.org/wiki/Property:P495",
+      "examples": [
+        "<http://www.wikidata.org/entity/Q38>",
+        "<http://www.wikidata.org/entity/Q142>",
+        "<http://www.wikidata.org/entity/Q145>",
+        "<http://www.wikidata.org/entity/Q183>",
+        "<http://www.wikidata.org/entity/Q159>",
+        "\"Corea del sud\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "<http://www.wikidata.org/entity/Q30>"
+      ]
+    },
+    "P176": {
+      "count": 160,
+      "description": "manufacturer",
+      "url": "https://www.wikidata.org/wiki/Property:P176",
+      "examples": [
+        "<http://www.wikidata.org/entity/Q136661830>",
+        "\"FOD\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Stanley\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"F.I.A.L. Legnano\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "<http://www.wikidata.org/entity/Q28616>",
+        "<http://www.wikidata.org/entity/Q246>",
+        "<http://www.wikidata.org/entity/Q23301320>",
+        "\"Bernardi\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Sizare-Naudin\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "<http://www.wikidata.org/entity/Q243278>"
+      ]
+    },
+    "P217": {
+      "count": 160,
+      "description": "inventory number",
+      "url": "https://www.wikidata.org/wiki/Property:P217",
+      "examples": [
+        "\"V035\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"V057\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"V047\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"COM 018\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"V 180\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"V021\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"V 195\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"V087\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"V067\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"V034\"^^<http://www.w3.org/2001/XMLSchema#string>"
+      ]
+    },
+    "P2052": {
+      "count": 129,
+      "description": "maximum speed",
+      "url": "https://www.wikidata.org/wiki/Property:P2052",
+      "examples": [
+        "\"242 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"45 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"30 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"245 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"145 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"55 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"250 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"225 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"160 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"212 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>"
+      ]
+    },
+    "P2754": {
+      "count": 97,
+      "description": "production date",
+      "url": "https://www.wikidata.org/wiki/Property:P2754",
+      "examples": [
+        "\"1966-1994\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1948\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1972-1976\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1957-1961\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1973-1976\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1945-1987\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1954-1960\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1979-1982\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1922-1924\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1951-1955\"^^<http://www.w3.org/2001/XMLSchema#string>"
+      ]
+    },
+    "P31": {
+      "count": 53,
+      "description": "instance of",
+      "url": "https://www.wikidata.org/wiki/Property:P31",
+      "examples": [
+        "<http://www.wikidata.org/entity/Q172686>",
+        "<http://www.wikidata.org/entity/Q1907023>",
+        "<http://www.wikidata.org/entity/Q3932858>",
+        "<http://www.wikidata.org/entity/Q1856900>",
+        "<http://www.wikidata.org/entity/Q105975708>",
+        "<http://www.wikidata.org/entity/Q1054074>",
+        "<http://www.wikidata.org/entity/Q749810>",
+        "<http://www.wikidata.org/entity/Q781028>",
+        "<http://www.wikidata.org/entity/Q1407704>",
+        "<http://www.wikidata.org/entity/Q2660817>"
+      ]
+    },
+    "P1002": {
+      "count": 130,
+      "description": "engine configuration",
+      "url": "https://www.wikidata.org/wiki/Property:P1002",
+      "examples": [
+        "\"1 cil\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Guzzi motociclistico a 1 cilindro\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"posteriore a 1 cilindro orizzontale\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"posteriore a 2 cilindri a V\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"2 cilindri in linea, posteriore\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"4 cilindri in linea\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"posteriore 4 cilindri contrapposti raffreddato ad aria\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"8 cil\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"12 cilindri a 180°\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"2 cilindri in linea, 2 tempi\"^^<http://www.w3.org/2001/XMLSchema#string>"
+      ]
+    },
+    "P1343": {
+      "count": 99,
+      "description": "described by source",
+      "url": "https://www.wikidata.org/wiki/Property:P1343",
+      "examples": [
+        "\"Con il nome Nibbio I e II vennero denominate due speciali vetture da record costruite dal giornalista pilota Giovanni Lurani Cernuschi (1905-1995): quella del 1935 in collaborazione con Ulisse Guzzi, figlio di uno dei fondatori della Casa motociclistica, e quella del 1955 con Piero Campanella e Angelo Poggio.\\nCome per la prima versione, anche il Nibbio II fu dotato di un motore Guzzi, ma monocilindrico bialbero di 350 cc, lo stesso che aveva permesso alla casa di Mandello del Lario di conquistare una serie di primati a Montlhéry. L’amico e pilota Campanella mise a disposizione di Cernuschi un telaio Volpini Formula 3, a quattro ruote indipendenti con balestre trasversali e ammortizzatori idraulici, mentre l’aerodinamica carrozzeria, con le due pinne molto pronunciate e la curiosa soluzione per l’uscita dell’aria di raffreddamento, venne realizzata dalla Ghia su disegno dell’ingegner Savonuzzi. Dopo essere stato esposto nello stand Ghia al Salone di Torino del 1956, il nuovo Nibbio fu collaudato il 28 marzo del 1956 sulla pista d’alta velocità di Monza. Il successivo 6 giugno, sempre sulla pista dell’autodromo monzese, il veicolo condotto da Lurani e Campanella stabilì il suo primo record internazionale, quello della classe D (fino a 350 cc) sulla distanza delle 3 ore: i chilometri percorsi furono 394,037, alla media di 131,345 km/h. Questo stesso primato venne migliorato dal Nibbio il 26 aprile\\ndell’anno successivo quando Campanella, Poggio e Volpini girarono a Monza per tre ore alla media di 141,643 km/h. Nella stessa occasione il filante veicolo conquistò altri 5 record internazionali: 50 km, 50 miglia, 100 km, 100 miglia e quello dell’ora.\\nAltri record vennero conquistati dalla vettura nel 1958 (200 miglia, 500 km, 500 miglia, 3 ore, 6 ore e 1000 km) e nel 1959 (500 km, 3 ore, 1000 miglia, 12 ore e 2000 km). La parte meccanica era stata nel frattempo messa a punto da Stanguellini, il quale aveva anche provveduto a migliorare il rendimento aerodinamico della carrozzeria.\\nNel 1960, infine, al posto del monocilindrico di 350 cc, il Nibbio ebbe un nuovo motore di 250 cc, sempre Guzzi e sempre monocilindrico bialbero, col quale Campanella e Poggio stabilirono altri quattro record internazionali della classe K (250 cc): 200 km, 200 miglia, 3 ore e 500 km.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"L’Isotta Fraschini è stata una delle più famose fabbriche italiane. Automobili prestigiose celebrate nel mondo, motori marini e d’aviazione, record sportivi e progettisti geniali sono gli ingredienti della storia di questa gloriosa marca automobilistica italiana di lusso, fondata a Milano nel 1900 da Cesare Isotta insieme ai fratelli Vincenzo, Oreste e Antonio Fraschini.\\nIl modello AN 20/30 HP è l’evoluzione della A 16/22 HP studiata da Giustino Cattaneo, tecnico di valore a cui si deve, fra l’altro, il brevetto dei freni sulle ruote anteriori e quello del primo motore a 8 cilindri in linea realizzato nel 1918.\\n«In attesa che qualcuno facesse quello che lei ha fatto, io ho sempre conservato una cara vecchia automobile che io stessa guidavo quando in Sicilia non eravamo più di due o tre donne ad avere la patente». Con queste parole la contessa Francesca Mirabile Mancusio propose a Carlo Biscaretti la sua Isotta Fraschini AN 20/30 HP, elegantemente carrozzata come “landaulet” dalla milanese Pavesi, Crespi & C. Biscaretti accettò con gioia il dono di questa vettura, nonostante le peripezie per farla arrivare nel capoluogo piemontese.\\nFrancesca Mancusio era nata a Caronia, in provincia di Messina, nel 1893, e fu la prima donna a conseguire la patente di guida in Italia, ottenuta nel 1913 all’età di soli vent’anni. L’Isotta Fraschini, costata 14.500 lire, le fu donata come regalo per i suoi sedici anni dal padre, il cavaliere Luigi Mancusio, amico dell’ingegner Cattaneo. L’amore per le automobili e i viaggi contraddistinguerà la vita di Francesca, come scriverà nell’autobiografia pubblicata nel 1965, nella quale racconterà del suo viaggio a bordo di una Lancia Appia alla volta del Circolo Polare Artico. Il simbolo della sua libertà, quella patente conseguita con così tanto orgoglio, è ancora oggi esposta sulla portiera della sua amata Isotta Fraschini.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Per il mondo dell’automobile la Lancia modello Lambda è una vera rivoluzione: la Casa torinese produce la prima vettura a scocca autoportante, ricetta vincente per la produzione di massa del dopoguerra.\\nDella nuova vettura leggera Lancia si cominciò a parlare dal novembre 1921, quando trapelarono le prime anticipazioni sulla stampa. Così scriveva la rivista specializzata “Motori Aero Cicli & Sports”: «Figuratevi una vettura lunga e spaziosa di dimensioni normali, assai bassa […] che tiene egregiamente la strada […] che non ha telaio né asse anteriore, e di cui è persino soddisfatto quel meticoloso ed incontentabile critico di sé stesso che è il cav. Lancia». Esposta, prima che in Italia, ai Saloni di Parigi e di Londra dell’autunno 1922, fu presentata entusiasticamente come la vettura che apriva nuovi orizzonti alla tecnica automobilistica.\\nL’innovativa struttura portante, che sostituiva il tradizionale telaio a longheroni, venne realizzata dal giovane ingegnere Battista Falchetto, messo a capo del gruppo di progetto a marzo del 1921, a poco più di un anno dall’assunzione. Si partì da un precedente progetto del 1919 per sviluppare una vettura la cui carrozzeria è inscindibile da tutto il resto, formando un’ossatura principale utilizzata come basamento per incorporare il motore, il cambio di velocità, la trasmissione e il differenziale. Lo scheletro della carrozzeria, anziché essere di legno, è di lamiera d’acciaio stampata (“emboutie”) di 2 mm di spessore, circondato all’esterno da sottile lamiera pure d’acciaio, mentre all’interno l’imbottitura e i cuscini sono mobili; le due estremità anteriori si chiudono in una cornice che incorpora il radiatore. Longitudinalmente la carrozzeria è attraversata da un rilievo arcuato, una sagomatura a tunnel – che sembra dividerla in due parti uguali – nella quale scorre l’albero cardanico di trasmissione. Questa sagomatura, che fa quasi da ponte armato, contribuisce ad aumentare il grado di rigidità e di coesione della vettura, abbassandone il centro di gravità. Furono necessari sei mesi di studio prima di poter arrivare alle prime prove su strada, avvenute nel settembre del 1921 con una vettura dalla linea molto diversa rispetto a quella definitiva, a partire dal radiatore sagomato che ricordava le Bugatti. Fu di Falchetto l’idea di prolungare il retro della vettura, a forma di coda affusolata, per alloggiarvi i bagagli: era il primo baule portabagagli non più applicato all’esterno, ma integrato nella linea della carrozzeria.\\nDal 1922 al 1931 furono costruiti 13.000 esemplari Lambda, tra vetture e telai. Una grande affermazione commerciale, anche se nel 1929 con il modello Dilambda si tornò al telaio separato, per la convinzione che la soluzione della scocca autoportante fosse inapplicabile alle macchine di maggiore dimensione e peso.\\nI tempi non erano ancora maturi per un’invenzione che a partire dagli anni Cinquanta sarà applicata a centinaia di milioni di automobili, costruite con scocca integrale.\\nNel 1922, Vincenzo Lancia volle esporre ai Saloni il telaio “nudo”, straordinario esempio di soluzione raffinata e avveniristica, e nell’ottobre 1934 decise di donarlo all’amico Carlo Biscaretti per l’appena costituito Museo dell’Automobile.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"La Cisitalia fu fondata da Piero Dusio a Torino nel 1946 e si distinse per la produzione di vetture eccezionali sia dal punto di vista stilistico che tecnico. A dispetto della sua breve vita (rimase in attività a Torino fino al 1952), la Cisitalia lasciò un’eredità e un’influenza nel panorama automobilistico tutt’oggi di valore inestimabile.\\nIl 1947 fu un anno di grandi soddisfazioni per la Cisitalia: la D46 mieteva ancora successi e la spider aerodinamica di Savonuzzi arrivò a un passo dalla vittoria dopo un’esaltante gara alla Mille Miglia. Dusio, sull’onda dell’entusiasmo, decise di avviare la produzione in serie di una Gran Turismo, derivandola dalle Savonuzzi e affidando la realizzazione del telaio alla Pininfarina, artefice di una vettura capolavoro: la Berlinetta 202. All’alba degli anni cinquanta, la 202 significherà da sola la nozione di Gran Turismo: le sue linee di assoluta purezza rappresentano una cesura nel design automobilistico. Da quel momento in poi, la linea di un’automobile non avrà più niente a che fare con il passato, e sarà una linea italiana, grazie alle matite di Giovanni Savonuzzi e Giovanni Battista Farina, su un telaio e una meccanica italiane.\\nSi racconta che il layout del progetto si basasse su queste indicazioni di Dusio: «Voglio una vettura veloce come una macchina di Formula, larga come la mia Buick, comoda come una Rolls Royce e leggera come la D46». Pininfarina eseguì alla lettera e il risultato fu una vettura perfettamente bilanciata, con padiglione schiacciato, un rivoluzionario disegno orizzontale della griglia del radiatore, cofano più basso dei parafanghi, coda inclinata, fiancate lisce: una linea unica, armoniosa ed essenziale. Il successo, già dalla presentazione al Salone di Parigi del 1947, fu folgorante. Il design mondiale ne fu talmente condizionato che quando, quattro anni dopo, il Museum of Modern Art di New York volle organizzare una mostra sul design automobilistico, la vettura scelta come «scultura in movimento» per eccellenza fu la Cisitalia 202, e attorno a essa il curatore Arthur Drexel progettò tutta la struttura della mostra, intitolata «8 Automobiles». Al termine della mostra, la Cisitalia entrò a far parte della collezione permanente del MoMA.\\nDonata nel 1960 da Luigi Delfino Berruto, la vettura esposta al Museo è stata restaurata nel 2008 da Pininfarina.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Frutto dell’ambizioso progetto che vide l’unione tra Fiat, Bianchi e Pirelli, che daranno vita all’Autobianchi, la Bianchina è la prima vettura “speciale” a essere realizzata in Italia su scala industriale su organi meccanici di un modello già esistente (Fiat Nuova 500). Alla sua presentazione al Salone di Parigi nel 1957 riscosse un successo immediato, accolta favorevolmente dalla critica che la giudica come “la più elegante e piacente delle vetturette economiche”. Rappresentò per gli italiani un’utilitaria di grande classe, che si distingueva per l’originalità della linea e la cura delle finizioni, tanto da diventare uno status symbol. Per la sua realizzazione, motore e meccaniche arrivavano dallo stabilimento Fiat Mirafiori e l’Autobianchi ne curava il montaggio, su scocca di proprio disegno e produzione, firmata da Fabio Luigi Rapi. Sempre studiata e curata in ogni dettaglio, venne proposta durante la sua produzione, in\\n300.000 unità circa, in più versioni: dal modello trasformabile al cabriolet, dalla versione hard top a quelle fuoriserie, alla berlina quattro posti, alla Panoramica. L’armatore Aristotele Onassis la scelse anche nella versione “spiaggia”.\\nÈ protagonista in numerose pellicole cinematografiche, ma chi le darà maggiore popolarità sarà sicuramente il ragionier Fantozzi, nei celebri film interpretati dall’attore Paolo Villaggio.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"L’Alfa Romeo 6 cilindri 2600, vettura confortevole, di alta classe, elegante e imponente, fu presentata al Salone di Ginevra nel 1962. Il motore, evoluzione del modello 2000, segnava un interessante ritorno al sei cilindri in linea, con blocco in lega leggera con canne in ghisa smontabili bagnate e flanghe superiori e inferiori; erogava 130 CV a 5900 giri/min. e consentiva una velocità massima di 200 km/h. La versione berlina, realizzata dalla carrozzeria Bertone, era “appesantita” da linee troppo barocche, mentre la linea equilibrata della Sprint, sempre di Bertone, è considerata una delle più belle realizzazioni della carrozzeria torinese.\\nDal 1962 al 1965 fu commercializzata anche la versione spider, carrozzata dalla Touring, di cui furono costruiti 2.255 esemplari. Per una migliore realizzazione della capote fu necessario rialzare la parte posteriore e di conseguenza tutto il profilo della fiancata della carrozzeria, con il conseguente risultato che la 2600 Spider, seppur di grande eleganza, risultò meno slanciata rispetto alla precedente 2000 Spider.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Una vettura da corsa di concezione rivoluzionaria, progettata dal tecnico Augusto Monaco e dal pilota Carlo Felice Trossi, che la collaudò nelle prove del Gran Premio d’Italia, a Monza, nel 1935. Progettata per i Grand Prix, la vettura era naturalmente inquadrata nelle limitazioni della Formula allora in vigore: cilindrata libera e peso massimo di 750 kg, senza gomme e senza rifornimenti. Mentre tutti i costruttori si trovavano in difficoltà per rientrare nei limiti della formula, per ciò che riguardava il peso (proprio allora le Mercedes cambiarono il colore da bianco in argento, in quanto per risparmiare un paio di chili venne raschiata la vernice della carrozzeria), la Monaco Trossi, con i suoi 710 kg, si trovava largamente in vantaggio su questo punto. La potenza di 250 CV dava un rapporto peso-potenza indubbiamente inferiore a quello delle vetture tedesche dell’epoca, ma, se avesse potuto essere sfruttata in modo efficace, questa potenza sarebbe stata perfettamente adeguata. La Monaco Trossi era nuova in ogni particolare: era per esempio dotata di telaio tubolare a traliccio, in tubi di 40 mm di diametro, del tutto analogo a quelli in uso sulle vetture da corsa di più di vent’anni dopo. Questa soluzione, forse sperimentata allora per la prima volta, permetteva un buon risparmio di peso. L’elemento più notevole della vettura era tuttavia rappresentato dal gruppo motopropulsore: trazione anteriore e motore stellare con raffreddamento ad aria. Questo spiega anche la struttura del telaio, cioè la chiara ispirazione aeronautica di tutto il complesso, nella ricerca di una sempre maggiore leggerezza. Il motore era apparentemente a 8 cilindri, che in realtà erano 16 disposti in due stelle accoppiate, collegati in modo che le camere di scoppio risultavano essere solo 8.\\nEssendo montato anteriormente, questo motore risolveva molto bene il problema del raffreddamento e, al tempo stesso, decideva praticamente la disposizione dell’intera vettura: infatti la trazione doveva per forza essere anteriore per evitare un lunghissimo albero e poter sfruttare l’aderenza delle ruote anteriori, sulle quali gravava il maggior carico. Purtroppo, fu proprio questa disposizione a segnare il destino della vettura che, infatti, per un eccesso di peso sulle ruote anteriori motrici era instabile anche in rettifilo ed eccessivamente sovrasterzante in curva, dove avrebbe invece dovuto ottenere i maggiori vantaggi. La vettura, difficile da domare anche per un asso delle corse come Carlo Felice Trossi, non superò le fasi di prova e rimase così solo un avveniristico prototipo.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Primo progetto eseguito sotto la responsabilità del direttore tecnico, l’ingegnere Giovanni Enrico, è anche il primo modello Fiat con motore a 2 cilindri verticali sistemato anteriormente, alloggiato in una parvenza di cofano, cambio in posizione centrale e trazione sulle ruote posteriori, mentre il radiatore a nido d’ape rimpiazzerà quello a serpentina solo successivamente.\\nIl modello rimase in produzione solo due anni ma, a farlo passare alla storia, fu la partecipazione di ben otto vetture del tipo 8 HP al primo, leggendario Giro d’Italia del 1901, sulla distanza di 1640 km. Non si trattava di una gara di velocità, bensì di un evento non competitivo, che si trasformò in un tour de force di sedici giorni nel quale si intervallavano percorsi faticosi su strade impervie e con condizioni climatiche tra le più sfavorevoli a serate di gala e allegri festeggiamenti a ogni tappa. Organizzatore del Giro e presidente onorario fu Roberto Biscaretti di Ruffia, padre di Carlo (entrambi vi parteciparono a bordo di una Fiat 12 HP) e vicepresidente fu nominata la contessa Elsa Albrizzi dell’Unione Automobilistica Veneta. Tutte e otto le vetture 8 HP iscritte arrivarono al traguardo, compresa quella guidata da Giovanni Agnelli, che scelse come “meccanico” il grande campione Felice Nazzaro, con cui fece la ricognizione del percorso prima della gara.\\nL’esemplare esposto, con carrozzeria “duc”, è quello di un altro dei soci fondatori della Fiat: Emanuele Cacherano di Bricherasio, che partecipò al Giro d’Italia insieme al marchese Ghisleri. Venne donato al Museo nel 1947 per volontà della sorella, la contessa Sofia, per l’amicizia e la stima che la legava a Carlo Biscaretti, e fu in seguito esposto alla Mostra sui Trasporti del Museo della Tecnica di Milano, nel 1954, e al Salone Internazionale dell’Automobile di Ginevra.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"La Cadillac fu fondata a Detroit nel 1902 da William H. Murphy ed Henry Leland. Lo slogan di questa prestigiosa azienda, che divenne rapidamente sinonimo delle migliori vetture di lusso costruite negli Stati Uniti, recitava: «Il nostro credo è la perfezione; la nostra legge la precisione». La sua crescente fama e la solidità finanziaria attirarono ben presto l’attenzione del finanziere e imprenditore americano William Crapo Durant, che nel 1909 riuscì a inserire la Cadillac nel gruppo General Motors.\\nCadillac è stato un marchio di rilievo nella storia dell’automobile, al quale si deve l’introduzione di significative innovazioni tecnico-stilistiche (tra le altre, la dotazione nelle sue vetture di un sistema elettrico moderno, comprensivo di avviamento, accensione e illuminazione, a partire dal 1912), e importante per l’utilizzo del metodo produttivo della “standardizzazione”, che consisteva nel produrre i pezzi in serie e renderli intercambiabili e adattabili a tutte le vetture di uno stesso modello.\\nIl modello 62 (discendente della serie 60) segnò l’apice della risonanza mondiale della casa di Detroit e fu prodotto in versioni successive, con carrozzeria coupé, convertibile o sedan, fino al 1964. La vettura esposta è una versione “sedan”, carrozzata Fischer, e fu il modello della gamma del quale si produssero il maggior numero di unità: 42.625.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"La Florentia è una delle marche d’automobili più antiche d’Italia, tanto da essere già citata dalla rivista “L’Automobile” nel 1901: «La Fabbrica Toscana di Automobili di Firenze sta ultimando un ottimo tipo di vetturella leggera “Florentia”, con un nuovo sistema di raffreddamento a ventilatore. Questo sistema analogo a quello della Mercedes ha l’incomparabile vantaggio di assicurare il perfetto e continuo raffreddamento con una quantità minima di acqua (8 o 9 litri) che serve per oltre 500 km di viaggio». L’azienda fu attiva tra il 1903 e il 1913, inizialmente con la costruzione di vetturette originali, poi producendo su licenza modelli della francese Rochet-Schneider. Nel 1906, la Regina Margherita di Savoia concesse alla Florentia il privilegio di fregiarsi delle insegne reali: un riconoscimento di non poco conto che andava ad aggiungersi al fatto che una Florentia faceva parte del garage reale, insieme all’Itala, alla Rapid, alla Fiat e a poche altre.\\nLa vettura esposta al Museo, unico esemplare al mondo di Florentia 10 HP, ha una carrozzeria “tonneau”, motore a 2 cilindri e trasmissione ad albero cardanico. Venne acquistata nel 1967 dal barone Giorgio Franchetti, noto mecenate romano e fra i pionieri del collezionismo di automobili in Italia.\"^^<http://www.w3.org/2001/XMLSchema#string>"
+      ]
+    },
+    "P8628": {
+      "count": 123,
+      "description": "displacement",
+      "url": "https://www.wikidata.org/wiki/Property:P8628",
+      "examples": [
+        "\"679 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1206 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1570 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"942 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"2992 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"4179 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1911 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"2994 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1050 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"855 cc\"^^<http://www.w3.org/2001/XMLSchema#string>"
+      ]
+    },
+    "P2109": {
+      "count": 129,
+      "description": "power",
+      "url": "https://www.wikidata.org/wiki/Property:P2109",
+      "examples": [
+        "\"21,5 hp - 4600 rpm\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"18 CV a 1700 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"240 CV a 7200 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"15 CV a 1200 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"45 CV a 1250 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"35 CV a 1400 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"83 CV a 3600 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"156 CV a 3400 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"3,5 hp\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"20 CV a 3400 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>"
+      ]
+    },
+    "P2283": {
+      "count": 1,
+      "description": "uses",
+      "url": "https://www.wikidata.org/wiki/Property:P2283",
+      "examples": [
+        "\"a carbone\"^^<http://www.w3.org/2001/XMLSchema#string>"
+      ]
+    },
+    "P516": {
+      "count": 129,
+      "description": "Sconosciuta",
+      "url": "https://www.wikidata.org/wiki/Property:P516",
+      "examples": [
+        "\"elettrico\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"a vapore\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"elettrosolare\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"vapore\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"combustione interna\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"idrogeno\"^^<http://www.w3.org/2001/XMLSchema#string>"
+      ]
+    },
+    "P287": {
+      "count": 10,
+      "description": "Sconosciuta",
+      "url": "https://www.wikidata.org/wiki/Property:P287",
+      "examples": [
+        "<http://www.wikidata.org/entity/Q654827>",
+        "<http://www.wikidata.org/entity/Q21543051>",
+        "<http://www.wikidata.org/entity/Q721488>",
+        "<http://www.wikidata.org/entity/Q3731978>",
+        "\"I.D.E.A. Institute (rielaborazione)\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"fibra in carbonio semiportante\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Zagato\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Pininfarina\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "<http://www.wikidata.org/entity/Q3903128>"
+      ]
+    },
+    "P4140": {
+      "count": 1,
+      "description": "Sconosciuta",
+      "url": "https://www.wikidata.org/wiki/Property:P4140",
+      "examples": [
+        "\"4 Marelli 12 V 150 Ah\"^^<http://www.w3.org/2001/XMLSchema#string>"
+      ]
+    },
+    "P7045": {
+      "count": 3,
+      "description": "Sconosciuta",
+      "url": "https://www.wikidata.org/wiki/Property:P7045",
+      "examples": [
+        "\"Tubolare\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"struttura reticolare in acciaio cromo\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"monoscocca in acciaio con roll-bar integrato, alloggiamento serbatoio posteriore in materiale composito\"^^<http://www.w3.org/2001/XMLSchema#string>"
+      ]
+    }
+  },
+  "entities": {
+    "Q38": {
+      "count": 206,
+      "label": "Italy",
+      "original_value": "Italia",
+      "type": "Q6256",
+      "url": "https://www.wikidata.org/wiki/Q38"
+    },
+    "Q35349": {
+      "count": 4,
+      "label": "Kia",
+      "original_value": "KIA",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q35349"
+    },
+    "Q145": {
+      "count": 12,
+      "label": "United Kingdom",
+      "original_value": "Regno Unito",
+      "type": "Q6256",
+      "url": "https://www.wikidata.org/wiki/Q145"
+    },
+    "Q6746": {
+      "count": 10,
+      "label": "Citroën",
+      "original_value": "Citroën",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q6746"
+    },
+    "Q30": {
+      "count": 24,
+      "label": "United States",
+      "original_value": "Stati Uniti",
+      "type": "Q6256",
+      "url": "https://www.wikidata.org/wiki/Q30"
+    },
+    "Q1407683": {
+      "count": 2,
+      "label": "Ferrari 365 GT4 2+2",
+      "original_value": "Ferrari 365 GT4 2+2",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q1407683"
+    },
+    "Q142": {
+      "count": 52,
+      "label": "France",
+      "original_value": "Francia",
+      "type": "Q6256",
+      "url": "https://www.wikidata.org/wiki/Q142"
+    },
+    "Q173634": {
+      "count": 2,
+      "label": "Lancia D50",
+      "original_value": "Lancia D50",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q173634"
+    },
+    "Q29852": {
+      "count": 10,
+      "label": "Itala",
+      "original_value": "Itala",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q29852"
+    },
+    "Q35896": {
+      "count": 20,
+      "label": "Lancia",
+      "original_value": "Lancia",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q35896"
+    },
+    "Q2553983": {
+      "count": 2,
+      "label": "Alfa Romeo P2",
+      "original_value": "Alfa Romeo P2",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q2553983"
+    },
+    "Q26921": {
+      "count": 24,
+      "label": "Alfa Romeo",
+      "original_value": "Alfa Romeo",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q26921"
+    },
+    "Q1664128": {
+      "count": 4,
+      "label": "Innocenti",
+      "original_value": "Innocenti",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q1664128"
+    },
+    "Q786820": {
+      "count": 37,
+      "label": "Sconosciuta",
+      "original_value": "",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q786820"
+    },
+    "Q27597": {
+      "count": 64,
+      "label": "Fiat",
+      "original_value": "Fiat",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q27597"
+    },
+    "Q3826655": {
+      "count": 2,
+      "label": "Lancia Aurelia B20",
+      "original_value": "Lancia Aurelia B20",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q3826655"
+    },
+    "Q183": {
+      "count": 20,
+      "label": "Germany",
+      "original_value": "Germania",
+      "type": "Q6256",
+      "url": "https://www.wikidata.org/wiki/Q183"
+    },
+    "Q5137275": {
+      "count": 4,
+      "label": "Clément-Panhard",
+      "original_value": "Clément-Panhard",
+      "type": "Q1144312",
+      "url": "https://www.wikidata.org/wiki/Q5137275"
+    },
+    "Q136661830": {
+      "count": 8,
+      "label": "Panhard & Levassor",
+      "original_value": "Panhard & Levassor",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q136661830"
+    },
+    "Q30055": {
+      "count": 4,
+      "label": "Jaguar Cars",
+      "original_value": "Jaguar",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q30055"
+    },
+    "Q636082": {
+      "count": 2,
+      "label": "Fiat 500 Topolino",
+      "original_value": "Fiat 500 \"Topolino\"",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q636082"
+    },
+    "Q173741": {
+      "count": 2,
+      "label": "Maserati 250F",
+      "original_value": "Maserati 250F",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q173741"
+    },
+    "Q951502": {
+      "count": 2,
+      "label": "Lancia Lambda",
+      "original_value": "Lancia Lambda",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q951502"
+    },
+    "Q27586": {
+      "count": 20,
+      "label": "Ferrari",
+      "original_value": "Ferrari",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q27586"
+    },
+    "Q3042099": {
+      "count": 2,
+      "label": "Mercedes-Benz 540K",
+      "original_value": "Mercedes Benz 540K",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q3042099"
+    },
+    "Q27110": {
+      "count": 8,
+      "label": "Autobianchi",
+      "original_value": "Autobianchi",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q27110"
+    },
+    "Q40971": {
+      "count": 4,
+      "label": "Packard",
+      "original_value": "Packard",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q40971"
+    },
+    "Q3702812": {
+      "count": 4,
+      "label": "Darracq Type SS 20/28",
+      "original_value": "Darracq",
+      "type": "Q3231690",
+      "url": "https://www.wikidata.org/wiki/Q3702812"
+    },
+    "Q27401": {
+      "count": 4,
+      "label": "Bugatti",
+      "original_value": "Bugatti",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q27401"
+    },
+    "Q243278": {
+      "count": 4,
+      "label": "Rolls-Royce",
+      "original_value": "Rolls-Royce",
+      "type": "Q4830453",
+      "url": "https://www.wikidata.org/wiki/Q243278"
+    },
+    "Q39898": {
+      "count": 4,
+      "label": "NSU Motorenwerke",
+      "original_value": "NSU",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q39898"
+    },
+    "Q105975708": {
+      "count": 2,
+      "label": "Kia EV6",
+      "original_value": "KIA EV6",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q105975708"
+    },
+    "Q3320084": {
+      "count": 4,
+      "label": "Monaco-Trossi Grand Prix car",
+      "original_value": "Monaco Trossi",
+      "type": "Q3231690",
+      "url": "https://www.wikidata.org/wiki/Q3320084"
+    },
+    "Q1907023": {
+      "count": 2,
+      "label": "Maserati Mexico",
+      "original_value": "Maserati Mexico",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q1907023"
+    },
+    "Q1129734": {
+      "count": 4,
+      "label": "Prinetti & Stucchi",
+      "original_value": "Prinetti & Stucchi",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q1129734"
+    },
+    "Q786136": {
+      "count": 2,
+      "label": "Autobianchi Primula",
+      "original_value": "Autobianchi Primula",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q786136"
+    },
+    "Q44294": {
+      "count": 6,
+      "label": "Ford Motor Company",
+      "original_value": "Ford",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q44294"
+    },
+    "Q2736928": {
+      "count": 2,
+      "label": "Fiat 8 HP",
+      "original_value": "Fiat 8 HP",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q2736928"
+    },
+    "Q1179850": {
+      "count": 8,
+      "label": "De Dion–Bouton",
+      "original_value": "De Dion-Bouton",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q1179850"
+    },
+    "Q27550": {
+      "count": 4,
+      "label": "Delage",
+      "original_value": "Delage",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q27550"
+    },
+    "Q463627": {
+      "count": 4,
+      "label": "Ferrari F40",
+      "original_value": "Ferrari F 2008",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q463627"
+    },
+    "Q174095": {
+      "count": 2,
+      "label": "Ferrari 312T5",
+      "original_value": "Ferrari 312 T5",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q174095"
+    },
+    "Q55097400": {
+      "count": 4,
+      "label": "Vinot & Deguingand BP 10CV",
+      "original_value": "Vinot & Deguingand",
+      "type": "Q3231690",
+      "url": "https://www.wikidata.org/wiki/Q55097400"
+    },
+    "Q3231690": {
+      "count": 4,
+      "label": "Sconosciuta",
+      "original_value": "",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q3231690"
+    },
+    "Q182323": {
+      "count": 2,
+      "label": "Ford Model T",
+      "original_value": "Ford Model T",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q182323"
+    },
+    "Q1129747": {
+      "count": 4,
+      "label": "SCAT",
+      "original_value": "Scat-Ceirano",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q1129747"
+    },
+    "Q159": {
+      "count": 4,
+      "label": "Russia",
+      "original_value": "Russia",
+      "type": "Q6256",
+      "url": "https://www.wikidata.org/wiki/Q159"
+    },
+    "Q35962": {
+      "count": 10,
+      "label": "Maserati",
+      "original_value": "Maserati",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q35962"
+    },
+    "Q6686": {
+      "count": 6,
+      "label": "Renault",
+      "original_value": "Renault",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q6686"
+    },
+    "Q740150": {
+      "count": 2,
+      "label": "Siata Spring",
+      "original_value": "Fiat 850 S",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q740150"
+    },
+    "Q3678223": {
+      "count": 2,
+      "label": "Cisitalia 202",
+      "original_value": "Cisitalia 202",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q3678223"
+    },
+    "Q692348": {
+      "count": 2,
+      "label": "NSU Ro 80",
+      "original_value": "NSU Ro80",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q692348"
+    },
+    "Q204327": {
+      "count": 4,
+      "label": "Oldsmobile",
+      "original_value": "Oldsmobile",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q204327"
+    },
+    "Q1054074": {
+      "count": 2,
+      "label": "Fiat 600 Multipla",
+      "original_value": "Fiat 600 Multipla",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q1054074"
+    },
+    "Q26678": {
+      "count": 4,
+      "label": "BMW Group",
+      "original_value": "BMW",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q26678"
+    },
+    "Q35907": {
+      "count": 4,
+      "label": "Land Rover",
+      "original_value": "Land Rover",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q35907"
+    },
+    "Q749810": {
+      "count": 4,
+      "label": "Fiat 4 HP",
+      "original_value": "Fiat 4 HP",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q749810"
+    },
+    "Q16039838": {
+      "count": 2,
+      "label": "Alfa Romeo 179B",
+      "original_value": "Alfa Romeo 179B",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q16039838"
+    },
+    "Q541477": {
+      "count": 6,
+      "label": "Daimler-Benz AG",
+      "original_value": "Mercedes Benz",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q541477"
+    },
+    "Q246": {
+      "count": 4,
+      "label": "Volkswagen",
+      "original_value": "Volkswagen",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q246"
+    },
+    "Q23301320": {
+      "count": 6,
+      "label": "Temperino 8/10 HP",
+      "original_value": "Temperino 8/10 HP",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q23301320"
+    },
+    "Q921301": {
+      "count": 4,
+      "label": "Brixia-Zust",
+      "original_value": "Brixia-Züst",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q921301"
+    },
+    "Q849372": {
+      "count": 2,
+      "label": "Fiat Barchetta",
+      "original_value": "Fiat Barchetta",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q849372"
+    },
+    "Q781028": {
+      "count": 2,
+      "label": "Austin 7",
+      "original_value": "Austin Seven",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q781028"
+    },
+    "Q27415": {
+      "count": 4,
+      "label": "Buick",
+      "original_value": "Buick",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q27415"
+    },
+    "Q1093218": {
+      "count": 6,
+      "label": "Cisitalia",
+      "original_value": "Cisitalia",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q1093218"
+    },
+    "Q1407704": {
+      "count": 2,
+      "label": "Ferrari Tipo 500",
+      "original_value": "Ferrari 500 F2",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q1407704"
+    },
+    "Q721488": {
+      "count": 3,
+      "label": "Franco Scaglione",
+      "original_value": "Franco Scaglione",
+      "type": "Q5",
+      "url": "https://www.wikidata.org/wiki/Q721488"
+    },
+    "Q6256": {
+      "count": 6,
+      "label": "Sconosciuta",
+      "original_value": "",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q6256"
+    },
+    "Q3744400": {
+      "count": 2,
+      "label": "Fiat 500 Lizard",
+      "original_value": "Fiat 500 L",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q3744400"
+    },
+    "Q1674581": {
+      "count": 6,
+      "label": "Isotta Fraschini",
+      "original_value": "Isotta Fraschini",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q1674581"
+    },
+    "Q28616": {
+      "count": 4,
+      "label": "GAZ",
+      "original_value": "Gaz",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q28616"
+    },
+    "Q177846": {
+      "count": 4,
+      "label": "Società Torinese Automobili Elettrici",
+      "original_value": "STAE",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q177846"
+    },
+    "Q36024": {
+      "count": 2,
+      "label": "Mini",
+      "original_value": "Morris Mini",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q36024"
+    },
+    "Q1209227": {
+      "count": 4,
+      "label": "Diatto",
+      "original_value": "Diatto",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q1209227"
+    },
+    "Q90018657": {
+      "count": 2,
+      "label": "Citroën DS 19",
+      "original_value": "Citroën DS 19",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q90018657"
+    },
+    "Q3932858": {
+      "count": 2,
+      "label": "Renault Floride",
+      "original_value": "Renault Floride",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q3932858"
+    },
+    "Q1664136": {
+      "count": 2,
+      "label": "Innocenti Mini",
+      "original_value": "Innocenti Mini T",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q1664136"
+    },
+    "Q3731978": {
+      "count": 3,
+      "label": "Ermenegildo Preti",
+      "original_value": "Ermenegildo Preti",
+      "type": "Q5",
+      "url": "https://www.wikidata.org/wiki/Q3731978"
+    },
+    "Q5": {
+      "count": 5,
+      "label": "Sconosciuta",
+      "original_value": "",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q5"
+    },
+    "Q3893267": {
+      "count": 2,
+      "label": "Panhard & Levassor type B1/B2",
+      "original_value": "Panhard & Levassor B1",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q3893267"
+    },
+    "Q1512553": {
+      "count": 2,
+      "label": "Jeep CJ",
+      "original_value": "Ford Jeep",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q1512553"
+    },
+    "Q426892": {
+      "count": 4,
+      "label": "Iso Rivolta",
+      "original_value": "Iso Rivolta",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q426892"
+    },
+    "Q1472912": {
+      "count": 2,
+      "label": "Alfa Romeo 8C",
+      "original_value": "Alfa Romeo 8C 2300",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q1472912"
+    },
+    "Q1410661": {
+      "count": 2,
+      "label": "Fiat Turbina",
+      "original_value": "Fiat Turbina",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q1410661"
+    },
+    "Q21543051": {
+      "count": 3,
+      "label": "Cesare Sala",
+      "original_value": "Cesare Sala",
+      "type": "Q5",
+      "url": "https://www.wikidata.org/wiki/Q21543051"
+    },
+    "Q926873": {
+      "count": 2,
+      "label": "Lancia Aprilia",
+      "original_value": "Lancia Aprilia",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q926873"
+    },
+    "Q2660817": {
+      "count": 2,
+      "label": "Fiat 520",
+      "original_value": "Fiat 520",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q2660817"
+    },
+    "Q1407659": {
+      "count": 2,
+      "label": "Ferrari 308",
+      "original_value": "Ferrari 308 GTB",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q1407659"
+    },
+    "Q2746144": {
+      "count": 2,
+      "label": "Fiat 130 HP",
+      "original_value": "Fiat 130 HP",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q2746144"
+    },
+    "Q1144312": {
+      "count": 1,
+      "label": "Sconosciuta",
+      "original_value": "",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q1144312"
+    },
+    "Q623274": {
+      "count": 4,
+      "label": "Aquila Italiana",
+      "original_value": "Aquila Italiana",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q623274"
+    },
+    "Q7821918": {
+      "count": 2,
+      "label": "Ferrari 208 GTB/GTS",
+      "original_value": "Ferrari 208 GTB",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q7821918"
+    },
+    "Q281228": {
+      "count": 2,
+      "label": "Peugeot Type 3",
+      "original_value": "Peugeot Tipo 3",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q281228"
+    },
+    "Q654827": {
+      "count": 4,
+      "label": "Flaminio Bertoni",
+      "original_value": "Flaminio Bertoni",
+      "type": "Q5",
+      "url": "https://www.wikidata.org/wiki/Q654827"
+    },
+    "Q172686": {
+      "count": 2,
+      "label": "Ferrari 156 F1",
+      "original_value": "Ferrari 156 F1",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q172686"
+    },
+    "Q27436": {
+      "count": 4,
+      "label": "Cadillac",
+      "original_value": "Cadillac",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q27436"
+    },
+    "Q1052719": {
+      "count": 4,
+      "label": "Ceirano GB & C",
+      "original_value": "Ceirano",
+      "type": "Q786820",
+      "url": "https://www.wikidata.org/wiki/Q1052719"
+    },
+    "Q2165508": {
+      "count": 2,
+      "label": "Alfa Romeo Disco Volante (1952)",
+      "original_value": "Alfa Romeo Disco Volante",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q2165508"
+    },
+    "Q3610959": {
+      "count": 2,
+      "label": "Alfa Romeo 155 V6 TI",
+      "original_value": "Alfa Romeo 155 V6 TI",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q3610959"
+    },
+    "Q3903128": {
+      "count": 3,
+      "label": "Pierluigi Raggi",
+      "original_value": "Pierluigi Raggi",
+      "type": "Q5",
+      "url": "https://www.wikidata.org/wiki/Q3903128"
+    },
+    "Q3803337": {
+      "count": 2,
+      "label": "Isotta Fraschini Tipo 8A",
+      "original_value": "Isotta Fraschini 8A",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q3803337"
+    },
+    "Q644067": {
+      "count": 2,
+      "label": "Trabant 601",
+      "original_value": "Trabant 601",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q644067"
+    },
+    "Q1856900": {
+      "count": 2,
+      "label": "Vespa 400",
+      "original_value": "ACMA Vespa 400",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q1856900"
+    },
+    "Q1133985": {
+      "count": 2,
+      "label": "Lancia D24",
+      "original_value": "Lancia D24",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q1133985"
+    },
+    "Q172705": {
+      "count": 2,
+      "label": "Ferrari 246 F1",
+      "original_value": "Ferrari 246 F1",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q172705"
+    },
+    "Q1125433": {
+      "count": 2,
+      "label": "Fiat 600",
+      "original_value": "Fiat 600",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q1125433"
+    },
+    "Q869076": {
+      "count": 2,
+      "label": "Cord L-29",
+      "original_value": "Cord L-29",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q869076"
+    },
+    "Q20010009": {
+      "count": 2,
+      "label": "Lancia Flaminia presidenziale",
+      "original_value": "Lancia Flaminia presidenziale",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q20010009"
+    },
+    "Q4830453": {
+      "count": 1,
+      "label": "Sconosciuta",
+      "original_value": "",
+      "type": "",
+      "url": "https://www.wikidata.org/wiki/Q4830453"
+    }
+  },
+  "statistics": {
+    "total_unique_properties": 18,
+    "total_unique_entities": 110,
+    "total_property_references": 1782,
+    "total_entity_links": 818
+  }
+}

@@ -20,6 +20,7 @@ Questo file contiene SOLO la logica di:
 import sys
 import os
 import csv
+import json
 import pandas as pd
 import glob
 from typing import Dict, Optional, List

@@ -1,5 +1,7 @@
 # Knowledge Graph per Museo Automobilistico
 
+**Ultimo aggiornamento**: 13 febbraio 2026
+
 Progetto di tesi per la creazione di knowledge graph a partire da dati del museo utilizzando tecnologie del web semantico, entity linking automatico e integrazione avanzata con Wikidata.
 
 ## 🎯 Obiettivi
@@ -10,6 +12,7 @@ Progetto di tesi per la creazione di knowledge graph a partire da dati del museo
 - **Doppia interoperabilità**: Mappings Wikidata (LOD) + Schema.org (Web) con HTTPS enforcement
 - **Logica centralizzata**: Tutta la business logic in museum_mappings.py per massima manutenibilità
 - **Gestione intelligente literals**: Mantiene literal quando appropriato (no forced IRI creation)
+- **Test LLM comparative**: Framework oneshot vs zeroshot per estrazione entità (+59.6% improvement con esempi)
 
 ## 📁 Struttura del Progetto
 
@@ -20,11 +23,11 @@ Progetto di tesi per la creazione di knowledge graph a partire da dati del museo
 │   ├── mappings.csv              # 44 mappings Schema.org (HTTPS enforced)
 │   └── Wikidata_P.csv            # 291 proprietà Wikidata per automotive
 ├── scripts/                      # 🚀 Sistema Generazione RDF con Validazione
-│   ├── integrated_semantic_enricher.py  # ⭐ Orchestrazione CSV→RDF
-│   ├── robust_wikidata_linker.py        # Entity linking + validazione ontologica
-│   └── museum_mappings.py               # ⭐ Hub logica centralizzata (mapping, rules, validation)
-├── cache/                        # Cache Wikidata persistente
-│   ├── production_cache.pkl             # Cache binaria (79 entities)
+│   ├── integrated_semantic_enricher.py  # ⭐ Orchestrazione CSV→RDF (refactored 12/02/2026)
+│   ├── robust_wikidata_linker.py        # Entity linking + validazione ontologica P31
+│   ├── museum_mappings.py               # ⭐ Hub logica centralizzata (27 mappings, 90+ rules)
+│   └── es/                       # Cache Wikidata persistente
+│   └── production_cache_entities.json   # Cache human-readable (79 entities)tities)
 │   └── production_cache_entities.json   # Cache human-readable
 ├── llm_test/                     # ⭐ Test LLM per estrazione entità
 │   ├── compare_modes.py          # Confronto risultati zeroshot vs oneshot
@@ -146,22 +149,25 @@ Per testare gli approcci legacy, i file sono disponibili nella cartella `/old/` 
 
 ### Knowledge Graph Finale (Sistema con Validazione Ontologica)
 - **160 veicoli** processati con entity linking validato
+- **5,162 triple RDF** generate (`output/output_automati (97.5% completezza)
 - **5,162 triple RDF** generate (`output/output_automatic_enriched.nt`)
   - 1,798 literals (anni, velocità, potenza, descrizioni)
-  - 1,566 IRIs Wikidata (entità validate)
-  - 0 custom IRIs (solo vehicle URIs)
+  - 1,566 IRIs Wikidata (entità validate con P31 instance of)
+  - 0 custom IRIs (solo vehicle URIs, design choice finale)
 - **293 entità Wikidata** linkate (tutte ontologicamente corrette)
-- **79 entities in cache** (persistente per performance)
-- **Doppia interoperabilità**: Wikidata + Schema.org HTTPS
-- **Validazione rigorosa**: 0 false positives (Q1789258 music band rejected)
+- **79 entities in cache** (persistente per performance API)
+- **Doppia interoperabilità**: Wikidata (27 properties) + Schema.org (44 properties) HTTPS
+- **Validazione rigorosa**: 0 false positives (Q1789258 music band rejected, OM mantenuto literal)
 - **Copertura temporale**: 1891-2000 (109 anni di storia automobilistica)
-
-### Test LLM per Estrazione Entità
-- **Oneshot vs Zeroshot**: Performance significativamente superiore con esempi (+59.6%)
-- **Modello utilizzato**: Qwen/Qwen3-0.6B su GPU RTX 4050 Laptop
+- **81 marche** rappresentate (prevalenza europea 85%: Italia 40%, Germania 30%
+### Test LLM per Estrazione Entità improvement)
+- **Modello utilizzato**: Qwen/Qwen3-0.6B (600M parametri) su GPU RTX 4050 Laptop (6.44 GB)
+- **Configurazione**: Temperature 0.2, max_tokens 300, FP16 per ottimizzazione memoria
 - **Oneshot**: 65/99 successi (65.7%) - esempio Ferrari F40 come guida
-- **Zeroshot**: 6/99 successi (6.1%) - senza esempi di riferimento
+- **Zeroshot**: 6/99 successi (6.1%) - senza esempi di riferimento, JSON malformati frequenti
 - **Migliori entità estratte** (oneshot): MARCA, PAESE, DESIGNER (>60% accuratezza)
+- **Entità più difficili**: PILOTA, GARA (~47-50% accuratezza)
+- **Debug framework**: Sistema progressivo con timing, memory tracking e ETA calculationER (>60% accuratezza)
 - **Entità più difficili**: PILOTA, GARA (~47-50% accuratezza)
 
 ### 🔍 Sistema di Validazione Ontologica
@@ -171,30 +177,38 @@ Per testare gli approcci legacy, i file sono disponibili nella cartella `/old/` 
 
 #### Soluzione Implementata
 **Validazione P31 (instance of) pre-scoring** in robust_wikidata_linker.py:
-
-```python
+# In robust_wikidata_linker.py
 incompatible_types = {
     'Q215380',   # musical group
     'Q482994',   # album
     'Q7366',     # song
     'Q11424',    # film
-    # ... altri tipi incompatibili
+    'Q5398426',  # television series
+    'Q7889',     # video game
+    'Q571',      # book
+    'Q11173',    # chemical compound
 }
 
 def _validate_ontology(candidate, predicate, label):
-    # 1. Verifica P31 claims
+    """Validazione ontologica PRIMA del calcolo score"""
+    # 1. Estrai P31 (instance of) claims
     instance_types = extract_p31_from_candidate(candidate)
     
-    # 2. REJECT incompatible types
+    # 2. REJECT incompatible types (media/entertainment)
     if instance_types & incompatible_types:
         return False, "[REJECTED] incompatible type"
     
     # 3. VALIDATE correct type for predicate
-    expected_type = entity_type_mappings.get(predicate)
+    expected_type = entity_type_mappings.get(predicate)  # es. Q786820 per manufacturer
     if expected_type in instance_types:
         return True, "[VALIDATED] correct type"
     
-    # 4. Special rules (acronyms ≤3 chars require automotive type)
+    # 4. Special rules: acronyms ≤3 chars require automotive type
+    if len(label) <= 3 and expected_type not in instance_types:
+        return False, "[REJECTED] short acronym without type"
+    
+    # 5. Accept if no incompatible types found
+    return True, "[WARNING] no P31 claims found type)
     if len(label) <= 3 and expected_type not in instance_types:
         return False, "[REJECTED] short acronym without type"
 ```

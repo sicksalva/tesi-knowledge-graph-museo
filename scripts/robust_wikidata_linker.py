@@ -377,38 +377,6 @@ class WikidataEntityLinker:
         except Exception as e:
             print(f"Errore ricerca Wikidata per '{query}': {e}")
             return []
-        """
-        Cerca entità su Wikidata usando wbsearchentities.
-        
-        Args:
-            query: Termine di ricerca
-            limit: Numero massimo di risultati
-            language: Lingua per la ricerca
-            
-        Returns:
-            Lista di entità candidate
-        """
-        url = "https://www.wikidata.org/w/api.php"
-        params = {
-            'action': 'wbsearchentities',
-            'search': query,
-            'language': language,
-            'type': 'item',
-            'limit': limit,
-            'format': 'json'
-        }
-        
-        try:
-            time.sleep(self.rate_limit_delay)
-            response = self.session.get(url, params=params, timeout=10)
-            response.raise_for_status()
-            
-            data = response.json()
-            return data.get('search', [])
-            
-        except Exception as e:
-            print(f"Errore ricerca Wikidata per '{query}': {e}")
-            return []
     
     def _get_entity_details(self, entity_id: str) -> Optional[Dict]:
         """

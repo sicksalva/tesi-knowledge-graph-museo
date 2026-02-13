@@ -691,9 +691,9 @@ def main():
                 try:
                     if os.path.isfile(cache_file):
                         os.remove(cache_file)
-                        print(f"  ✓ Eliminato: {os.path.basename(cache_file)}")
+                        print(f"  [OK] Eliminato: {os.path.basename(cache_file)}")
                 except Exception as e:
-                    print(f"  ✗ Errore nell'eliminare {os.path.basename(cache_file)}: {e}")
+                    print(f"  [ERRORE] Errore nell'eliminare {os.path.basename(cache_file)}: {e}")
             print("Cache pulita!\n")
         else:
             print("Nessun file di cache da eliminare.\n")

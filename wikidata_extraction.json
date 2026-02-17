@@ -5,16 +5,16 @@
       "description": "name in native language",
       "url": "https://www.wikidata.org/wiki/Property:P1559",
       "examples": [
-        "\"3½ HP\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Mini T\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"L-29\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Jeep\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Prototipo di Formula 3\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Tipo Zero A\"^^<http://www.w3.org/2001/XMLSchema#string>",
         "\"B1\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"GP Tipo 158 \\\"Alfetta\\\"\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"365 GT4 2+2\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"601\"^^<http://www.w3.org/2001/XMLSchema#string>"
+        "\"500 L\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"25/30 HP\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"600\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"508 \\\"Balilla\\\"\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Bianchina 500 trasformabile\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"F 2008\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"501 S\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Lambda\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Mini T\"^^<http://www.w3.org/2001/XMLSchema#string>"
       ]
     },
     "P1028": {
@@ -22,16 +22,16 @@
       "description": "donated by",
       "url": "https://www.wikidata.org/wiki/Property:P1028",
       "examples": [
-        "\"Dono della Famiglia Michetti, Francavilla a Mare (CH)\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Dono di Fiat S.p.A., Torino\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Dono delle Officine Alfieri Maserati, Modena\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Dono di Enrico Nardi, Torino\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Dono di Adriana e Chiara Rogliatti, Torino\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Dono della Famiglia Castronuovo, Bisuschio (VA)\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Dono di Giuseppina Cirani Sfrondini, Milano\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Dono di Luigi Damevino, Torino\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Dono di Itala S.A.C.A., Torino\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Dono di Giovanni Agnelli, Torino\"^^<http://www.w3.org/2001/XMLSchema#string>"
+        "\"Dono di Dante Bertolani, Torino\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Dono di Diageo\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Dono di Finalfa srl\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Dono di Roberto Giacomo Donato Momigliano, Torino\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Dono di Lancia S.p.A., Torino\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Dono di Giorgio Franchetti, Roma\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Dono della Famiglia Spagnoletti Zeuli, Torino\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Dono di Francesco Mirabile, Firenze\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Dono degli eredi Puccio, Genova\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Dono di Francesca (Nella) Mirabile Mancusio, Messina\"^^<http://www.w3.org/2001/XMLSchema#string>"
       ]
     },
     "P585": {
@@ -39,16 +39,16 @@
       "description": "point in time",
       "url": "https://www.wikidata.org/wiki/Property:P585",
       "examples": [
-        "\"1924\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"1895\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"2008\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1970\"^^<http://www.w3.org/2001/XMLSchema#string>",
         "\"1948\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"XVII sec\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1924\"^^<http://www.w3.org/2001/XMLSchema#string>",
         "\"1916\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"2005\"^^<http://www.w3.org/2001/XMLSchema#string>",
         "\"1903\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"2012\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"1938\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"1936\"^^<http://www.w3.org/2001/XMLSchema#string>"
+        "\"1941\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1901\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1982\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1969\"^^<http://www.w3.org/2001/XMLSchema#string>"
       ]
     },
     "P495": {
@@ -56,13 +56,13 @@
       "description": "country of origin",
       "url": "https://www.wikidata.org/wiki/Property:P495",
       "examples": [
-        "<http://www.wikidata.org/entity/Q38>",
+        "<http://www.wikidata.org/entity/Q30>",
         "<http://www.wikidata.org/entity/Q142>",
         "<http://www.wikidata.org/entity/Q145>",
-        "<http://www.wikidata.org/entity/Q183>",
-        "<http://www.wikidata.org/entity/Q159>",
+        "<http://www.wikidata.org/entity/Q38>",
         "\"Corea del sud\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "<http://www.wikidata.org/entity/Q30>"
+        "<http://www.wikidata.org/entity/Q183>",
+        "<http://www.wikidata.org/entity/Q159>"
       ]
     },
     "P176": {
@@ -70,16 +70,16 @@
       "description": "manufacturer",
       "url": "https://www.wikidata.org/wiki/Property:P176",
       "examples": [
-        "<http://www.wikidata.org/entity/Q136661830>",
-        "\"FOD\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Stanley\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"F.I.A.L. Legnano\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Nibbio\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Storero\"^^<http://www.w3.org/2001/XMLSchema#string>",
         "<http://www.wikidata.org/entity/Q28616>",
-        "<http://www.wikidata.org/entity/Q246>",
-        "<http://www.wikidata.org/entity/Q23301320>",
-        "\"Bernardi\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Sizare-Naudin\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "<http://www.wikidata.org/entity/Q243278>"
+        "\"Benz\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Formula Monza\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Carro di Cugnot\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Monaco Nardi\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "<http://www.wikidata.org/entity/Q1664128>",
+        "<http://www.wikidata.org/entity/Q3320084>",
+        "\"Carrozza\"^^<http://www.w3.org/2001/XMLSchema#string>"
       ]
     },
     "P217": {
@@ -87,16 +87,16 @@
       "description": "inventory number",
       "url": "https://www.wikidata.org/wiki/Property:P217",
       "examples": [
-        "\"V035\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"V057\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"V047\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"COM 018\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"V 180\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"V021\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"V 195\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"V087\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"V067\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"V034\"^^<http://www.w3.org/2001/XMLSchema#string>"
+        "\"V040\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"COM 010\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"V 186\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"V 172\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"V 168\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"V 194\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"V117\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"V059\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"V131\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"V038\"^^<http://www.w3.org/2001/XMLSchema#string>"
       ]
     },
     "P2052": {
@@ -104,16 +104,16 @@
       "description": "maximum speed",
       "url": "https://www.wikidata.org/wiki/Property:P2052",
       "examples": [
-        "\"242 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"45 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"30 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"245 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"145 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"78 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"100 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"165 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"35 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
         "\"55 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"250 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"225 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"160 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"212 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>"
+        "\"155 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"60 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"110 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"240 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"270 km/h\"^^<http://www.w3.org/2001/XMLSchema#string>"
       ]
     },
     "P2754": {
@@ -121,16 +121,16 @@
       "description": "production date",
       "url": "https://www.wikidata.org/wiki/Property:P2754",
       "examples": [
+        "\"1945-1987\"^^<http://www.w3.org/2001/XMLSchema#string>",
         "\"1966-1994\"^^<http://www.w3.org/2001/XMLSchema#string>",
         "\"1948\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"1972-1976\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"1957-1961\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"1973-1976\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"1945-1987\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"1954-1960\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"1979-1982\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"1922-1924\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"1951-1955\"^^<http://www.w3.org/2001/XMLSchema#string>"
+        "\"1903\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1922-1934\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1901\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1899-1902\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1934-1957\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1955-1962\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1957-1961\"^^<http://www.w3.org/2001/XMLSchema#string>"
       ]
     },
     "P31": {
@@ -138,16 +138,16 @@
       "description": "instance of",
       "url": "https://www.wikidata.org/wiki/Property:P31",
       "examples": [
-        "<http://www.wikidata.org/entity/Q172686>",
-        "<http://www.wikidata.org/entity/Q1907023>",
-        "<http://www.wikidata.org/entity/Q3932858>",
-        "<http://www.wikidata.org/entity/Q1856900>",
-        "<http://www.wikidata.org/entity/Q105975708>",
-        "<http://www.wikidata.org/entity/Q1054074>",
-        "<http://www.wikidata.org/entity/Q749810>",
         "<http://www.wikidata.org/entity/Q781028>",
-        "<http://www.wikidata.org/entity/Q1407704>",
-        "<http://www.wikidata.org/entity/Q2660817>"
+        "<http://www.wikidata.org/entity/Q1133985>",
+        "<http://www.wikidata.org/entity/Q105975708>",
+        "<http://www.wikidata.org/entity/Q2553983>",
+        "<http://www.wikidata.org/entity/Q36024>",
+        "<http://www.wikidata.org/entity/Q3042099>",
+        "<http://www.wikidata.org/entity/Q1512553>",
+        "<http://www.wikidata.org/entity/Q1664136>",
+        "<http://www.wikidata.org/entity/Q786136>",
+        "<http://www.wikidata.org/entity/Q869076>"
       ]
     },
     "P1002": {
@@ -155,16 +155,16 @@
       "description": "engine configuration",
       "url": "https://www.wikidata.org/wiki/Property:P1002",
       "examples": [
-        "\"1 cil\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Guzzi motociclistico a 1 cilindro\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"2 cilindri\"^^<http://www.w3.org/2001/XMLSchema#string>",
         "\"posteriore a 1 cilindro orizzontale\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"posteriore a 2 cilindri a V\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"2 cilindri in linea, posteriore\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"6 cilindri a V di 60°\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"6 cilindri a V\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"8 cilindri a V\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"3 cilindri monoblocco\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"4 cilindri “avalve”\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"2 cilindri contrapposti\"^^<http://www.w3.org/2001/XMLSchema#string>",
         "\"4 cilindri in linea\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"posteriore 4 cilindri contrapposti raffreddato ad aria\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"8 cil\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"12 cilindri a 180°\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"2 cilindri in linea, 2 tempi\"^^<http://www.w3.org/2001/XMLSchema#string>"
+        "\"posteriore orizzontale a 2 cilindri\"^^<http://www.w3.org/2001/XMLSchema#string>"
       ]
     },
     "P1343": {
@@ -172,16 +172,16 @@
       "description": "described by source",
       "url": "https://www.wikidata.org/wiki/Property:P1343",
       "examples": [
-        "\"Con il nome Nibbio I e II vennero denominate due speciali vetture da record costruite dal giornalista pilota Giovanni Lurani Cernuschi (1905-1995): quella del 1935 in collaborazione con Ulisse Guzzi, figlio di uno dei fondatori della Casa motociclistica, e quella del 1955 con Piero Campanella e Angelo Poggio.\\nCome per la prima versione, anche il Nibbio II fu dotato di un motore Guzzi, ma monocilindrico bialbero di 350 cc, lo stesso che aveva permesso alla casa di Mandello del Lario di conquistare una serie di primati a Montlhéry. L’amico e pilota Campanella mise a disposizione di Cernuschi un telaio Volpini Formula 3, a quattro ruote indipendenti con balestre trasversali e ammortizzatori idraulici, mentre l’aerodinamica carrozzeria, con le due pinne molto pronunciate e la curiosa soluzione per l’uscita dell’aria di raffreddamento, venne realizzata dalla Ghia su disegno dell’ingegner Savonuzzi. Dopo essere stato esposto nello stand Ghia al Salone di Torino del 1956, il nuovo Nibbio fu collaudato il 28 marzo del 1956 sulla pista d’alta velocità di Monza. Il successivo 6 giugno, sempre sulla pista dell’autodromo monzese, il veicolo condotto da Lurani e Campanella stabilì il suo primo record internazionale, quello della classe D (fino a 350 cc) sulla distanza delle 3 ore: i chilometri percorsi furono 394,037, alla media di 131,345 km/h. Questo stesso primato venne migliorato dal Nibbio il 26 aprile\\ndell’anno successivo quando Campanella, Poggio e Volpini girarono a Monza per tre ore alla media di 141,643 km/h. Nella stessa occasione il filante veicolo conquistò altri 5 record internazionali: 50 km, 50 miglia, 100 km, 100 miglia e quello dell’ora.\\nAltri record vennero conquistati dalla vettura nel 1958 (200 miglia, 500 km, 500 miglia, 3 ore, 6 ore e 1000 km) e nel 1959 (500 km, 3 ore, 1000 miglia, 12 ore e 2000 km). La parte meccanica era stata nel frattempo messa a punto da Stanguellini, il quale aveva anche provveduto a migliorare il rendimento aerodinamico della carrozzeria.\\nNel 1960, infine, al posto del monocilindrico di 350 cc, il Nibbio ebbe un nuovo motore di 250 cc, sempre Guzzi e sempre monocilindrico bialbero, col quale Campanella e Poggio stabilirono altri quattro record internazionali della classe K (250 cc): 200 km, 200 miglia, 3 ore e 500 km.\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"L’Isotta Fraschini è stata una delle più famose fabbriche italiane. Automobili prestigiose celebrate nel mondo, motori marini e d’aviazione, record sportivi e progettisti geniali sono gli ingredienti della storia di questa gloriosa marca automobilistica italiana di lusso, fondata a Milano nel 1900 da Cesare Isotta insieme ai fratelli Vincenzo, Oreste e Antonio Fraschini.\\nIl modello AN 20/30 HP è l’evoluzione della A 16/22 HP studiata da Giustino Cattaneo, tecnico di valore a cui si deve, fra l’altro, il brevetto dei freni sulle ruote anteriori e quello del primo motore a 8 cilindri in linea realizzato nel 1918.\\n«In attesa che qualcuno facesse quello che lei ha fatto, io ho sempre conservato una cara vecchia automobile che io stessa guidavo quando in Sicilia non eravamo più di due o tre donne ad avere la patente». Con queste parole la contessa Francesca Mirabile Mancusio propose a Carlo Biscaretti la sua Isotta Fraschini AN 20/30 HP, elegantemente carrozzata come “landaulet” dalla milanese Pavesi, Crespi & C. Biscaretti accettò con gioia il dono di questa vettura, nonostante le peripezie per farla arrivare nel capoluogo piemontese.\\nFrancesca Mancusio era nata a Caronia, in provincia di Messina, nel 1893, e fu la prima donna a conseguire la patente di guida in Italia, ottenuta nel 1913 all’età di soli vent’anni. L’Isotta Fraschini, costata 14.500 lire, le fu donata come regalo per i suoi sedici anni dal padre, il cavaliere Luigi Mancusio, amico dell’ingegner Cattaneo. L’amore per le automobili e i viaggi contraddistinguerà la vita di Francesca, come scriverà nell’autobiografia pubblicata nel 1965, nella quale racconterà del suo viaggio a bordo di una Lancia Appia alla volta del Circolo Polare Artico. Il simbolo della sua libertà, quella patente conseguita con così tanto orgoglio, è ancora oggi esposta sulla portiera della sua amata Isotta Fraschini.\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Per il mondo dell’automobile la Lancia modello Lambda è una vera rivoluzione: la Casa torinese produce la prima vettura a scocca autoportante, ricetta vincente per la produzione di massa del dopoguerra.\\nDella nuova vettura leggera Lancia si cominciò a parlare dal novembre 1921, quando trapelarono le prime anticipazioni sulla stampa. Così scriveva la rivista specializzata “Motori Aero Cicli & Sports”: «Figuratevi una vettura lunga e spaziosa di dimensioni normali, assai bassa […] che tiene egregiamente la strada […] che non ha telaio né asse anteriore, e di cui è persino soddisfatto quel meticoloso ed incontentabile critico di sé stesso che è il cav. Lancia». Esposta, prima che in Italia, ai Saloni di Parigi e di Londra dell’autunno 1922, fu presentata entusiasticamente come la vettura che apriva nuovi orizzonti alla tecnica automobilistica.\\nL’innovativa struttura portante, che sostituiva il tradizionale telaio a longheroni, venne realizzata dal giovane ingegnere Battista Falchetto, messo a capo del gruppo di progetto a marzo del 1921, a poco più di un anno dall’assunzione. Si partì da un precedente progetto del 1919 per sviluppare una vettura la cui carrozzeria è inscindibile da tutto il resto, formando un’ossatura principale utilizzata come basamento per incorporare il motore, il cambio di velocità, la trasmissione e il differenziale. Lo scheletro della carrozzeria, anziché essere di legno, è di lamiera d’acciaio stampata (“emboutie”) di 2 mm di spessore, circondato all’esterno da sottile lamiera pure d’acciaio, mentre all’interno l’imbottitura e i cuscini sono mobili; le due estremità anteriori si chiudono in una cornice che incorpora il radiatore. Longitudinalmente la carrozzeria è attraversata da un rilievo arcuato, una sagomatura a tunnel – che sembra dividerla in due parti uguali – nella quale scorre l’albero cardanico di trasmissione. Questa sagomatura, che fa quasi da ponte armato, contribuisce ad aumentare il grado di rigidità e di coesione della vettura, abbassandone il centro di gravità. Furono necessari sei mesi di studio prima di poter arrivare alle prime prove su strada, avvenute nel settembre del 1921 con una vettura dalla linea molto diversa rispetto a quella definitiva, a partire dal radiatore sagomato che ricordava le Bugatti. Fu di Falchetto l’idea di prolungare il retro della vettura, a forma di coda affusolata, per alloggiarvi i bagagli: era il primo baule portabagagli non più applicato all’esterno, ma integrato nella linea della carrozzeria.\\nDal 1922 al 1931 furono costruiti 13.000 esemplari Lambda, tra vetture e telai. Una grande affermazione commerciale, anche se nel 1929 con il modello Dilambda si tornò al telaio separato, per la convinzione che la soluzione della scocca autoportante fosse inapplicabile alle macchine di maggiore dimensione e peso.\\nI tempi non erano ancora maturi per un’invenzione che a partire dagli anni Cinquanta sarà applicata a centinaia di milioni di automobili, costruite con scocca integrale.\\nNel 1922, Vincenzo Lancia volle esporre ai Saloni il telaio “nudo”, straordinario esempio di soluzione raffinata e avveniristica, e nell’ottobre 1934 decise di donarlo all’amico Carlo Biscaretti per l’appena costituito Museo dell’Automobile.\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"La Cisitalia fu fondata da Piero Dusio a Torino nel 1946 e si distinse per la produzione di vetture eccezionali sia dal punto di vista stilistico che tecnico. A dispetto della sua breve vita (rimase in attività a Torino fino al 1952), la Cisitalia lasciò un’eredità e un’influenza nel panorama automobilistico tutt’oggi di valore inestimabile.\\nIl 1947 fu un anno di grandi soddisfazioni per la Cisitalia: la D46 mieteva ancora successi e la spider aerodinamica di Savonuzzi arrivò a un passo dalla vittoria dopo un’esaltante gara alla Mille Miglia. Dusio, sull’onda dell’entusiasmo, decise di avviare la produzione in serie di una Gran Turismo, derivandola dalle Savonuzzi e affidando la realizzazione del telaio alla Pininfarina, artefice di una vettura capolavoro: la Berlinetta 202. All’alba degli anni cinquanta, la 202 significherà da sola la nozione di Gran Turismo: le sue linee di assoluta purezza rappresentano una cesura nel design automobilistico. Da quel momento in poi, la linea di un’automobile non avrà più niente a che fare con il passato, e sarà una linea italiana, grazie alle matite di Giovanni Savonuzzi e Giovanni Battista Farina, su un telaio e una meccanica italiane.\\nSi racconta che il layout del progetto si basasse su queste indicazioni di Dusio: «Voglio una vettura veloce come una macchina di Formula, larga come la mia Buick, comoda come una Rolls Royce e leggera come la D46». Pininfarina eseguì alla lettera e il risultato fu una vettura perfettamente bilanciata, con padiglione schiacciato, un rivoluzionario disegno orizzontale della griglia del radiatore, cofano più basso dei parafanghi, coda inclinata, fiancate lisce: una linea unica, armoniosa ed essenziale. Il successo, già dalla presentazione al Salone di Parigi del 1947, fu folgorante. Il design mondiale ne fu talmente condizionato che quando, quattro anni dopo, il Museum of Modern Art di New York volle organizzare una mostra sul design automobilistico, la vettura scelta come «scultura in movimento» per eccellenza fu la Cisitalia 202, e attorno a essa il curatore Arthur Drexel progettò tutta la struttura della mostra, intitolata «8 Automobiles». Al termine della mostra, la Cisitalia entrò a far parte della collezione permanente del MoMA.\\nDonata nel 1960 da Luigi Delfino Berruto, la vettura esposta al Museo è stata restaurata nel 2008 da Pininfarina.\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Frutto dell’ambizioso progetto che vide l’unione tra Fiat, Bianchi e Pirelli, che daranno vita all’Autobianchi, la Bianchina è la prima vettura “speciale” a essere realizzata in Italia su scala industriale su organi meccanici di un modello già esistente (Fiat Nuova 500). Alla sua presentazione al Salone di Parigi nel 1957 riscosse un successo immediato, accolta favorevolmente dalla critica che la giudica come “la più elegante e piacente delle vetturette economiche”. Rappresentò per gli italiani un’utilitaria di grande classe, che si distingueva per l’originalità della linea e la cura delle finizioni, tanto da diventare uno status symbol. Per la sua realizzazione, motore e meccaniche arrivavano dallo stabilimento Fiat Mirafiori e l’Autobianchi ne curava il montaggio, su scocca di proprio disegno e produzione, firmata da Fabio Luigi Rapi. Sempre studiata e curata in ogni dettaglio, venne proposta durante la sua produzione, in\\n300.000 unità circa, in più versioni: dal modello trasformabile al cabriolet, dalla versione hard top a quelle fuoriserie, alla berlina quattro posti, alla Panoramica. L’armatore Aristotele Onassis la scelse anche nella versione “spiaggia”.\\nÈ protagonista in numerose pellicole cinematografiche, ma chi le darà maggiore popolarità sarà sicuramente il ragionier Fantozzi, nei celebri film interpretati dall’attore Paolo Villaggio.\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"L’Alfa Romeo 6 cilindri 2600, vettura confortevole, di alta classe, elegante e imponente, fu presentata al Salone di Ginevra nel 1962. Il motore, evoluzione del modello 2000, segnava un interessante ritorno al sei cilindri in linea, con blocco in lega leggera con canne in ghisa smontabili bagnate e flanghe superiori e inferiori; erogava 130 CV a 5900 giri/min. e consentiva una velocità massima di 200 km/h. La versione berlina, realizzata dalla carrozzeria Bertone, era “appesantita” da linee troppo barocche, mentre la linea equilibrata della Sprint, sempre di Bertone, è considerata una delle più belle realizzazioni della carrozzeria torinese.\\nDal 1962 al 1965 fu commercializzata anche la versione spider, carrozzata dalla Touring, di cui furono costruiti 2.255 esemplari. Per una migliore realizzazione della capote fu necessario rialzare la parte posteriore e di conseguenza tutto il profilo della fiancata della carrozzeria, con il conseguente risultato che la 2600 Spider, seppur di grande eleganza, risultò meno slanciata rispetto alla precedente 2000 Spider.\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Una vettura da corsa di concezione rivoluzionaria, progettata dal tecnico Augusto Monaco e dal pilota Carlo Felice Trossi, che la collaudò nelle prove del Gran Premio d’Italia, a Monza, nel 1935. Progettata per i Grand Prix, la vettura era naturalmente inquadrata nelle limitazioni della Formula allora in vigore: cilindrata libera e peso massimo di 750 kg, senza gomme e senza rifornimenti. Mentre tutti i costruttori si trovavano in difficoltà per rientrare nei limiti della formula, per ciò che riguardava il peso (proprio allora le Mercedes cambiarono il colore da bianco in argento, in quanto per risparmiare un paio di chili venne raschiata la vernice della carrozzeria), la Monaco Trossi, con i suoi 710 kg, si trovava largamente in vantaggio su questo punto. La potenza di 250 CV dava un rapporto peso-potenza indubbiamente inferiore a quello delle vetture tedesche dell’epoca, ma, se avesse potuto essere sfruttata in modo efficace, questa potenza sarebbe stata perfettamente adeguata. La Monaco Trossi era nuova in ogni particolare: era per esempio dotata di telaio tubolare a traliccio, in tubi di 40 mm di diametro, del tutto analogo a quelli in uso sulle vetture da corsa di più di vent’anni dopo. Questa soluzione, forse sperimentata allora per la prima volta, permetteva un buon risparmio di peso. L’elemento più notevole della vettura era tuttavia rappresentato dal gruppo motopropulsore: trazione anteriore e motore stellare con raffreddamento ad aria. Questo spiega anche la struttura del telaio, cioè la chiara ispirazione aeronautica di tutto il complesso, nella ricerca di una sempre maggiore leggerezza. Il motore era apparentemente a 8 cilindri, che in realtà erano 16 disposti in due stelle accoppiate, collegati in modo che le camere di scoppio risultavano essere solo 8.\\nEssendo montato anteriormente, questo motore risolveva molto bene il problema del raffreddamento e, al tempo stesso, decideva praticamente la disposizione dell’intera vettura: infatti la trazione doveva per forza essere anteriore per evitare un lunghissimo albero e poter sfruttare l’aderenza delle ruote anteriori, sulle quali gravava il maggior carico. Purtroppo, fu proprio questa disposizione a segnare il destino della vettura che, infatti, per un eccesso di peso sulle ruote anteriori motrici era instabile anche in rettifilo ed eccessivamente sovrasterzante in curva, dove avrebbe invece dovuto ottenere i maggiori vantaggi. La vettura, difficile da domare anche per un asso delle corse come Carlo Felice Trossi, non superò le fasi di prova e rimase così solo un avveniristico prototipo.\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"Primo progetto eseguito sotto la responsabilità del direttore tecnico, l’ingegnere Giovanni Enrico, è anche il primo modello Fiat con motore a 2 cilindri verticali sistemato anteriormente, alloggiato in una parvenza di cofano, cambio in posizione centrale e trazione sulle ruote posteriori, mentre il radiatore a nido d’ape rimpiazzerà quello a serpentina solo successivamente.\\nIl modello rimase in produzione solo due anni ma, a farlo passare alla storia, fu la partecipazione di ben otto vetture del tipo 8 HP al primo, leggendario Giro d’Italia del 1901, sulla distanza di 1640 km. Non si trattava di una gara di velocità, bensì di un evento non competitivo, che si trasformò in un tour de force di sedici giorni nel quale si intervallavano percorsi faticosi su strade impervie e con condizioni climatiche tra le più sfavorevoli a serate di gala e allegri festeggiamenti a ogni tappa. Organizzatore del Giro e presidente onorario fu Roberto Biscaretti di Ruffia, padre di Carlo (entrambi vi parteciparono a bordo di una Fiat 12 HP) e vicepresidente fu nominata la contessa Elsa Albrizzi dell’Unione Automobilistica Veneta. Tutte e otto le vetture 8 HP iscritte arrivarono al traguardo, compresa quella guidata da Giovanni Agnelli, che scelse come “meccanico” il grande campione Felice Nazzaro, con cui fece la ricognizione del percorso prima della gara.\\nL’esemplare esposto, con carrozzeria “duc”, è quello di un altro dei soci fondatori della Fiat: Emanuele Cacherano di Bricherasio, che partecipò al Giro d’Italia insieme al marchese Ghisleri. Venne donato al Museo nel 1947 per volontà della sorella, la contessa Sofia, per l’amicizia e la stima che la legava a Carlo Biscaretti, e fu in seguito esposto alla Mostra sui Trasporti del Museo della Tecnica di Milano, nel 1954, e al Salone Internazionale dell’Automobile di Ginevra.\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"La Cadillac fu fondata a Detroit nel 1902 da William H. Murphy ed Henry Leland. Lo slogan di questa prestigiosa azienda, che divenne rapidamente sinonimo delle migliori vetture di lusso costruite negli Stati Uniti, recitava: «Il nostro credo è la perfezione; la nostra legge la precisione». La sua crescente fama e la solidità finanziaria attirarono ben presto l’attenzione del finanziere e imprenditore americano William Crapo Durant, che nel 1909 riuscì a inserire la Cadillac nel gruppo General Motors.\\nCadillac è stato un marchio di rilievo nella storia dell’automobile, al quale si deve l’introduzione di significative innovazioni tecnico-stilistiche (tra le altre, la dotazione nelle sue vetture di un sistema elettrico moderno, comprensivo di avviamento, accensione e illuminazione, a partire dal 1912), e importante per l’utilizzo del metodo produttivo della “standardizzazione”, che consisteva nel produrre i pezzi in serie e renderli intercambiabili e adattabili a tutte le vetture di uno stesso modello.\\nIl modello 62 (discendente della serie 60) segnò l’apice della risonanza mondiale della casa di Detroit e fu prodotto in versioni successive, con carrozzeria coupé, convertibile o sedan, fino al 1964. La vettura esposta è una versione “sedan”, carrozzata Fischer, e fu il modello della gamma del quale si produssero il maggior numero di unità: 42.625.\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"La Florentia è una delle marche d’automobili più antiche d’Italia, tanto da essere già citata dalla rivista “L’Automobile” nel 1901: «La Fabbrica Toscana di Automobili di Firenze sta ultimando un ottimo tipo di vetturella leggera “Florentia”, con un nuovo sistema di raffreddamento a ventilatore. Questo sistema analogo a quello della Mercedes ha l’incomparabile vantaggio di assicurare il perfetto e continuo raffreddamento con una quantità minima di acqua (8 o 9 litri) che serve per oltre 500 km di viaggio». L’azienda fu attiva tra il 1903 e il 1913, inizialmente con la costruzione di vetturette originali, poi producendo su licenza modelli della francese Rochet-Schneider. Nel 1906, la Regina Margherita di Savoia concesse alla Florentia il privilegio di fregiarsi delle insegne reali: un riconoscimento di non poco conto che andava ad aggiungersi al fatto che una Florentia faceva parte del garage reale, insieme all’Itala, alla Rapid, alla Fiat e a poche altre.\\nLa vettura esposta al Museo, unico esemplare al mondo di Florentia 10 HP, ha una carrozzeria “tonneau”, motore a 2 cilindri e trasmissione ad albero cardanico. Venne acquistata nel 1967 dal barone Giorgio Franchetti, noto mecenate romano e fra i pionieri del collezionismo di automobili in Italia.\"^^<http://www.w3.org/2001/XMLSchema#string>"
+        "\"La Temperino era un’azienda torinese fondata nel 1907 dai fratelli Maurizio, Giacomo e Carlo Temperino, tornati in Italia dagli Stati Uniti dove erano nati e avevano lavorato come apprendisti in officine meccaniche. Dapprima l’attività fu di semplice garage/riparazioni in corso Principe Oddone 44, per presto passare a una produzione vera e propria di motociclette, sidecar e automobili. Con l’obiettivo di realizzare una vettura utilitaria, piccola ed economica sia nel prezzo sia nella gestione, l’attività produttiva della Temperino continuò per tutti gli anni dieci e la prima metà degli anni venti. Prerogativa di queste auto di tipo utilitario era il motore a 2 cilindri raffreddato ad aria.\\nIl modello 8/10 HP fu il primo costruito dalla Temperino e riscosse un certo successo in Italia e all’estero per le sue doti di economicità e maneggevolezza. E se in Italia erano soprattutto gli appassionati a guardare con favore alla nuova vetturetta, in Inghilterra le vendite furono fin da subito buone, complici la grande facilità di guida, l’accensione “kickstarter”, mediante una curiosa manovella a pedale, il prezzo contenuto (il modello base costava 175 sterline) e un aspetto da Fiat in miniatura, dato in particolare dal finto radiatore (solamente estetico perché la vettura era raffreddata ad aria). In versione da corsa questa vetturetta conobbe diverse affermazioni, tra cui la gara in salita Sassi-Superga nel 1919 e la vittoria dell’anno successivo del giro del Sestriere di 256 km alla media di 52,325 km/h a giro.\\nTra coloro che sperimentarono la scattante versione sportiva vi furono anche i due giovani figli del cavalier Farina, titolare degli omonimi stabilimenti e fornitore delle carrozzerie per la Temperino, appassionati piloti in erba che furono ritratti in una foto che divenne presto l’immagine pubblicitaria della Temperino. Uno dei due fratelli era il giovane Giuseppe “Nino” Farina, che sarebbe diventato il primo Campione del Mondo di Formula Uno nel 1950, su Alfa Romeo.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"La 501 fu la vettura popolare del primo dopoguerra per eccellenza, certamente una di quelle che costituirono l’ossatura della motorizzazione italiana per quasi un decennio. In quegli anni, la Fiat stava consolidando la propria immagine di fabbrica di piccole auto economiche ma affidabili, e ciò che fece la differenza fu la sua nuova capacità produttiva, potenziata dalla massiva produzione del periodo bellico, e la completa utilizzazione dello stabilimento del Lingotto, terminato nel 1922, che aprì una nuova era per la casa torinese.\\nAl riuscito modello 501 si affiancarono nel 1922 le versioni sportive 501 S e 501 SS. La versione 501 S aveva un motore potenziato da 26,5 CV, rispetto ai 23 CV della versione base, motore più compresso, diverso albero a camme, rapporti al ponte più lunghi e velocità più elevata. A questa versione ufficiale se ne aggiunsero molte altre, realizzate da carrozzieri abili e attenti che individuarono nella 501 S la vettura capace di unire caratteristiche sportive e costi contenuti. L’esemplare esposto al Museo fu allestito per volere del primo proprietario in spider due posti dalla carrozzeria Ghia & Actis, specializzata nella costruzione di queste vetture sportive a forma di siluro, una soluzione stilistica largamente imitata da molti altri carrozzieri del tempo.\\nLa vettura fu donata a Carlo Biscaretti nel 1955 dalla vedova del gentleman driver Mario Tangazzi, grande appassionato di corse su strada, che era venuta a conoscenza della ricerca di automobili e cimeli da parte del fondatore del Museo attraverso un annuncio pubblicato su un giornale.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Prodotta dalla Fiat a partire dal 1907 ereditando buona parte della meccanica del modello 16/20 HP, è una vettura di media potenza caratterizzata da un motore biblocco e dotata di trasmissione ancora del tipo a catena. La particolarità di maggior rilievo di questo modello è l’adozione di un innovativo tipo di dispositivo di avviamento del motore mediante aria compressa fornita da apposito compressore. Realizzata in tre passi differenti per poter montare diversi tipi di carrozzeria e costruita in oltre 400 esemplari, ottenne un buon successo anche sui mercati di esportazione. \\nL’elegante carrozzeria “landaulet” dell’esemplare esposto, eseguita dalla Società Anonima Fratelli Macchi di Varese, venne costruita per la famiglia Biscaretti di Ruffia, come testimonia lo stemma nobiliare della casata posto sulla portiera destra posteriore della vettura. Quando nel 1933 Carlo Biscaretti venne nominato Ordinatore del Museo, decise di donare la sua vettura, che divenne uno dei primi esemplari a far parte della prestigiosa collezione. Essa rappresenta quello che per Biscaretti era il Museo, un luogo vivo di racconto della storia dell’automobile, con vetture in movimento, laddove possibile, com’era la sua Fiat del 1908. Fu infatti utilizzata come vettura di rappresentanza in cortei, rievocazioni storiche e raid, guidata con orgoglio dallo stesso Biscaretti. In occasione della celebrazione dei 140 anni dalla nascita di Biscaretti, nel 2019, la vettura è stata sottoposta a un accurato restauro funzionale alla parte meccanica che ha permesso di rimetterla in moto, nel rispetto della sua autenticità e dell’eredità consegnata dal suo fondatore al Museo.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"È stata una delle più innovative macchine di Formula Uno, capace di coniugare tecnica raffinatissima e alte prestazioni, rivelandosi la vettura più veloce nelle competizioni della metà degli anni cinquanta. Artefici dei successi di questo gioiello meccanico furono l’ingegnere Rudolf Uhlenhaut, che aveva già disegnato negli anni dell’anteguerra le monoposto W154 e W163, e Alfred Neubauer, direttore sportivo di grande personalità e manager abilissimo.\\nDenominata con carrozzeria “a sigaro”, in contrapposizione con l’altro modello di prima serie a passo più lungo e carenatura integrale ricoprente le ruote (che gareggiò nel 1954), venne disegnata da Uhlenhaut con passo ridotto da 248 a 221 cm, e per determinati circuiti ridotto fino a 215, per adeguarla a tracciati più sinuosi. Vi erano concentrate tutta una serie di innovazioni tecniche, a partire dal motore a 8 cilindri in linea dotato di distribuzione con valvole a comando desmodromico (cioè senza molle di richiamo), alimentazione a iniezione diretta, due candele per cilindro. Inconsueto il telaio, di ispirazione motociclistica, con una struttura reticolare costituita da un traliccio di tubi di sezione cilindrica, di piccolo diametro e sviluppo rettilineo.\\nLa sospensione a barre di torsione era a quattro ruote indipendenti e i freni, di considerevole diametro, erano sistemati al centro, sia sull’asse anteriore sia su quello posteriore. Il cambio di velocità a 5 rapporti era sistemato posteriormente, davanti al differenziale.\\nLa sua prima vittoria coincise con l’esordio nel Gran Premio di Francia a Reims, nel 1954, con Juan Manuel Fangio e Karl Kling al 1° e 2° posto. Al volante della W196 R Fangio si aggiudicò il titolo mondiale negli anni 1954 e 1955.\\nProdotta in quindici esemplari, venne donata al Museo nel 1957 con una lettera di Nallinger, Chefingenieur della Daimler-Benz, seguita da una seconda dello stesso Alfred Neubauer.\\n\\nF1 World Champion 1955 (Juan Manuel Fangio)\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"È la versione modificata della P2 da corsa progettata da Vittorio Jano, che al suo esordio nel 1924, pilotata da Antonio Ascari, vinse la 200 Miglia del II Circuito di Cremona, prima di una lunga serie di vittorie, tra cui il Gran Premio d’Italia con Ascari, due Gran Premi d’Europa con Giuseppe Campari e Ascari, il primo Campionato del Mondo con Gastone Brilli Peri, il Gran Premio di Monza e la settima edizione del Circuito di Alessandria (denominato Circuito Pietro Bordino) con Achille Varzi. Il tipo modificato nel 1930 si affermò, fra l’altro, al Circuito di Alessandria e alla Targa Florio di quell’anno, ancora con Achille Varzi. Il modello P2 è considerato il capostipite di tutte le celebri Alfa Romeo da corsa.\\nL’esemplare esposto al Museo è la leggendaria P2 della Targa Florio di Varzi, una vettura potentissima e scorbutica, protagonista di una vittoria incredibile ottenuta nonostante rocamboleschi imprevisti (un serbatoio forato e un incendio spento con i cuscini del sedile). Al Museo venne offerta dalla stessa Alfa Romeo che la scambiò con una Tipo B – anch’essa donata dalla Casa con una lettera di Vittorio Jano nel 1935 – per poter costituire il proprio Museo. In origine era una delle P2 del Mondiale 1925, poi venduta a privati e ricomprata dall’Alfa nel 1930 proprio da Varzi, per essere elaborata in vista della corsa siciliana.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"La macchina da record con carrozzeria “bisiluro” progettata dall’ingegnere Piero Taruffi è costituita da due telai separati in tubi d’acciaio e rivestimenti “a goccia”. La struttura tubolare forma due profilatissimi elementi, uno che ospita il pilota ed il secondo per il propulsore, un motociclistico Gilera. La trasmissione del motore alle due ruote motrici posteriori è a mezzo catena. Il comando di guida avviene tramite leve che sostituiscono il volante. Il comando del cambio e della frizione è con leva a mano situata tra le gambe del pilota. Il comando dei freni è idraulico sulle quattro ruote. L’involucro esterno a forma di siluro è costruito con lamiere in duralluminio. Piani di deriva registrabili sono installati per ottenere una maggiore stabilità direzionale.\\nPilotato da Taruffi, il Tarf I debuttò con un motore senza compressore Guzzi 500 bicilindrico sviluppante 44 HP a 7000 giri, col quale vennero stabiliti 6 record nel periodo 1948-1949, tra cui quello sul chilometro lanciato con 207 km/h.\\nNel 1953 il motore Guzzi fu sostituito da un Gilera 4 cilindri senza compressore, raffreddato ad aria e sviluppante 60 HP a 10500 giri con carburante benzina 80 ottani. Con questo furono stabiliti 7 record nel 1953 e 6 nel 1954, percorrendo per la prima volta 200 km in un’ora.\\nSuccessivamente, nel 1956, il motore fu nuovamente sostituito da una versione maggiorata nell’alesaggio, che aveva 550 cc di cilindrata e sviluppava 65 HP a 10500 giri. Con questo motore il Tarf raggiunse sulla pista di Monza tre record per la classe 750. L’anno successivo, con un motore Gilera 350 a 4 cilindri sviluppante 40 HP a 11500, giri stabilì 7 nuovi record sulla pista di Monza.\\nComplessivamente i record internazionali conquistati dal Tarf I dal 1948 al 1957 furono ben 22.\\nAltri primati furono conquistati anche con una seconda versione del Tarf, costruita nel 1951.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"La Fiat (Fabbrica Italiana Automobili Torino) fu fondata nel capoluogo piemontese l’11 luglio 1899, da un piccolo gruppo di imprenditori, banchieri e appassionati del nascente motorismo, tra i quali spiccò, fin dall’inizio, la figura di Giovanni Agnelli. Fu lui l’artefice dell’immediato sviluppo industriale dell’azienda e, come amministratore delegato prima e come presidente poi, guidò le sorti della società fino alla sua morte, avvenuta nel 1945.\\nA differenza di quanto era avvenuto fino ad allora in Italia con un sistema costruttivo artigianale, la Fiat avviò subito una produzione di serie con il modello 3½ HP, di cui furono costruiti, come risulta dai registri ancora conservati, 30 esemplari.\\nProgettata dall’ingegnere Aristide Faccioli e derivata dalla Welleyes 3½ HP costruita da Giovanni Ceirano (da cui si differenza per alcune modifiche tecniche, come ad esempio l’impiego di ruote a razze in legno anziché ruote a raggi tangenti, ritenute forse troppo fragili), il modello Fiat 3½ HP uscì pochi mesi dopo la costituzione della società. Caratteristica di questa “vetturella” è il motore posteriore bicilindrico, raffreddato ad acqua attraverso un radiatore a serpentina, con cambio a 3 marce senzaretromarcia e trasmissione a catena. Il consumo era circa 8 l/100 km.\\nL’esemplare esposto, con carrozzeria tre posti tipo “vis-à-vis”, è un dono degli «Eredi Ing. G. Puccio, di Genova». Giunto al Museo nel 1934, fu sottoposto all’epoca a un costoso restauro.\\nDi questo modello sono conservati altri due esemplari presso il Centro Storico Fiat e uno al Beaulieu Museum in Inghilterra.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"L’ITC – International Touring Car Championship –, un “mondiale” per vetture derivate dalla grande serie, vide nella stagione 1996 combattere Opel, Mercedes e Alfa Romeo a sempre più alti livelli tecnologici e di competitività. Il titolo, sfuggito all’Alfa per soli 9 punti, dopo un testa a testa con Opel, si concluse soltanto all’ultima gara. Da Hockenheim a Suzuka, 13 appuntamenti di due gare ciascuno sui circuiti di tutto il mondo \\nAnni di produzione 1991-1993 con Alessandro Nannini, il pilota di punta della squadra italiana, sul podio al gradino più alto per sette volte: in assoluto il pilota che aveva vinto di più, ma il titolo va per un soffio alla Opel. L’anno successivo tutti i costruttori disertarono il Campionato, divenuto troppo costoso e non più coperto mediaticamente dalla FIA.\\nLa 155 V6 TI è l’ultima evoluzione della 155 che nel 1993 aveva sbancato il DTM con Nicola Larini e della vettura di serie conserva solo la forma della carrozzeria. Trazione integrale, elettronica, motori quasi da Formula Uno e materiali compositi: il regolamento della classe D1 è così aperto che le vetture sono quanto di più sofisticato, moderno e costoso vi sia nel motorsport.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"Gli anni sessanta avevano segnato il declino sportivo del marchio del tridente, soprattutto in ambito internazionale, ma decretarono il successo della produzione in serie, a partire dall’elegante berlinetta Sebring, realizzata nel 1962 su disegno della carrozzeria Vignale. Il 1963 fu l’anno della Quattroporte, prima berlina della Maserati, caratterizzata da un disegno di linee classiche, con carrozzeria a struttura portante con telaio ausiliario anteriore e interni e finizioni di livello elevato. In quegli anni la Maserati puntava su un alto tasso di diversificazione, presentando una gamma di otto modelli, un numero elevato rispetto anche al marchio Ferrari, che ne proponeva in listino quattro.\\nNel 1965 la fabbrica modenese presentò al Salone di Torino il prototipo Mexico basato sulla 5000 GT, una berlina sportiva a “2 posti più 2”, allestito da Vignale per un cliente sudamericano.\\nLa versione definitiva, a quattro posti, fu presentata al Salone di Parigi dell’anno successivo con un motore da 4,7 litri che dal 1969 fu affiancato dal più contenuto 402, con il medesimo allestimento. Costruita fino al 1973, la Maserati Mexico fu prodotta in 250 esemplari.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"L’Alfa Romeo 6 cilindri 2600, vettura confortevole, di alta classe, elegante e imponente, fu presentata al Salone di Ginevra nel 1962. Il motore, evoluzione del modello 2000, segnava un interessante ritorno al sei cilindri in linea, con blocco in lega leggera con canne in ghisa smontabili bagnate e flanghe superiori e inferiori; erogava 130 CV a 5900 giri/min. e consentiva una velocità massima di 200 km/h. La versione berlina, realizzata dalla carrozzeria Bertone, era “appesantita” da linee troppo barocche, mentre la linea equilibrata della Sprint, sempre di Bertone, è considerata una delle più belle realizzazioni della carrozzeria torinese.\\nDal 1962 al 1965 fu commercializzata anche la versione spider, carrozzata dalla Touring, di cui furono costruiti 2.255 esemplari. Per una migliore realizzazione della capote fu necessario rialzare la parte posteriore e di conseguenza tutto il profilo della fiancata della carrozzeria, con il conseguente risultato che la 2600 Spider, seppur di grande eleganza, risultò meno slanciata rispetto alla precedente 2000 Spider.\"^^<http://www.w3.org/2001/XMLSchema#string>"
       ]
     },
     "P8628": {
@@ -189,16 +189,16 @@
       "description": "displacement",
       "url": "https://www.wikidata.org/wiki/Property:P8628",
       "examples": [
-        "\"679 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"1206 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"1570 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"942 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"2992 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"4179 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"1911 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"4480 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1460 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"4719 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"995 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"765 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
         "\"2994 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"1050 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"855 cc\"^^<http://www.w3.org/2001/XMLSchema#string>"
+        "\"595 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1985 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"942 cc\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"516 cc\"^^<http://www.w3.org/2001/XMLSchema#string>"
       ]
     },
     "P2109": {
@@ -206,16 +206,16 @@
       "description": "power",
       "url": "https://www.wikidata.org/wiki/Property:P2109",
       "examples": [
-        "\"21,5 hp - 4600 rpm\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"18 CV a 1700 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"240 CV a 7200 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"15 CV a 1200 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"45 CV a 1250 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"35 CV a 1400 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"83 CV a 3600 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"156 CV a 3400 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"3,5 hp\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"20 CV a 3400 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>"
+        "\"125 CV a 3200 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"290 CV a 8000 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1200 hp\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"12 hp - 3500 rpm\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"8 CV a 1100 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"26 CV a 1100 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"26 CV\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"30 CV a 1200 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"1 cilindro raffreddato ad aria\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"246 CV a 6500 giri/min.\"^^<http://www.w3.org/2001/XMLSchema#string>"
       ]
     },
     "P2283": {
@@ -231,12 +231,12 @@
       "description": "Sconosciuta",
       "url": "https://www.wikidata.org/wiki/Property:P516",
       "examples": [
+        "\"idrogeno\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"elettrosolare\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "\"combustione interna\"^^<http://www.w3.org/2001/XMLSchema#string>",
         "\"elettrico\"^^<http://www.w3.org/2001/XMLSchema#string>",
         "\"a vapore\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"elettrosolare\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"vapore\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"combustione interna\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"idrogeno\"^^<http://www.w3.org/2001/XMLSchema#string>"
+        "\"vapore\"^^<http://www.w3.org/2001/XMLSchema#string>"
       ]
     },
     "P287": {
@@ -244,15 +244,15 @@
       "description": "Sconosciuta",
       "url": "https://www.wikidata.org/wiki/Property:P287",
       "examples": [
-        "<http://www.wikidata.org/entity/Q654827>",
-        "<http://www.wikidata.org/entity/Q21543051>",
-        "<http://www.wikidata.org/entity/Q721488>",
-        "<http://www.wikidata.org/entity/Q3731978>",
         "\"I.D.E.A. Institute (rielaborazione)\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"fibra in carbonio semiportante\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "<http://www.wikidata.org/entity/Q3731978>",
+        "<http://www.wikidata.org/entity/Q721488>",
         "\"Zagato\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "<http://www.wikidata.org/entity/Q654827>",
+        "\"fibra in carbonio semiportante\"^^<http://www.w3.org/2001/XMLSchema#string>",
+        "<http://www.wikidata.org/entity/Q3903128>",
         "\"Pininfarina\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "<http://www.wikidata.org/entity/Q3903128>"
+        "<http://www.wikidata.org/entity/Q21543051>"
       ]
     },
     "P4140": {
@@ -268,9 +268,9 @@
       "description": "Sconosciuta",
       "url": "https://www.wikidata.org/wiki/Property:P7045",
       "examples": [
+        "\"monoscocca in acciaio con roll-bar integrato, alloggiamento serbatoio posteriore in materiale composito\"^^<http://www.w3.org/2001/XMLSchema#string>",
         "\"Tubolare\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"struttura reticolare in acciaio cromo\"^^<http://www.w3.org/2001/XMLSchema#string>",
-        "\"monoscocca in acciaio con roll-bar integrato, alloggiamento serbatoio posteriore in materiale composito\"^^<http://www.w3.org/2001/XMLSchema#string>"
+        "\"struttura reticolare in acciaio cromo\"^^<http://www.w3.org/2001/XMLSchema#string>"
       ]
     }
   },

@@ -93,9 +93,6 @@ class AdvancedSemanticEnricher:
         # 0.3. USA I MAPPINGS per determinare se il predicato deve rimanere literal
         if self._should_keep_literal_by_mapping(predicate_str):
             return {'action': 'keep_original', 'value': value}
-
-        # 1. NON CREARE IRI TECNICI - cilindrata, potenza, velocità rimangono LITERAL
-        # (La normalizzazione tecnica è disabilitata - questi dati devono essere literal)
         
         # 2. Entity linking automatico SOLO per proprietà che devono essere IRI (guidato da mappings)
         if self._should_create_iri_by_mapping(predicate_str):

@@ -37,114 +37,114 @@ ESEMPI DI VALORI PER OGNI PROPRIETA'
 
 P1002 - engine configuration
 ----------------------------------------------------------------------------------------------------
-  - 1 cil
-  - Guzzi motociclistico a 1 cilindro
+  - 2 cilindri
   - posteriore a 1 cilindro orizzontale
-  - posteriore a 2 cilindri a V
-  - 2 cilindri in linea, posteriore
+  - 6 cilindri a V di 60°
+  - 6 cilindri a V
+  - 8 cilindri a V
+  - 3 cilindri monoblocco
+  - 4 cilindri “avalve”
+  - 2 cilindri contrapposti
   - 4 cilindri in linea
-  - posteriore 4 cilindri contrapposti raffreddato ad aria
-  - 8 cil
-  - 12 cilindri a 180°
-  - 2 cilindri in linea, 2 tempi
+  - posteriore orizzontale a 2 cilindri
   ... e altri 120 valori
 
 P1028 - donated by
 ----------------------------------------------------------------------------------------------------
-  - Dono della Famiglia Michetti, Francavilla a Mare (CH)
-  - Dono di Fiat S.p.A., Torino
-  - Dono delle Officine Alfieri Maserati, Modena
-  - Dono di Enrico Nardi, Torino
-  - Dono di Adriana e Chiara Rogliatti, Torino
-  - Dono della Famiglia Castronuovo, Bisuschio (VA)
-  - Dono di Giuseppina Cirani Sfrondini, Milano
-  - Dono di Luigi Damevino, Torino
-  - Dono di Itala S.A.C.A., Torino
-  - Dono di Giovanni Agnelli, Torino
+  - Dono di Dante Bertolani, Torino
+  - Dono di Diageo
+  - Dono di Finalfa srl
+  - Dono di Roberto Giacomo Donato Momigliano, Torino
+  - Dono di Lancia S.p.A., Torino
+  - Dono di Giorgio Franchetti, Roma
+  - Dono della Famiglia Spagnoletti Zeuli, Torino
+  - Dono di Francesco Mirabile, Firenze
+  - Dono degli eredi Puccio, Genova
+  - Dono di Francesca (Nella) Mirabile Mancusio, Messina
   ... e altri 81 valori
 
 P1343 - described by source
 ----------------------------------------------------------------------------------------------------
-  - Con il nome Nibbio I e II vennero denominate due speciali vetture da record c...
-  - L’Isotta Fraschini è stata una delle più famose fabbriche italiane. Automobil...
-  - Per il mondo dell’automobile la Lancia modello Lambda è una vera rivoluzione:...
-  - La Cisitalia fu fondata da Piero Dusio a Torino nel 1946 e si distinse per la...
-  - Frutto dell’ambizioso progetto che vide l’unione tra Fiat, Bianchi e Pirelli,...
+  - La Temperino era un’azienda torinese fondata nel 1907 dai fratelli Maurizio, ...
+  - La 501 fu la vettura popolare del primo dopoguerra per eccellenza, certamente...
+  - Prodotta dalla Fiat a partire dal 1907 ereditando buona parte della meccanica...
+  - È stata una delle più innovative macchine di Formula Uno, capace di coniugare...
+  - È la versione modificata della P2 da corsa progettata da Vittorio Jano, che a...
+  - La macchina da record con carrozzeria “bisiluro” progettata dall’ingegnere Pi...
+  - La Fiat (Fabbrica Italiana Automobili Torino) fu fondata nel capoluogo piemon...
+  - L’ITC – International Touring Car Championship –, un “mondiale” per vetture d...
+  - Gli anni sessanta avevano segnato il declino sportivo del marchio del trident...
   - L’Alfa Romeo 6 cilindri 2600, vettura confortevole, di alta classe, elegante ...
-  - Una vettura da corsa di concezione rivoluzionaria, progettata dal tecnico Aug...
-  - Primo progetto eseguito sotto la responsabilità del direttore tecnico, l’inge...
-  - La Cadillac fu fondata a Detroit nel 1902 da William H. Murphy ed Henry Lelan...
-  - La Florentia è una delle marche d’automobili più antiche d’Italia, tanto da e...
   ... e altri 89 valori
 
 P1559 - name in native language
 ----------------------------------------------------------------------------------------------------
-  - 3½ HP
-  - Mini T
-  - L-29
-  - Jeep
-  - Prototipo di Formula 3
-  - Tipo Zero A
   - B1
-  - GP Tipo 158 \Alfetta\
-  - 365 GT4 2+2
-  - 601
+  - 500 L
+  - 25/30 HP
+  - 600
+  - 508 \Balilla\
+  - Bianchina 500 trasformabile
+  - F 2008
+  - 501 S
+  - Lambda
+  - Mini T
   ... e altri 144 valori
 
 P176 - manufacturer
 ----------------------------------------------------------------------------------------------------
-  - <http://www.wikidata.org/entity/Q136661830>
-  - FOD
-  - Stanley
-  - F.I.A.L. Legnano
+  - Nibbio
+  - Storero
   - <http://www.wikidata.org/entity/Q28616>
-  - <http://www.wikidata.org/entity/Q246>
-  - <http://www.wikidata.org/entity/Q23301320>
-  - Bernardi
-  - Sizare-Naudin
-  - <http://www.wikidata.org/entity/Q243278>
+  - Benz
+  - Formula Monza
+  - Carro di Cugnot
+  - Monaco Nardi
+  - <http://www.wikidata.org/entity/Q1664128>
+  - <http://www.wikidata.org/entity/Q3320084>
+  - Carrozza
   ... e altri 150 valori
 
 P2052 - maximum speed
 ----------------------------------------------------------------------------------------------------
-  - 242 km/h
-  - 45 km/h
-  - 30 km/h
-  - 245 km/h
-  - 145 km/h
+  - 78 km/h
+  - 100 km/h
+  - 165 km/h
+  - 35 km/h
   - 55 km/h
-  - 250 km/h
-  - 225 km/h
-  - 160 km/h
-  - 212 km/h
+  - 155 km/h
+  - 60 km/h
+  - 110 km/h
+  - 240 km/h
+  - 270 km/h
   ... e altri 119 valori
 
 P2109 - power
 ----------------------------------------------------------------------------------------------------
-  - 21,5 hp - 4600 rpm
-  - 18 CV a 1700 giri/min.
-  - 240 CV a 7200 giri/min.
-  - 15 CV a 1200 giri/min.
-  - 45 CV a 1250 giri/min.
-  - 35 CV a 1400 giri/min.
-  - 83 CV a 3600 giri/min.
-  - 156 CV a 3400 giri/min.
-  - 3,5 hp
-  - 20 CV a 3400 giri/min.
+  - 125 CV a 3200 giri/min.
+  - 290 CV a 8000 giri/min.
+  - 1200 hp
+  - 12 hp - 3500 rpm
+  - 8 CV a 1100 giri/min.
+  - 26 CV a 1100 giri/min.
+  - 26 CV
+  - 30 CV a 1200 giri/min.
+  - 1 cilindro raffreddato ad aria
+  - 246 CV a 6500 giri/min.
   ... e altri 119 valori
 
 P217 - inventory number
 ----------------------------------------------------------------------------------------------------
-  - V035
-  - V057
-  - V047
-  - COM 018
-  - V 180
-  - V021
-  - V 195
-  - V087
-  - V067
-  - V034
+  - V040
+  - COM 010
+  - V 186
+  - V 172
+  - V 168
+  - V 194
+  - V117
+  - V059
+  - V131
+  - V038
   ... e altri 150 valori
 
 P2283 - uses
@@ -153,42 +153,42 @@ P2283 - uses
 
 P2754 - production date
 ----------------------------------------------------------------------------------------------------
+  - 1945-1987
   - 1966-1994
   - 1948
-  - 1972-1976
+  - 1903
+  - 1922-1934
+  - 1901
+  - 1899-1902
+  - 1934-1957
+  - 1955-1962
   - 1957-1961
-  - 1973-1976
-  - 1945-1987
-  - 1954-1960
-  - 1979-1982
-  - 1922-1924
-  - 1951-1955
   ... e altri 87 valori
 
 P287 - Sconosciuta
 ----------------------------------------------------------------------------------------------------
-  - <http://www.wikidata.org/entity/Q654827>
-  - <http://www.wikidata.org/entity/Q21543051>
-  - <http://www.wikidata.org/entity/Q721488>
-  - <http://www.wikidata.org/entity/Q3731978>
   - I.D.E.A. Institute (rielaborazione)
-  - fibra in carbonio semiportante
+  - <http://www.wikidata.org/entity/Q3731978>
+  - <http://www.wikidata.org/entity/Q721488>
   - Zagato
-  - Pininfarina
+  - <http://www.wikidata.org/entity/Q654827>
+  - fibra in carbonio semiportante
   - <http://www.wikidata.org/entity/Q3903128>
+  - Pininfarina
+  - <http://www.wikidata.org/entity/Q21543051>
 
 P31 - instance of
 ----------------------------------------------------------------------------------------------------
-  - <http://www.wikidata.org/entity/Q172686>
-  - <http://www.wikidata.org/entity/Q1907023>
-  - <http://www.wikidata.org/entity/Q3932858>
-  - <http://www.wikidata.org/entity/Q1856900>
-  - <http://www.wikidata.org/entity/Q105975708>
-  - <http://www.wikidata.org/entity/Q1054074>
-  - <http://www.wikidata.org/entity/Q749810>
   - <http://www.wikidata.org/entity/Q781028>
-  - <http://www.wikidata.org/entity/Q1407704>
-  - <http://www.wikidata.org/entity/Q2660817>
+  - <http://www.wikidata.org/entity/Q1133985>
+  - <http://www.wikidata.org/entity/Q105975708>
+  - <http://www.wikidata.org/entity/Q2553983>
+  - <http://www.wikidata.org/entity/Q36024>
+  - <http://www.wikidata.org/entity/Q3042099>
+  - <http://www.wikidata.org/entity/Q1512553>
+  - <http://www.wikidata.org/entity/Q1664136>
+  - <http://www.wikidata.org/entity/Q786136>
+  - <http://www.wikidata.org/entity/Q869076>
   ... e altri 43 valori
 
 P4140 - Sconosciuta
@@ -197,57 +197,57 @@ P4140 - Sconosciuta
 
 P495 - country of origin
 ----------------------------------------------------------------------------------------------------
-  - <http://www.wikidata.org/entity/Q38>
+  - <http://www.wikidata.org/entity/Q30>
   - <http://www.wikidata.org/entity/Q142>
   - <http://www.wikidata.org/entity/Q145>
+  - <http://www.wikidata.org/entity/Q38>
+  - Corea del sud
   - <http://www.wikidata.org/entity/Q183>
   - <http://www.wikidata.org/entity/Q159>
-  - Corea del sud
-  - <http://www.wikidata.org/entity/Q30>
   ... e altri 144 valori
 
 P516 - Sconosciuta
 ----------------------------------------------------------------------------------------------------
+  - idrogeno
+  - elettrosolare
+  - combustione interna
   - elettrico
   - a vapore
-  - elettrosolare
   - vapore
-  - combustione interna
-  - idrogeno
   ... e altri 119 valori
 
 P585 - point in time
 ----------------------------------------------------------------------------------------------------
-  - 1924
-  - 1895
+  - 2008
+  - 1970
   - 1948
-  - XVII sec
+  - 1924
   - 1916
-  - 2005
   - 1903
-  - 2012
-  - 1938
-  - 1936
+  - 1941
+  - 1901
+  - 1982
+  - 1969
   ... e altri 149 valori
 
 P7045 - Sconosciuta
 ----------------------------------------------------------------------------------------------------
+  - monoscocca in acciaio con roll-bar integrato, alloggiamento serbatoio posteri...
   - Tubolare
   - struttura reticolare in acciaio cromo
-  - monoscocca in acciaio con roll-bar integrato, alloggiamento serbatoio posteri...
 
 P8628 - displacement
 ----------------------------------------------------------------------------------------------------
-  - 679 cc
-  - 1206 cc
-  - 1570 cc
-  - 942 cc
-  - 2992 cc
-  - 4179 cc
-  - 1911 cc
+  - 4480 cc
+  - 1460 cc
+  - 4719 cc
+  - 995 cc
+  - 765 cc
   - 2994 cc
-  - 1050 cc
-  - 855 cc
+  - 595 cc
+  - 1985 cc
+  - 942 cc
+  - 516 cc
   ... e altri 113 valori
 
 

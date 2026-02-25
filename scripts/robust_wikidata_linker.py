@@ -19,6 +19,169 @@ from rdflib import Namespace
 EX = Namespace("http://example.org/")
 WD = Namespace("http://www.wikidata.org/entity/")
 
+# Keyword sets per filtraggio contestuale descrizioni (manufacturer / P176)
+MANUFACTURER_REJECT_KEYWORDS = frozenset([
+    # Trasporti NON automotive
+    'train', 'tram', 'railway', 'railroad', 'rail service', 'rail line', 'rail company',
+    # Veicoli specifici (non brand)
+    'racing car', 'racing automobile', 'race car', 'racing vehicle',
+    'single-seater', 'formula one car', 'formula car', 'rally car', 'dragster',
+    'type of car', 'type of vehicle', 'style of car', 'class of car', 'class of vehicle',
+    # Media / intrattenimento
+    'song', 'album', 'film', 'movie', 'television series', 'video game',
+    'music group', 'band', 'singer', 'musician', 'composer',
+    'comic', 'comics', 'manga', 'magazine', 'newspaper', 'journal', 'publication',
+    'board game', 'tabletop game', 'novel', 'book', 'literary work',
+    # Persone
+    'politician', 'statesman', 'activist', 'architect', 'artist', 'painter',
+    'athlete', 'footballer', 'basketball player', 'tennis player', 'swimmer',
+    # Luoghi geografici
+    'comune', 'city', 'municipality', 'commune', 'town', 'village', 'county',
+    'river', 'mountain', 'lake', 'island', 'region', 'province',
+    'church', 'building', 'castle', 'palace', 'bridge', 'street',
+    'spring water', 'mineral water', 'thermal', 'spa town', 'resort',
+    # Veicoli militari/aerei
+    'military vehicle', 'tank', 'aircraft', 'airplane', 'helicopter',
+    'motorcycle model', 'bicycle model',
+    # Cibo e bevande
+    'food', 'dish', 'recipe', 'cuisine', 'restaurant', 'sandwich', 'meal',
+    'cheese', 'bread', 'pasta', 'dessert', 'beverage', 'drink', 'wine',
+    'beer', 'sauce', 'soup', 'salad',
+    # Astronomia / biologia
+    'constellation', 'star system', 'planet', 'asteroid', 'satellite', 'nebula',
+    'genus', 'species', 'organism', 'bacteria', 'fungi',
+    # Organizzazioni non-automotive
+    'school', 'university', 'hospital', 'bank', 'insurance company',
+    'football club', 'sports team', 'sport club',
+])
+
+MANUFACTURER_BOOST_KEYWORDS = frozenset([
+    'manufacturer', 'car maker', 'automaker', 'automotive', 'automobile manufacturer',
+    'car company', 'motor company', 'vehicle manufacturer', 'carmaker',
+    'fabbrica di automobili', 'produttore di auto', 'costruttore di auto',
+    'coachbuilder', 'carrozziere', 'coach builder', 'car brand', 'automobile brand',
+    'motoring', 'marque',
+])
+
+_PREDICATE_CONTEXT_MAP = {
+    'P176': 'manufacturer',
+    'P1716': 'manufacturer',
+    'P1559': 'model',
+    'P495': 'country',
+    'P287': 'person',
+    'P57': 'person',
+}
+
+# Soglia minima di similarità label per contesto.
+# Per 'model' è alta: "Fiat 12/16 HP" non deve collegarsi a "Fiat 124" (stessa radice, oggetto diverso).
+CONTEXT_MIN_CONFIDENCE: Dict[str, float] = {
+    'manufacturer': 0.65,
+    'model':        0.72,
+    'person':       0.60,
+    'country':      0.75,
+}
+
+# P31 whitelist per contesto: un candidato viene accettato solo se:
+#   - ha P31 vuoto/non recuperabile (entità storica non classificata), OPPURE
+#   - almeno un suo P31 è in questa lista.
+# Safety net aggiuntivo rispetto a CONTEXT_PRIORITY_WEIGHTS.
+CONTEXT_P31_WHITELIST: Dict[str, frozenset] = {
+    'manufacturer': frozenset([
+        'Q786820',   # car manufacturer
+        'Q1616075',  # coachbuilder (carrozziere)
+        'Q190117',   # automobile manufacturer
+        'Q1060829',  # manufacturer (generico)
+        'Q167270',   # brand
+        'Q431289',   # brand of a product
+        'Q4830453',  # business
+        'Q6881511',  # enterprise
+        'Q783794',   # company
+        'Q43229',    # organization
+        'Q1761535',  # automotive company
+    ]),
+    'model': frozenset([
+        'Q1420',     # automobile
+        'Q3231690',  # automobile model
+        'Q936518',   # automobile series
+        'Q22279796', # automobile model series
+        'Q274586',   # racing car
+        'Q334433',   # concept car
+        'Q752870',   # motor vehicle
+        'Q42889',    # vehicle
+        'Q1140700',  # sports car
+        'Q39495',    # compact car
+        'Q15142889', # motorcycle model
+        'Q3024240',  # historical automobile
+    ]),
+    'person': frozenset([
+        'Q5',        # human
+        'Q215627',   # person
+    ]),
+    'country': frozenset([
+        'Q6256',     # country
+        'Q3624078',  # sovereign state
+        'Q7275',     # state
+        'Q458',      # European Union
+        'Q15634554', # state with limited recognition
+        'Q7270',     # republic
+        'Q512187',   # federal republic
+        'Q1520223',  # constitutional republic
+    ]),
+}
+
+# Pesi P31 per contesto: valore positivo = boost, -1 = hard reject
+CONTEXT_PRIORITY_WEIGHTS: Dict[str, Dict[str, float]] = {
+    'manufacturer': {
+        'Q786820': 100,  # car manufacturer
+        'Q431289':  80,  # brand
+        'Q167270':  70,  # brand (generico)
+        'Q783794':  60,  # company
+        'Q4830453': 30,  # business
+        'Q43229':   20,  # organization
+        # Hard reject: queste entita' NON sono produttori
+        'Q1420':    -1,  # automobile
+        'Q936518':  -1,  # car model
+        'Q3231690': -1,  # racing automobile
+        'Q5':       -1,  # human
+        'Q6256':    -1,  # country
+    },
+    'model': {
+        'Q1420':     100,  # automobile
+        'Q936518':    90,  # car model
+        'Q3231690':   85,  # racing automobile
+        'Q752870':    70,  # motor vehicle
+        'Q15142889':  60,  # motorcycle model
+        'Q42889':     50,  # vehicle
+        'Q5152161':   45,  # car body style
+        'Q3024240':   40,  # (historical) automobile
+        # Hard reject: queste entita' NON sono modelli di veicolo
+        'Q786820':  -1,  # manufacturer
+        'Q431289':  -1,  # brand
+        'Q167270':  -1,  # brand generico
+        'Q5':       -1,  # human
+        'Q6256':    -1,  # country
+    },
+    'country': {
+        'Q6256':    100,  # country
+        'Q3024240':  80,  # historical country
+        'Q3336843':  70,  # sovereign state
+        'Q7275':     60,  # state
+        # Hard reject
+        'Q786820':  -1,
+        'Q1420':    -1,
+        'Q5':       -1,
+    },
+    'person': {
+        'Q5':       100,  # human
+        'Q215627':   80,  # person
+        # Hard reject
+        'Q786820':  -1,
+        'Q1420':    -1,
+        'Q6256':    -1,
+    },
+}
+
+
 class WikidataEntityLinker:
     """
     Sistema robusto di entity linking verso Wikidata utilizzando l'API ufficiale.
@@ -181,21 +344,20 @@ class WikidataEntityLinker:
         """Genera chiave per la cache."""
         return f"{query.lower().strip()}:{entity_type}"
     
-    def _calculate_similarity_score(self, query: str, label: str, description: str = "") -> float:
+    def _calculate_similarity_score(self, query: str, label: str, description: str = "", predicate_context: str = None) -> float:
         """
         Calcola punteggio di similarità tra query e label/description.
-        
-        Args:
-            query: Termine di ricerca
-            label: Label dell'entità candidata
-            description: Descrizione dell'entità candidata
-            
-        Returns:
-            Punteggio di similarità (0.0 - 1.0)
+        Con filtraggio contestuale sulla descrizione per il predicato manufacturer.
         """
         query_clean = self._clean_text(query)
         label_clean = self._clean_text(label)
         desc_clean = self._clean_text(description)
+        
+        # Context-aware description filtering per manufacturer
+        if predicate_context == 'manufacturer' and description:
+            desc_lower = description.lower()
+            if any(kw in desc_lower for kw in MANUFACTURER_REJECT_KEYWORDS):
+                return 0.0  # Hard reject
         
         # Score basato su label (peso maggiore)
         label_score = SequenceMatcher(None, query_clean, label_clean).ratio()
@@ -218,6 +380,12 @@ class WikidataEntityLinker:
         if query_words and label_words:
             word_overlap = len(query_words & label_words) / len(query_words | label_words)
             combined_score += word_overlap * 0.2
+        
+        # Boost se descrizione conferma produttore automotive
+        if predicate_context == 'manufacturer' and description:
+            desc_lower = description.lower()
+            if any(kw in desc_lower for kw in MANUFACTURER_BOOST_KEYWORDS):
+                combined_score = min(combined_score * 1.15, 1.0)
         
         return min(combined_score, 1.0)
     
@@ -434,27 +602,48 @@ class WikidataEntityLinker:
                 
         return instance_of_ids
     
-    def _calculate_vehicle_priority_score(self, instance_of_ids: List[str]) -> float:
+    def _calculate_vehicle_priority_score(self, instance_of_ids: List[str], context: str = None) -> float:
         """
-        Calcola punteggio di priorità basato sui tipi di veicolo.
+        Calcola punteggio di priorità basato sui tipi P31.
+
+        Con context specificato usa CONTEXT_PRIORITY_WEIGHTS:
+        - valore positivo (0-100) → normalizzato a 0.0-1.0
+        - valore -1 → hard reject, ritorna -1.0
+
+        Senza context, usa self.vehicle_types (pesi veicolo generici).
         """
-        max_priority = 0.0
-        
-        for qid in instance_of_ids:
-            priority = self.vehicle_types.get(qid, 0.0)
-            max_priority = max(max_priority, priority)
-            
-        return max_priority
+        if context and context in CONTEXT_PRIORITY_WEIGHTS:
+            weights = CONTEXT_PRIORITY_WEIGHTS[context]
+            max_priority = 0.0
+            for qid in instance_of_ids:
+                w = weights.get(qid)
+                if w is None:
+                    continue
+                if w == -1:
+                    return -1.0  # Hard reject
+                max_priority = max(max_priority, w / 100.0)
+            return max_priority
+        else:
+            # Default: vehicle-type scoring da config
+            max_priority = 0.0
+            for qid in instance_of_ids:
+                priority = self.vehicle_types.get(qid, 0.0)
+                max_priority = max(max_priority, priority)
+            return max_priority
     
-    def _calculate_total_score(self, query: str, candidate: Dict, similarity_score: float, 
-                             priority_score: float) -> float:
+    def _calculate_total_score(self, query: str, candidate: Dict, similarity_score: float,
+                             priority_score: float, context: str = None) -> float:
         """
         Calcola punteggio totale combinando similarità e priorità con pesi adattivi.
+        Con contesto definito, il peso P31 aumenta per prediligere il tipo corretto.
         """
         # Detecta se siamo in una query specifica (alta similarità o query lunga)
         is_specific_query = similarity_score > 0.7 or len(query.split()) > 2
         
-        if is_specific_query:
+        if context and priority_score > 0:
+            # Con contesto esplicito, P31 ha peso maggiore: 50% similarity / 50% P31
+            total_score = similarity_score * 0.5 + priority_score * 0.5
+        elif is_specific_query:
             # Per query specifiche, favorisci la similarità (peso 80%)
             total_score = similarity_score * 0.8 + priority_score * 0.2
         else:
@@ -551,21 +740,51 @@ class WikidataEntityLinker:
                     print(f"  [SKIPPED] Saltato {entity_id} per incompatibilità ontologica")
                     continue
                 
+                # Whitelist P31: se ha P31 ma nessuno è in whitelist contesto → rifiuta
+                _pred_ctx_for_wl = None
+                if predicate_context:
+                    m_wl = re.search(r'/([PQ]\d+)', predicate_context)
+                    if m_wl:
+                        _pred_ctx_for_wl = _PREDICATE_CONTEXT_MAP.get(m_wl.group(1))
+                if (instance_of_ids and _pred_ctx_for_wl and
+                        _pred_ctx_for_wl in CONTEXT_P31_WHITELIST and
+                        not (set(instance_of_ids) & CONTEXT_P31_WHITELIST[_pred_ctx_for_wl])):
+                    print(f"  [REJECTED WHITELIST ctx={_pred_ctx_for_wl}] {entity_id} ({label}) P31={instance_of_ids}")
+                    continue
+                
                 # Calcola similarity score - USA LA VARIANTE CORRENTE per traduzioni!
                 is_translated_query = variation in translated_queries
                 
+                # Mappa predicate_context URI → nome contesto
+                _pred_ctx = None
+                if predicate_context:
+                    m = re.search(r'/([PQ]\d+)', predicate_context)
+                    if m:
+                        _pred_ctx = _PREDICATE_CONTEXT_MAP.get(m.group(1))
+                
                 # CRUCIALE: se è una traduzione, usa la variante tradotta per similarity
                 comparison_query = variation if is_translated_query else query
-                similarity_score = self._calculate_similarity_score(comparison_query, label, description)
+                similarity_score = self._calculate_similarity_score(comparison_query, label, description, predicate_context=_pred_ctx)
                 
                 if is_translated_query:
                     print(f"  [TRANSLATED] Usando query tradotta '{comparison_query}' per similarity (invece di '{query}')")
                 
                 # Calcola priority score basato su P31
-                priority_score = self._calculate_vehicle_priority_score(instance_of_ids)
+                priority_score = self._calculate_vehicle_priority_score(instance_of_ids, context=_pred_ctx)
+                
+                # Hard reject: tipo P31 incompatibile con il contesto
+                if priority_score < 0:
+                    print(f"  [REJECTED P31 ctx={_pred_ctx}] {entity_id} ({label}) - tipo incompatibile")
+                    continue
                 
                 # Calcola score totale
-                total_score = self._calculate_total_score(query, candidate, similarity_score, priority_score)
+                total_score = self._calculate_total_score(query, candidate, similarity_score, priority_score, context=_pred_ctx)
+                
+                # Applica soglia minima per contesto (evita false similarità numeriche)
+                effective_threshold = max(min_confidence, CONTEXT_MIN_CONFIDENCE.get(_pred_ctx, min_confidence))
+                if similarity_score < effective_threshold:
+                    print(f"  [REJECTED THRESHOLD ctx={_pred_ctx}] {entity_id} ({label}) sim={similarity_score:.2f} < {effective_threshold:.2f}")
+                    continue
                 
                 # BONUS MASSIMO per query TRADOTTE - priorità assoluta!
                 is_translated_query = variation in translated_queries

@@ -544,8 +544,13 @@ class AdvancedSemanticEnricherV2:
                                 search_value = f"{brand} {value_str}"  # "Ferrari 308 GTB"
                                 print(f"  → Ricerca modello con contesto: '{search_value}'")
                         
-                        # Gestisci possibili entità multiple (es. "Volkswagen, Porsche")
-                        entities = self.split_entities(search_value)
+                        # Gestisci possibili entità multiple (es. designer "Pininfarina e Bertone")
+                        # Per Marca e Modello: sempre un'entità singola.
+                        # '/' e '&' fanno parte del nome (es. "Fiat 12/16 HP", "Prinetti & Stucchi").
+                        if col_name in ('Modello', 'Marca'):
+                            entities = [search_value]
+                        else:
+                            entities = self.split_entities(search_value)
                         
                         for entity_value in entities:
                             # Prova entity linking con API Wikidata

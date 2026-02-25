@@ -565,6 +565,14 @@ class AdvancedSemanticEnricher:
                         if 'https://schema.org/productionDate' not in schema_predicates:
                             schema_predicates.append('https://schema.org/productionDate')
                     
+                    # CASO SPECIALE: Modello → aggiungi contesto Marca per ricerca Wikidata più precisa
+                    # Es. "12/16 HP" → "Fiat 12/16 HP" (senza brand, Wikidata restituisce risultati peggiori)
+                    # NON splittare: '/' e '&' fanno parte del nome storico del veicolo.
+                    if col_name == 'Modello' and 'Marca' in row:
+                        brand = str(row['Marca']).strip()
+                        if brand and not pd.isna(row['Marca']) and brand.lower() != 'nan':
+                            value_str = f"{brand} {value_str}"
+                    
                     # Arricchisci il valore (usa predicato Wikidata per decidere)
                     enrichment = self.enrich_single_value(value_str, predicate_uri)
                     

@@ -1,6 +1,6 @@
 # Knowledge Graph per Museo Automobilistico
 
-**Ultimo aggiornamento**: 13 febbraio 2026
+**Ultimo aggiornamento**: 25 febbraio 2026
 
 Progetto di tesi per la creazione di knowledge graph a partire da dati del museo utilizzando tecnologie del web semantico, entity linking automatico e integrazione avanzata con Wikidata.
 
@@ -43,7 +43,7 @@ Progetto di tesi per la creazione di knowledge graph a partire da dati del museo
 ├── queries/                      # Query attive (vuoto)
 ├── output/                       # 📊 Output finale
 │   ├── output_automatic_enriched.nt   # ⭐ KG V1 con validazione (4,634 triple)
-│   └── output_automatic_enriched_v2.nt # KG V2 architettura dichiarativa (5,772 triple)
+│   └── output_automatic_enriched_v2.nt # KG V2 architettura dichiarativa (7,632 triple)
 ├── old/                          # 🗄️ Archivio completo sviluppo storico
 │   ├── scripts/                 # Script evolutivi precedenti
 │   │   ├── generate_kg_dual_mappings.py    # Generatore con mappings multipli  
@@ -156,7 +156,7 @@ Per testare gli approcci legacy, i file sono disponibili nella cartella `/old/` 
 - **110 Q-codes Wikidata** unici referenziati
 - **107 entities in cache** (persistente per performance API)
 - **Doppia interoperabilità**: Wikidata (18 P-codes) + Schema.org (35 proprietà)
-- **Validazione rigorosa**: 0 false positives (Q1789258 music band rejected, OM mantenuto literal)
+- **Validazione rigorosa**: 0 false positives (Q1789258 music band rejected)
 - **Copertura temporale**: 1891-2000 (109 anni di storia automobilistica)
 ### Test LLM per Estrazione Entità improvement)
 - **Modello utilizzato**: Qwen/Qwen3-0.6B (600M parametri) su GPU RTX 4050 Laptop (6.44 GB)
@@ -212,7 +212,7 @@ def _validate_ontology(candidate, predicate, label):
 ```
 
 **Risultati**:
-- ✅ Q1789258 (OM band) → REJECTED, mantenuto come literal
+- ✅ Q1789258 (OM band) → REJECTED, fallback a IRI generica `ex:marca_om`
 - ✅ Q26921 (Alfa Romeo) → VALIDATED as Q786820 (automotive manufacturer)
 - ✅ Q27586 (Ferrari) → VALIDATED as Q786820 (automotive manufacturer)
 
@@ -278,7 +278,7 @@ def _validate_ontology(candidate, predicate, label):
 | Python Schema.org | 2,368 | Hardcoded | Schema.org | ✅ `old/output/output_complete.nt` |
 | Dual Mappings | 3,332 | Mappings CSV | Wikidata+Schema.org | ✅ `old/output/output_dual_mappings.nt` |
 | **CSV-to-RDF Validato (V1)** | **4,634** | **Validazione Ontologica** | **Wikidata+Schema.org HTTPS** | **✅ scripts/** |
-| **CSV-to-RDF Dichiarativo (V2)** | **5,772** | **Architettura Dichiarativa** | **Wikidata+Schema.org HTTPS** | **🚀 new_scripts/** |
+| **CSV-to-RDF Dichiarativo (V2)** | **7,632** | **Architettura Dichiarativa** | **Wikidata+Schema.org HTTPS** | **🚀 new_scripts/** |
 
 **Innovazioni versione finale**:
 - ✅ Lettura diretta da museo.csv (no intermediari RDF)
@@ -337,17 +337,21 @@ pyyaml            # Parsing file configurazione YAML
     schema:countryOfOrigin "Italia"^^xsd:string .
 ```
 
-### Esempio 2: Edge Case - OM Brand (Q1789258 Rejected)
+### Esempio 2: Edge Case - OM Brand (Q1789258 Rejected, IRI generica creata)
 ```turtle
-<http://example.org/vehicle_V098> a schema:Vehicle ;
-    wdt:P176 "OM"^^xsd:string ;           # Kept as literal (band rejected)
-    schema:brand "OM"^^xsd:string .
+<http://example.org/vehicle_V100> a schema:Vehicle ;
+    wdt:P176          <http://example.org/marca_om> ;   # fallback IRI generico
+    schema:manufacturer <http://example.org/marca_om> .
+
+<http://example.org/marca_om>
+    rdfs:label "OM"^^xsd:string ;
+    rdf:type   ex:Attribute .
 
 # Validation log:
 # Searching Wikidata for: OM (manufacturer)
 #   [REJECTED] Q1789258: incompatible type (music/media)
 #   ❌ No valid Wikidata entity found for "OM"
-#   → Maintained as literal
+#   → Fallback: IRI generica ex:marca_om (brand non perso)
 ```
 
 ### Esempio 3: Donazione con Predicati Speciali
@@ -371,7 +375,7 @@ pyyaml            # Parsing file configurazione YAML
 ### Risultati Tecnici
 - **Zero False Positives**: Sistema elimina linking errati (Q1789258 music band vs automotive)
 - **110 Q-codes Unici**: Entità Wikidata referenziate, tutte ontologicamente validate con P31
-- **4,634 Triple RDF (V1)**: +39.1% rispetto approccio dual mappings (3,332); V2 raggiunge 5,772
+- **4,634 Triple RDF (V1)**: +39.1% rispetto approccio dual mappings (3,332); V2 raggiunge 7,632
 - **Confidence Optimized**: Threshold 0.6 bilanciato tra recall e precision
 - **Cache Persistente**: Sistema ottimizzato riduce API calls a 107 entities uniche (V1)
 - **HTTPS Enforcement**: Schema.org properties tutte con protocollo sicuro
@@ -402,7 +406,7 @@ Vedi [progetto_log.md](notes/md/progetto_log.md) per la documentazione completa 
 - [x] **Cache persistente**: Sistema ottimizzato con 107 entities (V1) e 142 entities (V2)
 - [x] **Gestione edge cases**: Donazioni (P1028), acronimi, incompatible types
 - [x] **Knowledge Graph V1**: 4,634 triple con 160 veicoli, 110 Q-codes Wikidata linkati
-- [x] **Knowledge Graph V2**: 5,772 triple con 160 veicoli, 145 Q-codes Wikidata linkati
+- [x] **Knowledge Graph V2**: 7,632 triple con 160 veicoli, 145 Q-codes Wikidata linkati
 - [x] **Test LLM**: Framework comparativo zeroshot vs oneshot per estrazione entità
 - [x] **Documentazione completa**: 1,900+ righe log progetto (notes/md/progetto_log.md)
 

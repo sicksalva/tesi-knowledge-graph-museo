@@ -28,6 +28,7 @@ notes/
 
 # Script di utilità locali
 _build_codice_completo.py
+_audit_qcodes.py
 
 # File di estrazione e report generati
 wikidata_extraction.json

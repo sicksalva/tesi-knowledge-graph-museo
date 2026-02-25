@@ -7,26 +7,38 @@ data/*.csv
 sparql-anything-*
 
 # Output files (can be regenerated)
-output/output_temp.nt
+output/
+old/output/
 
 # Old/archived files
 old/
 
 # Cache files
-caches/*.pkl
-caches/*.json
+caches/
+*/caches/
+**/__pycache__/
 *.pkl
-production_cache_entities.json
-
-# Notes folder (except markdown)
-notes/*
-!notes/md/
-!notes/md/*.md
-
-# Python cache and virtual environment
-__pycache__/
 *.pyc
 *.pyo
+production_cache_entities.json
+production_cache_v2_entities.json
+
+# Notes / documentation (rimangono solo in locale)
+notes/
+
+# Script di utilità locali
+_build_codice_completo.py
+
+# File di estrazione e report generati
+wikidata_extraction.json
+wikidata_extraction_report.txt
+test_output.txt
+
+# LLM test (locale)
+llm_test/
+
+# Python virtual environment
+__pycache__/
 .venv/
 venv/
 env/

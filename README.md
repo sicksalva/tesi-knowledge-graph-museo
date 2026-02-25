@@ -27,8 +27,7 @@ Progetto di tesi per la creazione di knowledge graph a partire da dati del museo
 │   ├── robust_wikidata_linker.py        # Entity linking + validazione ontologica P31
 │   ├── museum_mappings.py               # ⭐ Hub logica centralizzata (27 mappings, 90+ rules)
 │   └── es/                       # Cache Wikidata persistente
-│   └── production_cache_entities.json   # Cache human-readable (79 entities)tities)
-│   └── production_cache_entities.json   # Cache human-readable
+│   └── production_cache_entities.json   # Cache human-readable (107 entities)
 ├── llm_test/                     # ⭐ Test LLM per estrazione entità
 │   ├── compare_modes.py          # Confronto risultati zeroshot vs oneshot
 │   ├── config.yaml               # Configurazione globale LLM
@@ -43,7 +42,8 @@ Progetto di tesi per la creazione di knowledge graph a partire da dati del museo
 │       └── results_zeroshot.json # Risultati (6/99 successi = 6.1%)
 ├── queries/                      # Query attive (vuoto)
 ├── output/                       # 📊 Output finale
-│   └── output_automatic_enriched.nt  # ⭐ KG finale con validazione (5,162 triple)
+│   ├── output_automatic_enriched.nt   # ⭐ KG V1 con validazione (4,634 triple)
+│   └── output_automatic_enriched_v2.nt # KG V2 architettura dichiarativa (5,772 triple)
 ├── old/                          # 🗄️ Archivio completo sviluppo storico
 │   ├── scripts/                 # Script evolutivi precedenti
 │   │   ├── generate_kg_dual_mappings.py    # Generatore con mappings multipli  
@@ -92,7 +92,7 @@ cd c:\Users\salva\Desktop\Tesi
 python scripts/integrated_semantic_enricher.py
 ```
 
-**Output**: `output/output_automatic_enriched.nt` (5,162 triple con validazione ontologica)
+**Output**: `output/output_automatic_enriched.nt` (4,634 triple con validazione ontologica)
 
 **Caratteristiche sistema**:
 - ✅ Lettura diretta da museo.csv (header riga 2)
@@ -149,17 +149,15 @@ Per testare gli approcci legacy, i file sono disponibili nella cartella `/old/` 
 
 ### Knowledge Graph Finale (Sistema con Validazione Ontologica)
 - **160 veicoli** processati con entity linking validato
-- **5,162 triple RDF** generate (`output/output_automati (97.5% completezza)
-- **5,162 triple RDF** generate (`output/output_automatic_enriched.nt`)
-  - 1,798 literals (anni, velocità, potenza, descrizioni)
-  - 1,566 IRIs Wikidata (entità validate con P31 instance of)
-  - 0 custom IRIs (solo vehicle URIs, design choice finale)
-- **293 entità Wikidata** linkate (tutte ontologicamente corrette)
-- **79 entities in cache** (persistente per performance API)
-- **Doppia interoperabilità**: Wikidata (27 properties) + Schema.org (44 properties) HTTPS
+- **4,634 triple RDF** generate (`output/output_automatic_enriched.nt`)
+  - 3,764 literals (anni, velocità, potenza, descrizioni, testi liberi)
+  - 870 IRI objects, di cui 710 Wikidata Q-codes (validate con P31 instance of)
+  - 160 rdf:type (una per veicolo: schema:Vehicle)
+- **110 Q-codes Wikidata** unici referenziati
+- **107 entities in cache** (persistente per performance API)
+- **Doppia interoperabilità**: Wikidata (18 P-codes) + Schema.org (35 proprietà)
 - **Validazione rigorosa**: 0 false positives (Q1789258 music band rejected, OM mantenuto literal)
 - **Copertura temporale**: 1891-2000 (109 anni di storia automobilistica)
-- **81 marche** rappresentate (prevalenza europea 85%: Italia 40%, Germania 30%
 ### Test LLM per Estrazione Entità improvement)
 - **Modello utilizzato**: Qwen/Qwen3-0.6B (600M parametri) su GPU RTX 4050 Laptop (6.44 GB)
 - **Configurazione**: Temperature 0.2, max_tokens 300, FP16 per ottimizzazione memoria
@@ -279,7 +277,8 @@ def _validate_ontology(candidate, predicate, label):
 | SPARQL Anything | 1,579 | Query SPARQL | Schema.org | ✅ `old/output/output.nt` |
 | Python Schema.org | 2,368 | Hardcoded | Schema.org | ✅ `old/output/output_complete.nt` |
 | Dual Mappings | 3,332 | Mappings CSV | Wikidata+Schema.org | ✅ `old/output/output_dual_mappings.nt` |
-| **CSV-to-RDF Validato** | **5,162** | **Validazione Ontologica** | **Wikidata+Schema.org HTTPS** | **🚀 ATTIVO** |
+| **CSV-to-RDF Validato (V1)** | **4,634** | **Validazione Ontologica** | **Wikidata+Schema.org HTTPS** | **✅ scripts/** |
+| **CSV-to-RDF Dichiarativo (V2)** | **5,772** | **Architettura Dichiarativa** | **Wikidata+Schema.org HTTPS** | **🚀 new_scripts/** |
 
 **Innovazioni versione finale**:
 - ✅ Lettura diretta da museo.csv (no intermediari RDF)
@@ -287,7 +286,7 @@ def _validate_ontology(candidate, predicate, label):
 - ✅ Logica centralizzata in museum_mappings.py
 - ✅ Confidence threshold 0.6 (vs 0.4 precedente)
 - ✅ Gestione edge cases: donazioni (P1028), acronimi, incompatible types
-- ✅ Cache persistente ottimizzata (79 entities)
+- ✅ Cache persistente ottimizzata (107 entities)
 
 ## 🔧 Tecnologie Utilizzate
 
@@ -371,10 +370,10 @@ pyyaml            # Parsing file configurazione YAML
 
 ### Risultati Tecnici
 - **Zero False Positives**: Sistema elimina linking errati (Q1789258 music band vs automotive)
-- **293 Entities Validate**: Tutte le entities linkate passano validazione ontologica P31
-- **5,162 Triple Semantiche**: +118% rispetto approccio dual mappings (3,332)
+- **110 Q-codes Unici**: Entità Wikidata referenziate, tutte ontologicamente validate con P31
+- **4,634 Triple RDF (V1)**: +39.1% rispetto approccio dual mappings (3,332); V2 raggiunge 5,772
 - **Confidence Optimized**: Threshold 0.6 bilanciato tra recall e precision
-- **Cache Persistente**: Sistema ottimizzato riduce API calls a 79 entities uniche
+- **Cache Persistente**: Sistema ottimizzato riduce API calls a 107 entities uniche (V1)
 - **HTTPS Enforcement**: Schema.org properties tutte con protocollo sicuro
 
 ### Best Practices Implementate
@@ -400,15 +399,16 @@ Vedi [progetto_log.md](notes/md/progetto_log.md) per la documentazione completa 
 - [x] **Validazione ontologica**: Verifica P31 pre-scoring per eliminare false positives
 - [x] **Logica centralizzata**: Museum_mappings.py come hub configurazione completo
 - [x] **Doppia interoperabilità**: Wikidata + Schema.org HTTPS simultanei
-- [x] **Cache persistente**: Sistema ottimizzato con 79 entities validate
+- [x] **Cache persistente**: Sistema ottimizzato con 107 entities (V1) e 142 entities (V2)
 - [x] **Gestione edge cases**: Donazioni (P1028), acronimi, incompatible types
-- [x] **Knowledge Graph produzione**: 5,162 triple con 160 veicoli, 293 entities linkate
+- [x] **Knowledge Graph V1**: 4,634 triple con 160 veicoli, 110 Q-codes Wikidata linkati
+- [x] **Knowledge Graph V2**: 5,772 triple con 160 veicoli, 145 Q-codes Wikidata linkati
 - [x] **Test LLM**: Framework comparativo zeroshot vs oneshot per estrazione entità
 - [x] **Documentazione completa**: 1,900+ righe log progetto (notes/md/progetto_log.md)
 
 ### 🎯 **Risultati Chiave Raggiunti**
 - **Zero false positives**: Q1789258 (music band) correttamente rejected
-- **Entity linking validato**: Tutte le 293 entities passano validazione P31
+- **Entity linking validato**: 110 Q-codes unici (V1), 145 Q-codes unici (V2), tutti validati con P31
 - **Confidence optimized**: Threshold 0.6 elimina match ambigui
 - **Interoperabilità massima**: Wikidata (LOD) + Schema.org (Web) simultanei
 - **Architettura enterprise**: Codice modulare, testabile, riusabile

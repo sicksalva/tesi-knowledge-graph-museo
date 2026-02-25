@@ -68,10 +68,10 @@ class AdvancedSemanticEnricher:
         entities = []
         for p in parts:
             p = p.strip()
-            # Skip parti vuote, troppo corte o generiche
-            if (p and len(p) > 3 and 
-                not re.match(r'^(di|da|per|con|in|su|a|il|la|le|lo|gli|un|una|dei|delle|dello|della)$', p.lower()) and
-                not re.match(r'^[A-Z]+$', p)):  # Skip acronimi semplici
+            # Escludi solo stringhe vuote e articoli/preposizioni italiane.
+            # NON escludere acronimi in maiuscolo (OM, BMW, ACMA, SPA sono brand validi).
+            if (p and len(p) >= 2 and
+                not re.match(r'^(di|da|per|con|in|su|a|il|la|le|lo|gli|un|una|dei|delle|dello|della)$', p.lower())):
                 entities.append(p)
         return entities
     

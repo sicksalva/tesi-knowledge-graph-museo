@@ -154,9 +154,10 @@ class AdvancedSemanticEnricherV2:
         entities = []
         for p in parts:
             p = p.strip()
-            if (p and len(p) > 3 and 
-                not re.match(r'^(di|da|per|con|in|su|a|il|la|le|lo|gli|un|una|dei|delle|dello|della)$', p.lower()) and
-                not re.match(r'^[A-Z]+$', p)):
+            # Escludi solo stringhe vuote e articoli/preposizioni italiane.
+            # NON escludere acronimi in maiuscolo (OM, BMW, ACMA, SPA sono brand validi).
+            if (p and len(p) >= 2 and
+                not re.match(r'^(di|da|per|con|in|su|a|il|la|le|lo|gli|un|una|dei|delle|dello|della)$', p.lower())):
                 entities.append(p)
         return entities
     
@@ -578,6 +579,11 @@ class AdvancedSemanticEnricherV2:
                                 graph.add((attribute_iri, RDF.type, EX['Attribute']))
                                 total_triples += 3
                                 literals_converted_to_iris += 1
+                                
+                                # Aggiungi anche con predicati Schema.org
+                                for schema_pred in schema_predicates:
+                                    graph.add((subject, URIRef(schema_pred), attribute_iri))
+                                    total_triples += 1
                     
                     # 3. Se il predicato ha valori literal che devono diventare IRI GENERICA
                     elif museum_mappings.should_convert_literal_to_iri(predicate_uri):

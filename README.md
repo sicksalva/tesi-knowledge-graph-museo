@@ -1,6 +1,6 @@
 # Knowledge Graph per Museo Automobilistico
 
-**Ultimo aggiornamento**: 25 febbraio 2026
+**Ultimo aggiornamento**: 26 febbraio 2026
 
 Progetto di tesi per la creazione di knowledge graph a partire da dati del museo utilizzando tecnologie del web semantico, entity linking automatico e integrazione avanzata con Wikidata.
 
@@ -86,7 +86,7 @@ python -m venv .venv
 pip install pandas>=1.3.0 rdflib>=6.0.0 requests
 ```
 
-#### 2. Generazione Knowledge Graph
+#### 2. Generazione Knowledge Graph V1
 ```bash
 cd c:\Users\salva\Desktop\Tesi
 python scripts/integrated_semantic_enricher.py
@@ -94,13 +94,30 @@ python scripts/integrated_semantic_enricher.py
 
 **Output**: `output/output_automatic_enriched.nt` (4,634 triple con validazione ontologica)
 
-**Caratteristiche sistema**:
+#### 3. Generazione Knowledge Graph V2 (Architettura Dichiarativa)
+```bash
+cd c:\Users\salva\Desktop\Tesi
+python new_scripts/integrated_semantic_enricher.py
+```
+
+**Output**: `output/output_automatic_enriched_v2.nt` (7,632 triple con routing 3-tier)
+
+**Caratteristiche V1** (`scripts/`):
 - ✅ Lettura diretta da museo.csv (header riga 2)
-- ✅ Validazione P31 (instance of) pre-scoring
+- ✅ Validazione P31 pre-scoring con blacklist tipi incompatibili
 - ✅ Doppio mapping: Wikidata + Schema.org HTTPS
-- ✅ Cache persistente: cache/production_cache.pkl
-- ✅ Confidence threshold: 0.6 (riduce false positives)
-- ✅ Gestione edge cases: donazioni (P1028), acronimi, incompatible types
+- ✅ Cache persistente: `caches/production_cache_entities.json`
+- ✅ Confidence threshold: 0.6
+- ✅ Gestione edge cases: donazioni (P1028), acronimi
+
+**Caratteristiche V2** (`new_scripts/`) — aggiornamenti rispetto a V1:
+- ✅ Architettura 3-tier (entity linking / IRI generico / literal)
+- ✅ `CONTEXT_P31_WHITELIST`: validazione whitelist per contesto (no blacklist globale)
+- ✅ `CONTEXT_DESCRIPTION_FILTERS`: hard-reject/boost per keyword descrizione
+- ✅ `CONTEXT_MIN_CONFIDENCE`: soglie per contesto (0.65/0.72/0.60/0.75)
+- ✅ Fetch P31 in batch (1 API call per tutti i candidati)
+- ✅ Modello ora fa entity linking (non solo literal)
+- ✅ Valori tecnici (cilindrata, potenza...) diventano IRI generici
 
 ### Test LLM per Estrazione Entità
 
@@ -174,47 +191,50 @@ Per testare gli approcci legacy, i file sono disponibili nella cartella `/old/` 
 **Caso critico**: Q1789258 (music band "OM") erroneamente linkato come automotive manufacturer
 
 #### Soluzione Implementata
-**Validazione P31 (instance of) pre-scoring** in robust_wikidata_linker.py:
+**Validazione a due livelli** in `robust_wikidata_linker.py`:
+
+**Livello 1 — `CONTEXT_P31_WHITELIST`**: whitelist per contesto. Un candidato è accettato
+solo se il suo P31 (instance of) è presente nella whitelist del contesto semantico
+del predicato (`manufacturer`, `model`, `person`, `country`). Entità senza P31 noti
+(brand storici non classificati) passano al livello successivo.
+
+```python
 # In robust_wikidata_linker.py
-incompatible_types = {
-    'Q215380',   # musical group
-    'Q482994',   # album
-    'Q7366',     # song
-    'Q11424',    # film
-    'Q5398426',  # television series
-    'Q7889',     # video game
-    'Q571',      # book
-    'Q11173',    # chemical compound
+CONTEXT_P31_WHITELIST = {
+    'manufacturer': frozenset([
+        'Q786820',   # car manufacturer
+        'Q1616075',  # coachbuilder
+        'Q4830453',  # business
+        'Q43229',    # organization
+        'Q783794',   # company
+    ]),
+    'model':   frozenset(['Q1420', 'Q3231690', 'Q936518', ...]),
+    'person':  frozenset(['Q5']),
+    'country': frozenset(['Q6256', 'Q3624078', 'Q7275']),
 }
 
-def _validate_ontology(candidate, predicate, label):
-    """Validazione ontologica PRIMA del calcolo score"""
-    # 1. Estrai P31 (instance of) claims
-    instance_types = extract_p31_from_candidate(candidate)
-    
-    # 2. REJECT incompatible types (media/entertainment)
-    if instance_types & incompatible_types:
-        return False, "[REJECTED] incompatible type"
-    
-    # 3. VALIDATE correct type for predicate
-    expected_type = entity_type_mappings.get(predicate)  # es. Q786820 per manufacturer
-    if expected_type in instance_types:
-        return True, "[VALIDATED] correct type"
-    
-    # 4. Special rules: acronyms ≤3 chars require automotive type
-    if len(label) <= 3 and expected_type not in instance_types:
-        return False, "[REJECTED] short acronym without type"
-    
-    # 5. Accept if no incompatible types found
-    return True, "[WARNING] no P31 claims found type)
-    if len(label) <= 3 and expected_type not in instance_types:
-        return False, "[REJECTED] short acronym without type"
+def _validate_ontology(self, entity_id, instance_of_ids, predicate_context, label):
+    """Whitelist per contesto: accetta solo P31 automotive-compatibili."""
+    if not predicate_context or predicate_context not in CONTEXT_P31_WHITELIST:
+        return True
+    if not instance_of_ids:   # P31 sconosciuto → non rifiutare
+        return True
+    whitelist = CONTEXT_P31_WHITELIST[predicate_context]
+    return bool(set(instance_of_ids) & whitelist)  # almeno un P31 in whitelist
 ```
 
+**Livello 2 — `CONTEXT_DESCRIPTION_FILTERS`**: per i candidati sopravvissuti, hard-reject
+e boost basati su keyword della descrizione (`"song"`, `"municipality"` → reject;
+`"automaker"`, `"automobile manufacturer"` → score ×1.15).
+
+**Soglie per contesto** (`CONTEXT_MIN_CONFIDENCE`): 0.65 manufacturer, 0.72 model,
+0.60 person, 0.75 country.
+
 **Risultati**:
-- ✅ Q1789258 (OM band) → REJECTED, fallback a IRI generica `ex:marca_om`
-- ✅ Q26921 (Alfa Romeo) → VALIDATED as Q786820 (automotive manufacturer)
-- ✅ Q27586 (Ferrari) → VALIDATED as Q786820 (automotive manufacturer)
+- ✅ Q1789258 (OM band, P31=musical group) → non in whitelist → REJECTED
+- ✅ Q26921 (Alfa Romeo, P31=car manufacturer) → in whitelist → VALIDATED
+- ✅ Q27586 (Ferrari, P31=car manufacturer) → in whitelist → VALIDATED
+- ✅ Entità storiche senza P31 (ACMA, SPA storica) → accettate se descrizione OK
 
 ### 🏗️ Architettura Centralizzata
 
@@ -222,23 +242,27 @@ def _validate_ontology(candidate, predicate, label):
 
 1. **museum_mappings.py** - Hub logica centralizzata
    - `museum_mappings`: Dict colonna→predicato (27 mappings)
-   - `literal_only_properties`: Lista 90+ properties che restano literal
-   - `iri_target_properties`: Properties per entity linking
+   - `literal_only_properties`: Proprietà che restano sempre literal (descrizioni, inventario, posizioni museo)
+   - `literal_value_to_iri_properties`: Valori tecnici → IRI generici (cilindrata, potenza, velocità...)
+   - `iri_target_properties`: Proprietà per entity linking Wikidata (marca, paese, designer, modello)
    - `entity_type_mappings`: Predicato→tipo Wikidata atteso
-   - `incompatible_types`: Tipi da rifiutare (bands, films, albums)
-   - Funzioni: `is_year_value()`, `is_donation()`, `is_long_description()`
+   - Funzioni di routing: `should_keep_literal()`, `should_use_entity_linking()`, `should_convert_literal_to_iri()`
+   - Funzioni utility: `is_year_value()`, `is_donation()`, `is_long_description()`
 
 2. **integrated_semantic_enricher.py** - Orchestrazione
    - Lettura museo.csv (header=1)
-   - Caricamento museum_column_mapping.csv + mappings.csv
-   - Generazione triple con doppio mapping
-   - Applicazione entity linking con validazione
+   - Caricamento museum_column_mapping.csv (mappings.csv obsoleto ignorato)
+   - Generazione triple con doppio mapping Wikidata + Schema.org
+   - Routing a 3 tier con casi speciali (Anni di produzione, Acquisizione)
 
 3. **robust_wikidata_linker.py** - API + Validation
-   - Wikidata API search con multi-lingua
-   - Validazione ontologica pre-scoring
-   - Confidence scoring (threshold: 0.6)
-   - Cache persistente (cache/production_cache.pkl)
+   - Wikidata API search con multi-lingua (IT + EN) + varianti query
+   - `CONTEXT_P31_WHITELIST`: whitelist P31 per contesto (manufacturer/model/person/country)
+   - `CONTEXT_DESCRIPTION_FILTERS`: reject/boost per keyword descrizione per contesto
+   - `CONTEXT_MIN_CONFIDENCE`: soglie per contesto (0.65/0.72/0.60/0.75)
+   - Fetch P31 batch in una sola chiamata API per tutti i candidati
+   - Cache pickle persistente (`caches/production_cache_v2.pkl`)
+   - Carica configurazione da `data/wikidata_ontology_config.json`
 
 **Vantaggi**:
 - ✅ Zero logica hardcoded in enricher

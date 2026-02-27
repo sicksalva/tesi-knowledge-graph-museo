@@ -73,10 +73,10 @@ _PREDICATE_CONTEXT_MAP = {
 }
 
 # Soglia minima di similarità label per contesto.
-# Per 'model' è alta: "Fiat 12/16 HP" non deve collegarsi a "Fiat 124" (stessa radice, oggetto diverso).
+# Per 'model' è stata abbassata da 0.72 a 0.65 per permettere migliore matching di modelli racing.
 CONTEXT_MIN_CONFIDENCE: Dict[str, float] = {
     'manufacturer': 0.65,
-    'model':        0.72,
+    'model':        0.65,
     'person':       0.60,
     'country':      0.75,
 }
@@ -112,6 +112,9 @@ CONTEXT_P31_WHITELIST: Dict[str, frozenset] = {
         'Q39495',    # compact car
         'Q15142889', # motorcycle model
         'Q3024240',  # historical automobile
+        'Q90834785', # formula racing car (per Ferrari F2005)
+        'Q1430157',  # racing car (variant)
+        'Q1348239',  # formula one vehicle
     ]),
     'person': frozenset([
         'Q5',        # human
@@ -150,6 +153,9 @@ CONTEXT_PRIORITY_WEIGHTS: Dict[str, Dict[str, float]] = {
         'Q936518':    90,  # car model
         'Q3231690':   85,  # racing automobile
         'Q752870':    70,  # motor vehicle
+        'Q90834785':  85,  # formula racing car (Ferrari F2005)
+        'Q1430157':   85,  # racing car (variant)
+        'Q1348239':   85,  # formula one vehicle
         'Q15142889':  60,  # motorcycle model
         'Q42889':     50,  # vehicle
         'Q5152161':   45,  # car body style
@@ -272,7 +278,6 @@ class WikidataEntityLinker:
                 # Rifiuta esplicitamente entità geografiche
                 geographic_types = {'Q515', 'Q484170', 'Q15220960', 'Q1549591', 'Q3957', 'Q532', 'Q486972', 'Q5119', 'Q6256'}
                 if any(t in geographic_types for t in instance_of_ids):
-                    print(f"  [REJECTED] {entity_id} ({label}) - è un'entità geografica, non un brand")
                     return False
                 
                 # OBBLIGATORIO: deve avere tipo automotive/manufacturer
@@ -280,40 +285,33 @@ class WikidataEntityLinker:
                 has_automotive_type = any(t in valid_brand_types or t in self.vehicle_types for t in instance_of_ids)
                 
                 if not has_automotive_type:
-                    print(f"  [REJECTED] {entity_id} ({label}) - brand SENZA tipo automotive (P31: {instance_of_ids})")
                     return False
                 
                 # Se ha tipo automotive, PASSA anche se ha business/altri tipi
-                print(f"  [VALIDATED BRAND] {entity_id} ({label}) - tipo automotive confermato (ignoro altri tipi come business)")
                 return True
             
             # Country - deve essere un paese
             if 'P495' in predicate_context or 'country' in predicate_context.lower():
                 valid_country_types = {'Q6256', 'Q3024240', 'Q3336843', 'Q7275'}
                 if instance_of_ids and not any(t in valid_country_types for t in instance_of_ids):
-                    print(f"  [REJECTED] {entity_id} ({label}) - non è un paese")
                     return False
             
             # Person - deve essere umano (Q5)
             if 'P287' in predicate_context or 'Person' in predicate_context:
                 if 'Q5' not in instance_of_ids:
-                    print(f"  [REJECTED] {entity_id} ({label}) - non è una persona")
                     return False
         
         # Step 2: Rifiuta entità con tipi incompatibili (solo per NON-brand)
         for instance_id in instance_of_ids:
             if instance_id in self.incompatible_types:
-                print(f"  [REJECTED] {entity_id} ({label}) - incompatibile: {instance_id} (band/album/song/film/business non-automotive)")
                 return False
         
         # Step 3: Per acronimi brevi (<= 3 caratteri), richiedi tipo automotive esplicito
         if len(label.strip()) <= 3:
             # Deve avere almeno un tipo automotive
             if not any(t in self.vehicle_types for t in instance_of_ids):
-                print(f"  [REJECTED] {entity_id} ({label}) - acronimo senza tipo automotive")
                 return False
         
-        print(f"  [VALIDATED] {entity_id} ({label})")
         return True
     
     def _load_cache(self) -> Dict:
@@ -340,9 +338,10 @@ class WikidataEntityLinker:
         except Exception as e:
             print(f"Errore salvataggio cache: {e}")
     
-    def _get_cache_key(self, query: str, entity_type: str = "item") -> str:
-        """Genera chiave per la cache."""
-        return f"{query.lower().strip()}:{entity_type}"
+    def _get_cache_key(self, query: str, entity_type: str = "item", predicate_context: str = None) -> str:
+        """Genera chiave per la cache, includendo il predicato se specificato."""
+        context_part = f":{predicate_context.lower()}" if predicate_context else ""
+        return f"{query.lower().strip()}:{entity_type}{context_part}"
     
     def _calculate_similarity_score(self, query: str, label: str, description: str = "", predicate_context: str = None) -> float:
         """
@@ -422,6 +421,26 @@ class WikidataEntityLinker:
         
         return query, None
     
+    def _create_query_variants(self, query: str) -> List[str]:
+        """
+        Crea varianti della query rimuovendo spazi tra lettere e numeri.
+        Pattern comune nei modelli di auto: "Ferrari F 2005" → "Ferrari F2005"
+        
+        Returns:
+            Lista di varianti (originale + varianti senza spazi)
+        """
+        variants = [query]  # Query originale
+        
+        # Rimuovi spazi tra lettere e numeri (pattern comune per modelli auto)
+        # Es: "F 2005" → "F2005", "308 GTB" → "308GTB"
+        no_space_variant = re.sub(r'([A-Za-z])\s+(\d)', r'\1\2', query)
+        no_space_variant = re.sub(r'(\d)\s+([A-Za-z])', r'\1\2', no_space_variant)
+        
+        if no_space_variant != query:
+            variants.append(no_space_variant)
+        
+        return variants
+    
     def _generate_alternative_queries(self, query: str) -> Tuple[List[str], List[str]]:
         """
         Genera query alternative per migliorare il matching, inclusi termini storici e traduzioni.
@@ -437,7 +456,6 @@ class WikidataEntityLinker:
         query_lower = query.lower()
         translation_found = False
         
-        print(f"  [SEARCH] Cercando traduzioni per: '{query_lower}'")
         
         for italian_term, english_terms in self.historical_translations.items():
             # Match diretto completo (parola intera)
@@ -445,7 +463,6 @@ class WikidataEntityLinker:
                 translated_queries.extend(english_terms)
                 alternatives.extend(english_terms)
                 translation_found = True
-                print(f"  [MATCH] Esatto: '{query_lower}' -> {english_terms}")
                 break
             # Match di parole intere separate (evita substring come "italia" in "cisitalia")
             query_words = set(query_lower.split())
@@ -455,7 +472,6 @@ class WikidataEntityLinker:
                 translated_queries.extend(english_terms)
                 alternatives.extend(english_terms)
                 translation_found = True
-                print(f"  [MATCH] Parole: '{italian_term}' trovato in '{query_lower}' -> {english_terms}")
                 break
         
         # AGGIUNGI LA QUERY ORIGINALE SOLO DOPO LE TRADUZIONI
@@ -675,8 +691,8 @@ class WikidataEntityLinker:
         Returns:
             Dizionario con informazioni dell'entità migliore o None
         """
-        # Riabilita cache per performance  
-        cache_key = self._get_cache_key(query)
+        # Riabilita cache per performance (incluimi il context nel cache key)
+        cache_key = self._get_cache_key(query, predicate_context=predicate_context)
         if cache_key in self.cache:
             return self.cache[cache_key]
         
@@ -685,6 +701,12 @@ class WikidataEntityLinker:
         
         # Genera query alternative (include traduzioni e varianti storiche)
         query_alternatives, translated_queries = self._generate_alternative_queries(query)
+        
+        # Aggiungi varianti senza spazi tra lettere e numeri (es. "Ferrari F 2005" → "Ferrari F2005")
+        space_removed_variants = []
+        for alt_query in query_alternatives:
+            space_variants = self._create_query_variants(alt_query)
+            space_removed_variants.extend(space_variants[1:])  # Escludi il primo che è identico
         
         # Aggiungi anche varianti semplificate tradizionali
         simplified_variations = []
@@ -701,18 +723,14 @@ class WikidataEntityLinker:
             if len(filtered_words) < len(words) and filtered_words:
                 simplified_variations.append(' '.join(filtered_words))
         
-        # Combina tutte le varianti
-        all_variations = query_alternatives + simplified_variations
+        # Combina tutte le varianti (priorita': originale, senza-spazi, poi semplificate)
+        all_variations = query_alternatives + space_removed_variants + simplified_variations
         all_variations = list(dict.fromkeys(all_variations))  # Rimuovi duplicati
-        
-        print(f"Cercando con {len(all_variations)} varianti: {all_variations[:5]}...")
         
         # Prova tutte le varianti della query per trovare il miglior punteggio globale
         for i, variation in enumerate(all_variations):
             if not variation.strip():
                 continue
-                
-            print(f"\\n--- Testando variante {i+1}: '{variation}' ---")
             
             # Usa ricerca multilingue per massimizzare i risultati
             candidates = self._search_wikidata_entities_multilang(variation, limit=5)  # Ridotto per debug
@@ -737,7 +755,6 @@ class WikidataEntityLinker:
                 
                 # Valida compatibilità ontologica PRIMA di calcolare score
                 if not self._validate_ontology(entity_id, instance_of_ids, predicate_context=predicate_context, label=label):
-                    print(f"  [SKIPPED] Saltato {entity_id} per incompatibilità ontologica")
                     continue
                 
                 # Whitelist P31: se ha P31 ma nessuno è in whitelist contesto → rifiuta
@@ -767,7 +784,6 @@ class WikidataEntityLinker:
                 similarity_score = self._calculate_similarity_score(comparison_query, label, description, predicate_context=_pred_ctx)
                 
                 if is_translated_query:
-                    print(f"  [TRANSLATED] Usando query tradotta '{comparison_query}' per similarity (invece di '{query}')")
                 
                 # Calcola priority score basato su P31
                 priority_score = self._calculate_vehicle_priority_score(instance_of_ids, context=_pred_ctx)
@@ -777,7 +793,30 @@ class WikidataEntityLinker:
                     print(f"  [REJECTED P31 ctx={_pred_ctx}] {entity_id} ({label}) - tipo incompatibile")
                     continue
                 
-                # Calcola score totale
+                # PENALITA' PER VARIANTI MOLTO DIVERSE: Se la variante testata è molto diversa 
+                # dalla query originale, il risultato è meno affidabile
+                # Es: "Ferrari F" è una variante semplificata di "Ferrari F 2005" -> meno affidabile
+                original_query_clean = self._clean_text(query.lower())
+                variation_clean = self._clean_text(variation.lower())
+                
+                # Quanto la variante è simile alla query ORIGINALE?
+                # Se simile al 95%+, è praticamente la stessa cosa
+                # Se simile al 50%, è molto semplificata
+                variation_original_similarity = SequenceMatcher(None, original_query_clean, variation_clean).ratio()
+                
+                # Se la variante è MOLTO semplificata (simile <= 0.6 alla query originale),
+                # riduco il priority_score perché potrebbe essere un match "generico"
+                original_priority_score = priority_score
+                if variation_original_similarity <= 0.6:
+                    # Penaliza il priority score per varianti molto semplificate
+                    priority_score *= 0.4  # Ridurre drasticamente
+                    print(f"    [PENALTA PRIORITY: variante '{variation}' è solo {variation_original_similarity:.2f} simile a '{query}' - priority {original_priority_score:.1f} -> {priority_score:.1f}]")
+                elif variation_original_similarity <= 0.8:
+                    # Penalizza moderatamente
+                    priority_score *= 0.7
+                    print(f"    [PENALTA MODERATA: variante '{variation}' è {variation_original_similarity:.2f} simile a '{query}' - priority {original_priority_score:.1f} -> {priority_score:.1f}]")
+                
+                # Calcola score totale con priority_score corretto
                 total_score = self._calculate_total_score(query, candidate, similarity_score, priority_score, context=_pred_ctx)
                 
                 # Applica soglia minima per contesto (evita false similarità numeriche)
@@ -802,7 +841,33 @@ class WikidataEntityLinker:
                     if not is_translated_query:  # Solo se non ha già bonus traduzione
                         total_score += 0.2
                 
-                print(f"  {entity_id} - {label}: sim={similarity_score:.3f}, pri={priority_score:.3f}, tot={total_score:.3f}")
+                # CRUCIALE: Il VARIATION-LABEL SIMILARITY deve essere parte del calcolo PRINCIPALE
+                # Non solo un bonus, ma un MOLTIPLICATORE dello score finale
+                # Se la variante e il label sono quasi identici -> score intatto
+                # Se sono molto diversi -> score drasticamente ridotto
+                variation_label_similarity = SequenceMatcher(None, 
+                                                             self._clean_text(variation.lower()), 
+                                                             self._clean_text(label.lower())).ratio()
+                
+                # Moltiplica lo score per la similarità variantev-label
+                # Questo garantisce che un match "generico" non vinca su un match "esatto"
+                # Es: Q463627 (Ferrari F40) trovato con variante "Ferrari F" (0.90 simile) 
+                #     vs Q173365 (Ferrari F2005) trovato con variante "Ferrari F2005" (1.0 simile)
+                #     => Q173365 vince anche se Q463627 ha priority_score più alto
+                total_score = total_score * variation_label_similarity
+                
+                
+                # Se la variante e il label sono UGUALI (similarity >= 0.95), aggiungi bonus extra
+                if variation_label_similarity >= 0.95:
+                    bonus_perfetto = 0.15
+                    total_score += bonus_perfetto
+                elif variation_label_similarity < 0.5:
+                    # Se sono molto diversi, aggiungi una piccola penalità extra
+                    penalty_cattivo = -0.10
+                    total_score += penalty_cattivo
+                    print(f"    [PENALTA MATCH PESSIMO {penalty_cattivo}]")
+                
+                print(f"  {entity_id} - {label}: sim={similarity_score:.3f}, var_sim={variation_label_similarity:.3f}, pri={priority_score:.3f}, tot={total_score:.3f}")
                 
                 # Aggiorna miglior candidato se questo è davvero migliore
                 if total_score > best_score and total_score >= min_confidence:
@@ -815,9 +880,14 @@ class WikidataEntityLinker:
                         'similarity_score': similarity_score,
                         'priority_score': priority_score,
                         'instance_of': instance_of_ids,
-                        'query_variation': variation
+                        'query_variation': variation,
+                        'variation_label_similarity': variation_label_similarity
                     }
                     print(f"  *** NUOVO MIGLIOR MATCH: {entity_id} - {label} (score: {total_score:.3f}) ***")
+                    
+                    # RIMOSSO: check di similarity >= 0.85 che fermava la ricerca
+                    # Adesso continua a cercare tutte le varianti, il bonus di variation_label_similarity
+                    # farà in modo che il match corretto vinca
         
         # Risultato finale dopo aver esplorato tutte le varianti
         if best_entity:
@@ -955,7 +1025,6 @@ class WikidataEntityLinker:
         results = {}
         
         for i, query in enumerate(queries):
-            print(f"Processando {i+1}/{len(queries)}: {query}")
             result = self.find_best_entity(query, min_confidence)
             results[query] = result
             
@@ -992,33 +1061,5 @@ def get_entity_with_details(query: str, min_confidence: float = 0.3, cache_file:
         Dizionario completo dell'entità o None
     """
     linker = WikidataEntityLinker(cache_file=cache_file)
-    return linker.find_best_entity(query, min_confidence)
+    return linker.find_best_entity(query, min_confidence)    
 
-# Test della funzione
-if __name__ == "__main__":
-    # Test con alcuni esempi di auto italiane
-    test_queries = [
-        "Jamais Contente",
-        "Automobile a molla di Leonardo", 
-        "Ferrari",
-        "Alfa Romeo 8C 2300",
-        "Fiat 500",
-        "Lancia Stratos"
-    ]
-    
-    linker = WikidataEntityLinker(cache_file="test_cache.pkl")
-    
-    print("=== TEST WIKIDATA ENTITY LINKER ===")
-    for query in test_queries:
-        print(f"\nCercando: {query}")
-        result = linker.find_best_entity(query, min_confidence=0.2)
-        
-        if result:
-            print(f"[OK] Trovato: {result['qid']} - {result['label']}")
-            print(f"  Confidenza: {result['confidence']:.3f}")
-            print(f"  Similarità: {result['similarity_score']:.3f}")
-            print(f"  Priorità: {result['priority_score']:.3f}")
-            print(f"  Descrizione: {result['description']}")
-            print(f"  Tipi: {result['instance_of']}")
-        else:
-            print("Nessun risultato trovato")

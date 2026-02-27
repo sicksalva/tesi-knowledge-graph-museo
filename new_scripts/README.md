@@ -193,8 +193,9 @@ Potenza: 25 CV a 3300 giri/min.
 | Configurazione | Hardcoded nel codice | Dichiarativa (mappings) |
 | Literals in IRI | Solo entità concettuali | Configurabile |
 | Velocità | Lenta (API calls) | Veloce |
-| Triple generate | ~500+ | ~1500+ |
-| Nodi IRI | ~50 | ~300+ |
+| Triple generate | 5,331 | 7,705 |
+| Veicoli | 163 | 163 |
+| Nodi IRI | 100 | 163 |
 
 ## File di Output
 

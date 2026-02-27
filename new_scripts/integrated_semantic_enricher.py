@@ -17,7 +17,8 @@ import json
 import pandas as pd
 import glob
 from typing import Dict, Optional, List
-# Aggiungi la directory scripts al path per importare il linker E i mappings
+# Aggiungi la directory scripts al path per importare il linker
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'scripts'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
 from robust_wikidata_linker import WikidataEntityLinker
@@ -121,8 +122,10 @@ class AdvancedSemanticEnricherV2:
             # Determina tipo suggerito dai mappings
             suggested_type = museum_mappings.get_entity_type_for_predicate(predicate_str)
             
-            # Chiama API
-            api_result = self.wikidata_linker.find_best_entity(value, min_confidence=0.6, predicate_context=predicate_str)
+            # Chiama API con soglia appropriata per entity linking
+            # (aumentata da 0.6 a 0.65 per usare lo stesso valore del linker)
+            api_result = self.wikidata_linker.find_best_entity(value, min_confidence=0.65, predicate_context=predicate_str)
+            
             if api_result:
                 # Seleziona il tipo più appropriato
                 instance_of_types = api_result.get('instance_of', [])
@@ -356,7 +359,22 @@ class AdvancedSemanticEnricherV2:
     
     def _create_subject_iri(self, inventory_number: str) -> URIRef:
         """Crea IRI per subject (veicolo) basato su numero inventario."""
-        normalized = re.sub(r'[^a-zA-Z0-9]', '_', inventory_number.strip())
+        normalized = re.sub(r'[^a-zA-Z0-9]', '', inventory_number.strip())
+        return EX[f"vehicle_{normalized}"]
+
+    def _create_subject_iri_fallback(self, row) -> URIRef:
+        """Crea IRI fallback per veicoli senza numero inventario, usando Marca+Modello o Marca+Anno."""
+        marca = str(row.get('Marca', '')).strip()
+        modello = str(row.get('Modello', '')).strip()
+        anno = str(row.get('Anno', '')).strip()
+        # Usa marca+modello se disponibili, altrimenti marca+anno
+        if marca and modello and modello not in ('', 'nan'):
+            raw = f"{marca}_{modello}"
+        elif marca and anno and anno not in ('', 'nan'):
+            raw = f"{marca}_{anno}"
+        else:
+            raw = marca or "unknown"
+        normalized = re.sub(r'[^a-zA-Z0-9]', '', raw)
         return EX[f"vehicle_{normalized}"]
     
     def process_csv_to_rdf(self, csv_file: str, mapping_file: str, output_file: str) -> bool:
@@ -421,15 +439,18 @@ class AdvancedSemanticEnricherV2:
             
             # Processa ogni riga (veicolo)
             for idx, row in df.iterrows():
-                # Skip righe vuote
-                if pd.isna(row.get('N. inventario')) or str(row.get('N. inventario')).strip() == '':
+                # Skip righe completamente vuote (nessun dato significativo)
+                if pd.isna(row.get('Marca')) and pd.isna(row.get('N. inventario')):
                     continue
                 
                 total_vehicles += 1
-                inventory_num = str(row['N. inventario']).strip()
+                inventory_num = str(row.get('N. inventario', '')).strip()
                 
                 # Crea subject per questo veicolo
-                subject = self._create_subject_iri(inventory_num)
+                if not inventory_num or inventory_num == 'nan':
+                    subject = self._create_subject_iri_fallback(row)
+                else:
+                    subject = self._create_subject_iri(inventory_num)
                 
                 # Aggiungi tipo
                 graph.add((subject, RDF.type, SCHEMA.Vehicle))

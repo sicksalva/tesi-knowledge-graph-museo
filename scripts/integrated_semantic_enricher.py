@@ -48,7 +48,12 @@ class AdvancedSemanticEnricher:
     """
     
     def __init__(self, use_wikidata_api=True, cache_file="advanced_enricher_cache.pkl"):
-        self.wikidata_linker = WikidataEntityLinker(cache_file=cache_file) if use_wikidata_api else None
+        # Percorsi assoluti basati sulla posizione dello script
+        _root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        if not os.path.isabs(cache_file):
+            cache_file = os.path.join(_root, cache_file)
+        _ontology_config = os.path.join(_root, "data", "wikidata_ontology_config.json")
+        self.wikidata_linker = WikidataEntityLinker(cache_file=cache_file, ontology_config_file=_ontology_config) if use_wikidata_api else None
         self.use_wikidata_api = use_wikidata_api
         
         # Cache dinamico entità risolte (si espande automaticamente)
@@ -327,20 +332,36 @@ class AdvancedSemanticEnricher:
                 col_name = row['column_name']
                 wd_prop = row['wikidata_property']
                 
+                # Gestisci proprietà multiple separate da | (es. P2754|P571|P576)
+                # Usa solo la prima come predicato principale
+                wd_prop_primary = wd_prop.split('|')[0].strip()
+                wd_prop_extra = [p.strip() for p in wd_prop.split('|')[1:] if p.strip()]
+                
                 # Determina URI completo del predicato Wikidata
-                if wd_prop.startswith('P') and len(wd_prop) <= 6:
+                if wd_prop_primary.startswith('P') and len(wd_prop_primary) <= 6:
                     # Proprietà Wikidata
-                    predicate_uri = f"http://www.wikidata.org/prop/direct/{wd_prop}"
-                elif wd_prop.startswith('custom:'):
+                    predicate_uri = f"http://www.wikidata.org/prop/direct/{wd_prop_primary}"
+                elif wd_prop_primary.startswith('custom:'):
                     # Proprietà custom
-                    custom_name = wd_prop.replace('custom:', '')
+                    custom_name = wd_prop_primary.replace('custom:', '')
                     predicate_uri = f"http://example.org/{custom_name}"
                 else:
-                    predicate_uri = wd_prop
+                    predicate_uri = wd_prop_primary
+                
+                # Costruisci URI anche per le proprietà extra
+                extra_uris = []
+                for ep in wd_prop_extra:
+                    if ep.startswith('P') and len(ep) <= 6:
+                        extra_uris.append(f"http://www.wikidata.org/prop/direct/{ep}")
+                    elif ep.startswith('custom:'):
+                        extra_uris.append(f"http://example.org/{ep.replace('custom:', '')}")
+                    elif ep.startswith('http'):
+                        extra_uris.append(ep)
                 
                 mappings[col_name] = {
                     'predicate': predicate_uri,
-                    'property_id': wd_prop,
+                    'property_id': wd_prop_primary,
+                    'extra_predicates': extra_uris,
                     'label': row['property_label'],
                     'category': row['macro_category'],
                     'schema_predicates': []  # Sarà popolato da mappings.csv
@@ -459,8 +480,21 @@ class AdvancedSemanticEnricher:
     
     def _create_subject_iri(self, inventory_number: str) -> URIRef:
         """Crea IRI per subject (veicolo) basato su numero inventario."""
-        # Normalizza numero inventario per IRI
-        normalized = re.sub(r'[^a-zA-Z0-9]', '_', inventory_number.strip())
+        normalized = re.sub(r'[^a-zA-Z0-9]', '', inventory_number.strip())
+        return EX[f"vehicle_{normalized}"]
+
+    def _create_subject_iri_fallback(self, row) -> URIRef:
+        """Crea IRI fallback per veicoli senza numero inventario, usando Marca+Modello o Marca+Anno."""
+        marca = str(row.get('Marca', '')).strip()
+        modello = str(row.get('Modello', '')).strip()
+        anno = str(row.get('Anno', '')).strip()
+        if marca and modello and modello not in ('', 'nan'):
+            raw = f"{marca}_{modello}"
+        elif marca and anno and anno not in ('', 'nan'):
+            raw = f"{marca}_{anno}"
+        else:
+            raw = marca or "unknown"
+        normalized = re.sub(r'[^a-zA-Z0-9]', '', raw)
         return EX[f"vehicle_{normalized}"]
     
     def process_csv_to_rdf(self, csv_file: str, mapping_file: str, output_file: str) -> bool:
@@ -526,15 +560,18 @@ class AdvancedSemanticEnricher:
             
             # Processa ogni riga (veicolo)
             for idx, row in df.iterrows():
-                # Skip righe vuote
-                if pd.isna(row.get('N. inventario')) or str(row.get('N. inventario')).strip() == '':
+                # Skip righe completamente vuote (nessun dato significativo)
+                if pd.isna(row.get('Marca')) and pd.isna(row.get('N. inventario')):
                     continue
                 
                 total_vehicles += 1
-                inventory_num = str(row['N. inventario']).strip()
+                inventory_num = str(row.get('N. inventario', '')).strip()
                 
                 # Crea subject per questo veicolo
-                subject = self._create_subject_iri(inventory_num)
+                if not inventory_num or inventory_num == 'nan':
+                    subject = self._create_subject_iri_fallback(row)
+                else:
+                    subject = self._create_subject_iri(inventory_num)
                 
                 # Aggiungi tipo: questo è un veicolo
                 graph.add((subject, RDF.type, SCHEMA.Vehicle))
@@ -552,7 +589,7 @@ class AdvancedSemanticEnricher:
                     value_str = str(value).strip()
                     mapping = column_mappings[col_name]
                     predicate_uri = mapping['predicate']
-                    schema_predicates = mapping.get('schema_predicates', [])
+                    schema_predicates = mapping.get('schema_predicates', []) + mapping.get('extra_predicates', [])
                     
                     # SPECIAL CASE: Acquisizione con "Dono" -> usa predicato DONOR
                     if col_name == 'Acquisizione' and museum_mappings.is_donation(value_str):
@@ -705,12 +742,16 @@ def main():
     else:
         print("Cache mantenuta.\n")
     
-    enricher = AdvancedSemanticEnricher(use_wikidata_api=True, cache_file="caches/production_cache.pkl")
+    # Percorsi assoluti basati sulla posizione dello script (scripts/ -> root/)
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    cache_file_path = os.path.join(root, "caches", "production_cache.pkl")
+    
+    enricher = AdvancedSemanticEnricher(use_wikidata_api=True, cache_file=cache_file_path)
     
     # File di input e output
-    csv_file = "data/museo.csv"
-    mapping_file = "data/museum_column_mapping.csv"
-    output_file = "output/output_automatic_enriched.nt"
+    csv_file = os.path.join(root, "data", "museo.csv")
+    mapping_file = os.path.join(root, "data", "museum_column_mapping.csv")
+    output_file = os.path.join(root, "output", "output_automatic_enriched.nt")
     
     success = enricher.process_csv_to_rdf(csv_file, mapping_file, output_file)
     

@@ -1,6 +1,6 @@
 # Knowledge Graph per Museo Automobilistico
 
-**Ultimo aggiornamento**: 26 febbraio 2026
+**Ultimo aggiornamento**: 27 febbraio 2026 (Soluzione Scoring System)
 
 Progetto di tesi per la creazione di knowledge graph a partire da dati del museo utilizzando tecnologie del web semantico, entity linking automatico e integrazione avanzata con Wikidata.
 
@@ -42,8 +42,8 @@ Progetto di tesi per la creazione di knowledge graph a partire da dati del museo
 │       └── results_zeroshot.json # Risultati (6/99 successi = 6.1%)
 ├── queries/                      # Query attive (vuoto)
 ├── output/                       # 📊 Output finale
-│   ├── output_automatic_enriched.nt   # ⭐ KG V1 con validazione (4,634 triple)
-│   └── output_automatic_enriched_v2.nt # KG V2 architettura dichiarativa (7,632 triple)
+│   ├── output_automatic_enriched.nt   # ⭐ KG V1 con validazione (5,331 triple)
+│   └── output_automatic_enriched_v2.nt # KG V2 architettura dichiarativa (7,705 triple)
 ├── old/                          # 🗄️ Archivio completo sviluppo storico
 │   ├── scripts/                 # Script evolutivi precedenti
 │   │   ├── generate_kg_dual_mappings.py    # Generatore con mappings multipli  
@@ -92,7 +92,7 @@ cd c:\Users\salva\Desktop\Tesi
 python scripts/integrated_semantic_enricher.py
 ```
 
-**Output**: `output/output_automatic_enriched.nt` (4,634 triple con validazione ontologica)
+**Output**: `output/output_automatic_enriched.nt` (5,331 triple con validazione ontologica)
 
 #### 3. Generazione Knowledge Graph V2 (Architettura Dichiarativa)
 ```bash
@@ -100,11 +100,11 @@ cd c:\Users\salva\Desktop\Tesi
 python new_scripts/integrated_semantic_enricher.py
 ```
 
-**Output**: `output/output_automatic_enriched_v2.nt` (7,632 triple con routing 3-tier)
+**Output**: `output/output_automatic_enriched_v2.nt` (7,705 triple con routing 3-tier)
 
 **Caratteristiche V1** (`scripts/`):
 - ✅ Lettura diretta da museo.csv (header riga 2)
-- ✅ Validazione P31 pre-scoring con blacklist tipi incompatibili
+- ✅ Validazione P31 con whitelist per contesto (27/02/2026: rimossa blacklist)
 - ✅ Doppio mapping: Wikidata + Schema.org HTTPS
 - ✅ Cache persistente: `caches/production_cache_entities.json`
 - ✅ Confidence threshold: 0.6
@@ -166,7 +166,7 @@ Per testare gli approcci legacy, i file sono disponibili nella cartella `/old/` 
 
 ### Knowledge Graph Finale (Sistema con Validazione Ontologica)
 - **160 veicoli** processati con entity linking validato
-- **4,634 triple RDF** generate (`output/output_automatic_enriched.nt`)
+- **5,331 triple RDF** generate (`output/output_automatic_enriched.nt`)
   - 3,764 literals (anni, velocità, potenza, descrizioni, testi liberi)
   - 870 IRI objects, di cui 710 Wikidata Q-codes (validate con P31 instance of)
   - 160 rdf:type (una per veicolo: schema:Vehicle)
@@ -189,6 +189,41 @@ Per testare gli approcci legacy, i file sono disponibili nella cartella `/old/` 
 
 #### Problema Risolto: False Positives Semantici
 **Caso critico**: Q1789258 (music band "OM") erroneamente linkato come automotive manufacturer
+
+#### ⭐ RISOLTO CRITICO: Scoring System (27/02/2026)
+
+**Problema Identificato**: Quando si cercava "Ferrari F 2005", il sistema ritornava Q463627 (Ferrari F40) 
+invece di Q173365 (Ferrari F2005) — il match perfetto. Root cause: categoria P31 non pesata per racing cars.
+
+**Soluzione Implementata** — Sistema di scoring multi-layer:
+
+1. **Aggiunta categorie P31 mancanti** (data/wikidata_ontology_config.json):
+   ```json
+   "Q90834785": 10.0,  // Formula racing car (←Ferrari F2005 usa questa!)
+   "Q1430157": 10.0,   // racing car
+   "Q1348239": 10.0    // Formula One vehicle
+   ```
+
+2. **Penalty per varianti semplificate** (scripts/robust_wikidata_linker.py):
+   - Se variante << query originale: riduce priority_score × 0.4-0.7
+   - Evita false positives da query troppo generiche ("Ferrari F" → Q463627)
+
+3. **Moltiplicatore variation_label_similarity** (CRUCIALE):
+   - Match perfetto ("Ferrari F2005" → "Ferrari F2005") multiplica per 1.0 ✓
+   - Match generico ("Ferrari F" → "Ferrari F40") multiplica per 0.9 ✗
+   - Un match esatto con categoria "minore" batte un match vago con categoria "maggiore"
+
+**Risultato**: 
+```
+PRIMA: Q463627 (Ferrari F40) vince con score 1.250 ❌
+DOPO:  Q173365 (Ferrari F2005) vince con score 1.150 ✅
+```
+
+**Dettagli completi**: Vedi [notes/md/SCORING_SOLUTION.md](notes/md/SCORING_SOLUTION.md)
+
+---
+
+#### Soluzione Ontologica Generale
 
 #### Soluzione Implementata
 **Validazione a due livelli** in `robust_wikidata_linker.py`:
@@ -301,8 +336,8 @@ e boost basati su keyword della descrizione (`"song"`, `"municipality"` → reje
 | SPARQL Anything | 1,579 | Query SPARQL | Schema.org | ✅ `old/output/output.nt` |
 | Python Schema.org | 2,368 | Hardcoded | Schema.org | ✅ `old/output/output_complete.nt` |
 | Dual Mappings | 3,332 | Mappings CSV | Wikidata+Schema.org | ✅ `old/output/output_dual_mappings.nt` |
-| **CSV-to-RDF Validato (V1)** | **4,634** | **Validazione Ontologica** | **Wikidata+Schema.org HTTPS** | **✅ scripts/** |
-| **CSV-to-RDF Dichiarativo (V2)** | **7,632** | **Architettura Dichiarativa** | **Wikidata+Schema.org HTTPS** | **🚀 new_scripts/** |
+| **CSV-to-RDF Validato (V1)** | **5,331** | **Validazione Ontologica** | **Wikidata+Schema.org HTTPS** | **✅ scripts/** |
+| **CSV-to-RDF Dichiarativo (V2)** | **7,705** | **Architettura Dichiarativa** | **Wikidata+Schema.org HTTPS** | **🚀 new_scripts/** |
 
 **Innovazioni versione finale**:
 - ✅ Lettura diretta da museo.csv (no intermediari RDF)
@@ -399,7 +434,7 @@ pyyaml            # Parsing file configurazione YAML
 ### Risultati Tecnici
 - **Zero False Positives**: Sistema elimina linking errati (Q1789258 music band vs automotive)
 - **110 Q-codes Unici**: Entità Wikidata referenziate, tutte ontologicamente validate con P31
-- **4,634 Triple RDF (V1)**: +39.1% rispetto approccio dual mappings (3,332); V2 raggiunge 7,632
+- **5,331 Triple RDF (V1)**: +60.0% rispetto approccio dual mappings (3,332); V2 raggiunge 7,705
 - **Confidence Optimized**: Threshold 0.6 bilanciato tra recall e precision
 - **Cache Persistente**: Sistema ottimizzato riduce API calls a 107 entities uniche (V1)
 - **HTTPS Enforcement**: Schema.org properties tutte con protocollo sicuro
@@ -418,7 +453,11 @@ pyyaml            # Parsing file configurazione YAML
 
 ## 📚 Documentazione
 
-Vedi [progetto_log.md](notes/md/progetto_log.md) per la documentazione completa del processo di sviluppo.
+**Documentazione Tecnica**:
+- [notes/md/SCORING_SOLUTION.md](notes/md/SCORING_SOLUTION.md) — ⭐ **NUOVO** Soluzione del problema di scoring (27/02/2026)
+- [notes/md/scelte_implementative_v1_scripts.md](notes/md/scelte_implementative_v1_scripts.md) — Architettura V1 con validazione ontologica
+- [notes/md/scelte_implementative_v2_new_scripts.md](notes/md/scelte_implementative_v2_new_scripts.md) — Architettura V2 dichiarativa
+- [notes/md/progetto_log.md](notes/md/progetto_log.md) — Log completo del processo di sviluppo (1,900+ righe)
 
 ## 🏁 Status e Roadmap
 
@@ -429,10 +468,11 @@ Vedi [progetto_log.md](notes/md/progetto_log.md) per la documentazione completa 
 - [x] **Doppia interoperabilità**: Wikidata + Schema.org HTTPS simultanei
 - [x] **Cache persistente**: Sistema ottimizzato con 107 entities (V1) e 142 entities (V2)
 - [x] **Gestione edge cases**: Donazioni (P1028), acronimi, incompatible types
-- [x] **Knowledge Graph V1**: 4,634 triple con 160 veicoli, 110 Q-codes Wikidata linkati
-- [x] **Knowledge Graph V2**: 7,632 triple con 160 veicoli, 145 Q-codes Wikidata linkati
+- [x] **Knowledge Graph V1**: 5,331 triple con 163 veicoli, 100 Q-codes Wikidata linkati
+- [x] **Knowledge Graph V2**: 7,705 triple con 163 veicoli, 163 Q-codes Wikidata linkati
 - [x] **Test LLM**: Framework comparativo zeroshot vs oneshot per estrazione entità
-- [x] **Documentazione completa**: 1,900+ righe log progetto (notes/md/progetto_log.md)
+- [x] **⭐ Soluzione Scoring System**: Moltiplicatore variation_label_similarity, F1-racing categories, penalizzazione varianti (27/02/2026)
+- [x] **Documentazione completa**: 1,900+ righe log progetto + SCORING_SOLUTION.md
 
 ### 🎯 **Risultati Chiave Raggiunti**
 - **Zero false positives**: Q1789258 (music band) correttamente rejected

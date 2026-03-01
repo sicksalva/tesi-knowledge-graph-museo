@@ -695,11 +695,20 @@ class AdvancedSemanticEnricher:
             if output_dir:
                 os.makedirs(output_dir, exist_ok=True)
             graph.serialize(destination=output_file, format='nt', encoding='utf-8')
+
+            # Conteggio triple uniche effettive (rdflib mantiene un set di triple)
+            try:
+                unique_triples = len(graph)
+            except Exception:
+                # Fallback: se per qualche motivo len(graph) non è disponibile
+                unique_triples = None
             
             # Risultati
             print(f"\n=== RISULTATI GENERAZIONE RDF ===\n")
             print(f"Veicoli processati: {total_vehicles}")
-            print(f"Triple generate: {total_triples}")
+            print(f"Triple generate (conteggio incrementale): {total_triples}")
+            if unique_triples is not None:
+                print(f"Triple serializzate (uniche): {unique_triples}")
             print(f"\nDettaglio arricchimento:")
             print(f"  - Literal mantenuti: {literals_kept}")
             print(f"  - Entità Wikidata (da cache): {dynamic_cache_hits}")

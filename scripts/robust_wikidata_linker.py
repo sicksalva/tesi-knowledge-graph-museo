@@ -784,7 +784,10 @@ class WikidataEntityLinker:
                 similarity_score = self._calculate_similarity_score(comparison_query, label, description, predicate_context=_pred_ctx)
                 
                 if is_translated_query:
-                
+                    # no-op branch: preserved for clarity when a translated-query-specific
+                    # behavior is added; keeping a pass avoids indentation errors.
+                    pass
+
                 # Calcola priority score basato su P31
                 priority_score = self._calculate_vehicle_priority_score(instance_of_ids, context=_pred_ctx)
                 

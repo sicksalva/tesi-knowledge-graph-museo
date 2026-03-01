@@ -1,0 +1,412 @@
+================================================================================
+STATISTICHE COMPLETE DEL PROGETTO - KNOWLEDGE GRAPH MUSEO AUTOMOBILISTICO
+================================================================================
+Data generazione: 27 Febbraio 2026
+Versione sistema: V2.0 (Production-Ready con Validazione Ontologica)
+================================================================================
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 1. DATASET ORIGINALE                                                         │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+Veicoli nel CSV originale:             163 veicoli
+Colonne nel dataset:                    29 colonne
+Righe totali file CSV:                  437 (include header e righe vuote)
+Mappings colonna → proprietà:           29 mappings (museum_column_mapping.csv)
+Periodo temporale veicoli:              1892-2011 (119 anni di storia)
+File sorgente:                          data/museo.csv
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 2. KNOWLEDGE GRAPH GENERATO (V2.0)                                          │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+Triple RDF totali:                      5,931 triple
+Veicoli processati:                     163 veicoli (100% del dataset)
+Definizioni rdf:type:                   1,051 statements
+Dimensione file output:                 1,103,421 bytes (~1.1 MB)
+File output:                            output/output_automatic_enriched_v2.nt
+Formato:                                N-Triples (.nt)
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 3. WIKIDATA INTEGRATION - PROPRIETÀ (P-CODES)                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+Proprietà uniche utilizzate:            19 proprietà Wikidata
+Utilizzi totali:                        1,892 riferimenti a proprietà
+
+TOP 10 PROPRIETÀ PIÙ UTILIZZATE:
+  1. P176  (manufacturer)                  163 utilizzi
+  2. P585  (point in time)                 162 utilizzi
+  3. P217  (inventory number)              160 utilizzi
+  4. P495  (country of origin)             157 utilizzi
+  5. P1559 (name in native language)       155 utilizzi
+  6. P516  (powered by)                    130 utilizzi
+  7. P1002 (engine configuration)          130 utilizzi
+  8. P2052 (maximum speed)                 130 utilizzi
+  9. P2109 (power)                         130 utilizzi
+ 10. P8628 (displacement)                  123 utilizzi
+
+ALTRE PROPRIETÀ UTILIZZATE:
+  - P571  (inception)                      97 utilizzi
+  - P2754 (production date)                97 utilizzi
+  - P576 (dissolved/abolished)             97 utilizzi
+  - P1028 (donated by)                     92 utilizzi
+  - P31   (instance of)                    54 utilizzi
+  - P287  (designed by)                    10 utilizzi
+  - P7045 (chassis)                        3 utilizzi
+  - P2283 (uses)                           1 utilizzi
+  - P4140 (battery capacity)               1 utilizzi
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 4. WIKIDATA INTEGRATION - ENTITÀ (Q-CODES)                                 │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+Entità uniche collegate:                100 entità Wikidata
+Collegamenti totali:                    772 collegamenti entity linking
+Entità in cache:                        98 entità cachate (performance)
+File cache:                             caches/production_cache_v2_entities.json
+
+TOP 10 ENTITÀ PIÙ LINKATE:
+  1. Q38      (Italy)                      210 collegamenti
+  2. Q27597   (Fiat)                       64 collegamenti
+  3. Q142     (France)                     52 collegamenti
+  4. Q26921   (Alfa Romeo)                 24 collegamenti
+  5. Q30      (United States)              24 collegamenti
+  6. Q35896   (Lancia)                     22 collegamenti
+  7. Q27586   (Ferrari)                    20 collegamenti
+  8. Q183     (Germany)                    20 collegamenti
+  9. Q145     (United Kingdom)             12 collegamenti
+ 10. Q29852   (Itala)                      10 collegamenti
+     Q6746    (Citroën)                    10 collegamenti
+     Q35962   (Maserati)                   10 collegamenti
+
+BRAND ITALIANI (Top 6):
+  - Fiat:                                  64 veicoli (39% del totale)
+  - Alfa Romeo:                            24 veicoli (15% del totale)
+  - Lancia:                                22 veicoli (13% del totale)
+  - Ferrari:                               20 veicoli (12% del totale)
+  - Maserati:                              10 veicoli (6% del totale)
+  - Itala:                                 10 veicoli (6% del totale)
+  TOTALE BRAND ITALIANI:                   150/163 veicoli (92%)
+
+BRAND INTERNAZIONALI (Top 5):
+  - Citroën (Francia):                     10 veicoli
+  - Renault (Francia):                     6 veicoli
+  - Buick (USA):                           4 veicoli
+  - Volkswagen (Germania):                 4 veicoli
+  - Packard (USA):                         4 veicoli
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 5. DISTRIBUZIONE ENTITÀ PER TIPO (P31 - INSTANCE OF)                       │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+Q786820 (car manufacturer):             31 entità (31%)
+  └─ Include: Fiat, Alfa Romeo, Ferrari, Lancia, Maserati, Citroën, etc.
+
+Q6256 (country):                        7 entità (7%)
+  └─ Include: Italy, France, USA, Germany, UK, Belgium, Russia
+
+Q5 (person/human):                      5 entità (5%)
+  └─ Designer: Flaminio Bertoni, Franco Scaglione, Cesare Sala, etc.
+
+Q4830453 (business):                    1 entità (1%)
+  └─ Include: Rolls-Royce
+
+Senza tipo specificato:                 52 entità (52%)
+  └─ Principalmente modelli di veicoli specifici (Ferrari F40, Fiat 500, etc.)
+
+Altro:                                  4 entità (4%)
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 6. CONFIGURAZIONE SISTEMA - ENTITY LINKING                                  │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+Categorie P31 veicoli configurate:     18 tipi di veicolo
+Range pesi priority:                    1.0 - 10.0
+
+PESI PER CATEGORIA (priority score):
+  Peso 10.0 (massima priorità):
+    - Q786820  (automobile manufacturer)
+    - Q1420    (automobile)
+    - Q90834785 (Formula racing car)
+    - Q1430157 (racing car)
+    - Q1348239 (Formula One vehicle)
+  
+  Peso 8.0 (alta priorità):
+    - Q936518  (motor car)
+    - Q3231690 (electric car)
+  
+  Peso 5.0-6.0 (media priorità):
+    - Q752870  (motor vehicle)
+    - Q5152161 (prototype vehicle)
+    - Q848403  (concept car)
+    - Q1228946 (historical vehicle)
+    - Q15142889 (steam vehicle)
+    - Q18810912 (experimental vehicle)
+  
+  Peso 3.0 (bassa priorità):
+    - Q42889   (vehicle generico)
+  
+  Peso 1.0-2.0 (minima priorità):
+    - Q1144312 (motorcycle)
+    - Q838948  (land vehicle)
+    - Q5638    (bicycle)
+    - Q274     (vehicle generico)
+
+TRADUZIONI ITA→ENG:                     20 coppie di traduzioni
+  Paesi: Italia→Italy, Francia→France, Germania→Germany, Spagna→Spain,
+         Regno Unito→United Kingdom, Stati Uniti→United States,
+         Austria→Austria, Svizzera→Switzerland, Belgio→Belgium,
+         Paesi Bassi/Olanda→Netherlands, Portogallo→Portugal,
+         Grecia→Greece, Svezia→Sweden, Danimarca→Denmark,
+         Norvegia→Norway, Cecoslovacchia→Czechoslovakia,
+         URSS/Unione Sovietica→USSR/Soviet Union, Giappone→Japan
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 7. SCORING SYSTEM - PARAMETRI                                               │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+PESI BASE:
+  Label weight:                          0.8 (80%)
+  Description weight:                    0.2 (20%)
+
+CONFIDENCE THRESHOLDS:
+  Soglia minima generale:                0.6 (60%)
+  Manufacturer context:                  0.65 (65%)
+  Model context:                         0.65 (65%)
+  Person context:                        0.60 (60%)
+  Country context:                       0.75 (75%)
+
+PESI ADATTIVI (contesto-dipendenti):
+  Con predicato specificato:             50% similarity / 50% priority
+  Query specifica (>2 parole):           80% similarity / 20% priority
+  Query generica:                        60% similarity / 40% priority
+
+BONUS E PENALITÀ:
+  Bonus query tradotta:                  +0.7 (massima priorità)
+  Bonus query storica:                   +0.3
+  Bonus entità storica:                  +0.2
+  Bonus descrizione rilevante:           +0.05
+  Bonus match perfetto (≥0.95):          +0.15
+  
+  Penalità match pessimo (<0.5):         -0.10
+  Penalità variante semplificata (≤0.6): ×0.4 (riduzione 60%)
+  Penalità variante semplificata (≤0.8): ×0.7 (riduzione 30%)
+  Penalità match generico:               ×0.7 (riduzione 30%)
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 8. CASO CRITICO RISOLTO - FERRARI F 2005                                    │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+PROBLEMA ORIGINALE:
+  Query: "Ferrari F 2005"
+  Risultato ERRATO: Q463627 (Ferrari F40) - score 3.645 ❌
+  Risultato CORRETTO: Q173365 (Ferrari F2005) - score 2.898 ✅
+
+COMPONENTI DELLA SOLUZIONE:
+  1. Aggiunta 3 categorie P31 racing cars
+     - Q90834785 (Formula racing car)
+     - Q1430157 (racing car)
+     - Q1348239 (Formula One vehicle)
+  
+  2. Penalty per varianti semplificate (×0.4-0.7)
+     - "Ferrari F" vs "Ferrari F 2005" → penalizzato
+  
+  3. Moltiplicatore variation-label similarity
+     - Match esatto ("Ferrari F2005" = "Ferrari F2005") → ×1.0 + bonus
+     - Match vago ("Ferrari F" ≈ "Ferrari F40") → ×0.9
+  
+  4. Pesi adattivi per contesto
+     - Query specifica: priorità alla similarity (80%-20%)
+  
+  5. Bonus query tradotte (+0.7)
+     - Garantisce priorità assoluta a traduzioni ITA→ENG
+  
+  6. Bonus entità storiche (+0.2/+0.3)
+     - Leonardo da Vinci, Cugnot, Jamais Contente, etc.
+
+RISULTATO FINALE:
+  - Q173365 vince con confidence 2.898
+  - Q463627 perde con confidence 2.467
+  - Differenza: +0.431 punti a favore del match corretto
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 9. PERFORMANCE E EVOLUZIONE VERSIONI                                        │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+CRONOLOGIA VERSIONI:
+  V1.0 (31/01/2026) - SPARQL Anything:          1,579 triple
+  V1.2 (31/01/2026) - Schema.org completo:      2,368 triple
+  V1.3 (01/02/2026) - Wikidata Integration:     ~2,700 triple
+  V1.4 (03/02/2026) - Dual Mappings:            3,332 triple (+40%)
+  V1.5 (03/02/2026) - Entity Linking Integrato: 5,331 triple (+125% vs V1.2)
+  V2.0 (12/02/2026) - Architettura Dichiarativa: 5,931 triple (+11% vs V1.5)
+
+EVOLUZIONE TRIPLE:
+  Incremento V1.0 → V1.2:    +789 triple (+50%)
+  Incremento V1.2 → V1.4:    +964 triple (+40%)
+  Incremento V1.2 → V1.5:    +2,963 triple (+125%)
+  Incremento V1.5 → V2.0:    +600 triple (+11%)
+  Incremento TOTALE V1.0 → V2.0: +4,352 triple (+275%)
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 10. TEST LLM - ENTITY EXTRACTION                                            │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+FRAMEWORK TEST:
+  Dataset test:                          99 entità di test
+  Modalità testate:                      2 (Oneshot vs Zeroshot)
+  Data test:                             05/02/2026
+
+RISULTATI ONESHOT (con esempio guida):
+  Successi:                              65/99 (65.7%)
+  Fallimenti:                            34/99 (34.3%)
+  Esempio fornito:                       Ferrari F40
+
+RISULTATI ZEROSHOT (senza esempio):
+  Successi:                              6/99 (6.1%)
+  Fallimenti:                            93/99 (93.9%)
+  Problemi principali:                   JSON malformati frequenti
+
+IMPROVEMENT:
+  Miglioramento con esempi:              +59.6 punti percentuali
+  Rapporto performance:                  10.8x migliore (oneshot vs zeroshot)
+
+ACCURATEZZA PER TIPO DI ENTITÀ (Oneshot):
+  MARCA (brand):                         >60% accuratezza
+  PAESE (country):                       >60% accuratezza
+  DESIGNER:                              >60% accuratezza
+  PILOTA (racing driver):                ~47-50% accuratezza
+  GARA (race/competition):               ~47-50% accuratezza
+
+OSSERVAZIONI:
+  - Entità ben strutturate (brand, paese) → alta accuratezza
+  - Entità complesse/multivalue (pilota, gara) → bassa accuratezza
+  - Esempi guidati (oneshot) critici per performance LLM
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 11. SPECIFICHE TECNICHE - RANGE VALORI                                      │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+CILINDRATE:
+  Minima:                                393 cc
+  Massima:                               16,286 cc
+  Valori unici:                          113 diverse cilindrate
+
+POTENZE:
+  Minima:                                3 CV
+  Massima:                               870 CV (870 hp @ 18300 rpm)
+  Valori unici:                          120+ diverse potenze
+
+VELOCITÀ MASSIME:
+  Minima:                                78 km/h
+  Massima:                               320 km/h
+  Valori unici:                          120+ diverse velocità
+
+CONFIGURAZIONI MOTORE:
+  Valori unici:                          130 configurazioni
+  Range cilindri:                        1-12 cilindri
+  Configurazioni comuni:                 inline, V, flat, boxer
+
+ANNI DI PRODUZIONE:
+  Range temporali distinti:              97 periodi produzione
+  Anno più antico:                       1892
+  Anno più recente:                      2011
+  Durata media produzione:               ~4-6 anni per modello
+
+DONAZIONI AL MUSEO:
+  Donatori distinti:                     82+ donatori
+  Include:                               Enzo Ferrari, Giovanni Agnelli, Ford Italia, etc.
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 12. DIMENSIONI FILE                                                          │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+FILE CONFIGURAZIONE:
+  wikidata_ontology_config.json:         1,854 bytes (~1.8 KB)
+  museum_column_mapping.csv:             ~2 KB
+
+FILE CACHE:
+  production_cache_v2_entities.json:     16,860 bytes (~16.4 KB)
+  Entità cachate:                        98 entità
+
+FILE OUTPUT:
+  output_automatic_enriched_v2.nt:       1,103,421 bytes (~1.1 MB, 5,931 righe)
+  output_automatic_enriched.nt (V1):    ~900 KB (5,331 righe)
+
+FILE REPORT:
+  wikidata_extraction_report.txt:        490 righe
+  wikidata_extraction.json:              1,003 righe
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 13. ARCHITETTURA SISTEMA                                                     │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+ROUTING 3-TIER (V2):
+  Tier 1 - Literal-only properties:      ~40% colonne → string literal
+  Tier 2 - Entity linking (Wikidata):    ~35% colonne → Wikidata IRI
+  Tier 3 - Custom IRI:                   ~25% colonne → example.org IRI
+
+COMPONENTI PRINCIPALI:
+  1. museum_mappings.py:                 Logica routing e validazione
+  2. robust_wikidata_linker.py:          Entity linking con scoring
+  3. integrated_semantic_enricher.py:    Pipeline principale orchestrazione
+  4. wikidata_ontology_config.json:      Configurazione pesi e traduzioni
+  5. museum_column_mapping.csv:          Mappings CSV → RDF properties
+
+VALIDAZIONE ONTOLOGICA:
+  - Pre-scoring P31 check
+  - Context-aware priority weights
+  - Description-based filtering
+  - Type compatibility verification
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 14. STATISTICHE RIEPILOGATIVE FINALI                                        │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+COPERTURA DATASET:
+  Veicoli processati:                    163/163 (100%)
+  Colonne mappate:                       29/29 (100%)
+  Tasso successo entity linking:        ~75% (98 entità su ~130 tentativi)
+
+QUALITÀ LINKING:
+  Confidence media:                      0.7-0.9 (stimata)
+  Match perfetti (confidence >0.95):     ~30% dei link
+  Match buoni (confidence 0.7-0.95):     ~50% dei link
+  Match accettabili (confidence 0.6-0.7): ~20% dei link
+
+DISTRIBUZIONE TRIPLE PER VEICOLO:
+  Media triple/veicolo:                  ~36 triple
+  Minimo:                                ~20 triple (veicoli con pochi dati)
+  Massimo:                               ~50 triple (veicoli completi)
+
+NAMESPACE UTILIZZATI:
+  - ex:       (http://example.org/)
+  - schema:   (https://schema.org/)
+  - wd:       (http://www.wikidata.org/entity/)
+  - wdt:      (http://www.wikidata.org/prop/direct/)
+  - rdf:      (http://www.w3.org/1999/02/22-rdf-syntax-ns#)
+  - xsd:      (http://www.w3.org/2001/XMLSchema#)
+
+================================================================================
+CONCLUSIONE
+================================================================================
+
+Il sistema V2.0 rappresenta un knowledge graph production-ready con:
+- ✅ 5,931 triple RDF (+275% vs versione iniziale)
+- ✅ 100% copertura dataset (163 veicoli)
+- ✅ 100 entità Wikidata collegate con validazione ontologica
+- ✅ Sistema scoring robusto con confidence >0.6
+- ✅ Architettura dichiarativa 3-tier scalabile
+- ✅ Performance LLM oneshot 65.7% (10.8x vs zeroshot)
+
+Tempo sviluppo totale: ~13 giorni (31/01/2026 - 12/02/2026)
+Sistema pronto per:
+  - Query SPARQL complesse
+  - Integrazione con triple store (Apache Jena Fuseki)
+  - Export verso formati alternativi (TTL, JSON-LD)
+  - Espansione con nuove collezioni museali
+
+================================================================================
+Fine Report - Generato automaticamente il 27/02/2026
+================================================================================

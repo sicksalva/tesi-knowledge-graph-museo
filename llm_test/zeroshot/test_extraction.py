@@ -148,12 +148,23 @@ def save_results(results, config):
     """Salva risultati in JSON."""
     output_file = config['output']['file_name']
     
+    successful = sum(1 for r in results if r['success'])
+    # Statistiche entità aggregate
+    entity_counts = {}
+    for r in results:
+        if r['success'] and r.get('extracted_entities'):
+            for etype, vals in r['extracted_entities'].items():
+                if vals:
+                    entity_counts[etype] = entity_counts.get(etype, 0) + 1
+    
     summary = {
         'timestamp': datetime.now().isoformat(),
         'mode': 'zeroshot',
+        'model': config.get('model', {}).get('name', 'unknown'),
         'total_processed': len(results),
-        'successful_extractions': sum(1 for r in results if r['success']),
-        'success_rate': sum(1 for r in results if r['success']) / len(results) if results else 0,
+        'successful_extractions': successful,
+        'success_rate': successful / len(results) if results else 0,
+        'entity_coverage': entity_counts,
         'results': results
     }
     
@@ -168,12 +179,11 @@ def main():
     """Funzione principale."""
     print("=== TEST ESTRAZIONE ENTITÀ - ZEROSHOT ===")
     
-    # Verifica GPU
-    if not torch.cuda.is_available():
-        print("ERRORE: CUDA non disponibile! Installa PyTorch con supporto CUDA.")
-        return
-    
-    print(f"GPU disponibile: {torch.cuda.get_device_name()}")
+    # Verifica GPU (con fallback su CPU)
+    if torch.cuda.is_available():
+        print(f"GPU disponibile: {torch.cuda.get_device_name()}")
+    else:
+        print("ATTENZIONE: CUDA non disponibile – esecuzione su CPU (più lenta).")
     
     # Carica config
     config = load_config()

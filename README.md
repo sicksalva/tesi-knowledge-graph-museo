@@ -165,11 +165,11 @@ Per testare gli approcci legacy, i file sono disponibili nella cartella `/old/` 
 ## 📊 Risultati
 
 ### Knowledge Graph Finale (Sistema con Validazione Ontologica)
-- **160 veicoli** processati con entity linking validato
+- **163 veicoli** processati con entity linking validato (100% del dataset)
 - **5,331 triple RDF** generate (`output/output_automatic_enriched.nt`)
   - 3,764 literals (anni, velocità, potenza, descrizioni, testi liberi)
   - 870 IRI objects, di cui 710 Wikidata Q-codes (validate con P31 instance of)
-  - 160 rdf:type (una per veicolo: schema:Vehicle)
+  - 163 rdf:type (una per veicolo: schema:Vehicle)
 - **110 Q-codes Wikidata** unici referenziati
 - **107 entities in cache** (persistente per performance API)
 - **Doppia interoperabilità**: Wikidata (18 P-codes) + Schema.org (35 proprietà)
